@@ -1,0 +1,576 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>알로하 수업 일정</title>
+<meta name="description" content="알로하다이빙 프리다이빙 수업 일정 — 성남 아쿠아라인·용인 딥스테이션, 남은 자리 확인하고 바로 신청하세요.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="알로하다이빙 수업 일정">
+<meta property="og:description" content="성남 아쿠아라인·용인 딥스테이션 프리다이빙 수업 — 남은 자리 확인하고 바로 신청하세요. / Freediving class schedule & booking.">
+<meta name="theme-color" content="#0D7C8A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#F4F8F9; --surface:#FFFFFF; --ink:#0A2130; --muted:#5C7A86; --faint:#A2B4BB;
+  --line:#DCE7EB; --line-soft:#E9EFF1;
+  --sn:#0D7C8A; --sn-tint:#E6F4F5; --sn-ink:#0A5760;
+  --yi:#3557A8; --yi-tint:#E9EEF9; --yi-ink:#27427F;
+  --cta:#F0A202; --cta-ink:#2A1C00;
+  --off-bg:#F2F1F7; --off-line:#DFDCEA; --off-ink:#8F86AF;
+  --shut-bg:#F7F4EE; --shut-line:#E8DFCF; --shut-ink:#9C8B5E;
+  --past:#EDF2F4; --sun:#C25450; --sat:#3C74B8;
+  --shadow:0 18px 50px rgba(10,33,48,.18); --on-accent:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A22; --surface:#11252F; --ink:#E4EEF1; --muted:#8FA9B3; --faint:#557480;
+    --line:#1F3A46; --line-soft:#18303A;
+    --sn:#3FB4C2; --sn-tint:#0F343A; --sn-ink:#8FDCE5;
+    --yi:#7E9BE0; --yi-tint:#1A2748; --yi-ink:#B9CAF2;
+    --cta:#F5B434; --cta-ink:#2A1C00;
+    --off-bg:#1C1B2A; --off-line:#2C2A42; --off-ink:#A79FD0;
+    --shut-bg:#231F16; --shut-line:#3A3222; --shut-ink:#C4B289;
+    --past:#0E2029; --sun:#E0827E; --sat:#7FA6DC;
+    --shadow:0 18px 50px rgba(0,0,0,.5); --on-accent:#05202A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A22; --surface:#11252F; --ink:#E4EEF1; --muted:#8FA9B3; --faint:#557480;
+  --line:#1F3A46; --line-soft:#18303A;
+  --sn:#3FB4C2; --sn-tint:#0F343A; --sn-ink:#8FDCE5;
+  --yi:#7E9BE0; --yi-tint:#1A2748; --yi-ink:#B9CAF2;
+  --cta:#F5B434; --cta-ink:#2A1C00;
+  --off-bg:#1C1B2A; --off-line:#2C2A42; --off-ink:#A79FD0;
+  --shut-bg:#231F16; --shut-line:#3A3222; --shut-ink:#C4B289;
+  --past:#0E2029; --sun:#E0827E; --sat:#7FA6DC;
+  --shadow:0 18px 50px rgba(0,0,0,.5); --on-accent:#05202A;
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,sans-serif;
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:880px; margin:0 auto; padding-inline:16px; padding-block:22px 64px}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible{outline:2.5px solid var(--sn); outline-offset:2px}
+
+/* ---------- header ---------- */
+.top{display:flex; justify-content:space-between; align-items:center; gap:12px}
+.eyebrow{font-size:12px; font-weight:700; letter-spacing:.16em; color:var(--sn)}
+.lang{display:flex; border:1px solid var(--line); border-radius:999px; background:var(--surface); padding:2px}
+.lang button{border:0; background:transparent; font-size:12px; font-weight:700; letter-spacing:.06em;
+  padding:5px 11px; border-radius:999px; color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink); color:var(--bg)}
+
+.head{margin-top:14px}
+h1{font-size:clamp(30px,7vw,44px); font-weight:900; letter-spacing:-.035em; line-height:1.05; margin:0; text-wrap:balance}
+h1 em{font-style:normal; color:var(--sn)}
+.months{display:flex; gap:8px; margin-top:16px; overflow-x:auto; scrollbar-width:none; padding:2px 2px 10px; margin-inline:-2px}
+.months::-webkit-scrollbar{display:none}
+.mtab{flex:1 0 auto; max-width:180px; min-width:96px; display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+  border:1.5px solid var(--line); background:var(--surface); border-radius:13px; padding:10px 14px 9px; text-align:left}
+.mtab .m{font-size:18px; font-weight:900; letter-spacing:-.03em; line-height:1.1}
+.mtab .c{font-size:12px; font-weight:700; color:var(--sn); font-variant-numeric:tabular-nums}
+.mtab .c.zero{color:var(--faint)}
+.mtab:hover{border-color:var(--sn)}
+.mtab[aria-pressed="true"]{background:var(--sn); border-color:var(--sn); color:var(--on-accent);
+  box-shadow:0 6px 16px -6px var(--sn)}
+.mtab[aria-pressed="true"] .c{color:inherit; opacity:.9}
+.swipehint{font-size:11.5px; color:var(--muted); margin-top:8px; text-align:center}
+@media (min-width:720px){ .swipehint{display:none} }
+
+.controls{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:18px}
+.seg{display:flex; background:var(--line-soft); border-radius:11px; padding:3px}
+.seg button{border:0; background:transparent; padding:7px 16px; border-radius:8px; font-size:14px; font-weight:700; color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:0 1px 3px rgba(10,33,48,.12)}
+.chips{display:flex; gap:6px; flex-wrap:wrap}
+.chip{display:flex; align-items:center; gap:6px; border:1px solid var(--line); background:var(--surface);
+  padding:6px 11px; border-radius:999px; font-size:13px; font-weight:600; color:var(--muted)}
+.chip .sw{width:9px; height:9px; border-radius:3px}
+.chip[aria-pressed="true"]{border-color:var(--ink); color:var(--ink); font-weight:700}
+
+.sample{margin-top:14px; font-size:12px; color:var(--muted); display:flex; align-items:center; gap:7px}
+.sample b{background:var(--cta); color:var(--cta-ink); font-size:10.5px; letter-spacing:.08em; padding:2px 7px; border-radius:5px}
+
+/* ---------- slot row (shared by list + calendar detail) ---------- */
+.slot{display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:4px 12px;
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:11px 12px}
+.slot .when{grid-row:span 2; align-self:stretch; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-width:58px; padding:4px 6px; border-radius:8px; background:var(--tint); color:var(--pink); line-height:1.15;
+  font-variant-numeric:tabular-nums}
+.slot .when small{font-size:10.5px; font-weight:700; opacity:.8}
+.slot .when b{font-size:15px; font-weight:900; letter-spacing:-.02em}
+.slot.sn{--tint:var(--sn-tint); --pink:var(--sn-ink); --c:var(--sn)}
+.slot.yi{--tint:var(--yi-tint); --pink:var(--yi-ink); --c:var(--yi)}
+.slot .where{font-weight:700; font-size:14.5px; letter-spacing:-.02em; display:flex; align-items:center; gap:7px; min-width:0}
+.slot .where .dot{width:8px; height:8px; border-radius:50%; background:var(--c); flex:none}
+.slot .meta{grid-column:2; display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:12.5px; color:var(--muted)}
+.pips{display:flex; gap:3px}
+.pips i{width:9px; height:9px; border-radius:3px; background:var(--c)}
+.pips i.taken{background:var(--line)}
+.memo{background:var(--line-soft); color:var(--ink); border-radius:5px; padding:1px 6px; font-weight:600}
+.slot .act{grid-column:3; grid-row:1 / span 2}
+.book{border:0; background:var(--cta); color:var(--cta-ink); font-weight:800; font-size:14px;
+  padding:9px 16px; border-radius:9px; letter-spacing:-.01em}
+.book:hover{filter:brightness(1.05)}
+a.book{text-decoration:none; text-align:center; display:inline-block}
+.retry{margin-top:12px; border:1px solid var(--line); background:var(--surface); border-radius:9px; padding:8px 16px; font-weight:700}
+.fullbadge{display:inline-block; font-size:13px; font-weight:700; color:var(--faint); padding:9px 12px;
+  border:1.5px dashed var(--line); border-radius:9px}
+.slot.is-full .where, .slot.is-full .when{opacity:.55}
+
+/* ---------- list ---------- */
+.list{display:flex; flex-direction:column; gap:18px; margin-top:22px}
+.day{display:grid; grid-template-columns:54px 1fr; gap:12px}
+.dlabel{padding-top:6px; text-align:center}
+.dlabel .dn{font-size:26px; font-weight:900; letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums}
+.dlabel .dw{font-size:12px; font-weight:700; color:var(--muted); margin-top:3px}
+.dlabel.sun .dw{color:var(--sun)} .dlabel.sat .dw{color:var(--sat)}
+.slots{display:flex; flex-direction:column; gap:8px}
+.empty{margin-top:28px; padding:28px 16px; text-align:center; color:var(--muted); border:1.5px dashed var(--line); border-radius:14px}
+
+/* ---------- calendar ---------- */
+.cal{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; margin-top:20px}
+.dow{text-align:center; font-size:12px; font-weight:700; color:var(--muted); padding-bottom:4px; letter-spacing:.04em}
+.dow.sun{color:var(--sun)} .dow.sat{color:var(--sat)}
+.cell{border:1.5px solid var(--line-soft); background:var(--surface); border-radius:10px; min-height:66px;
+  padding:6px 4px 5px; display:flex; flex-direction:column; gap:3px; text-align:left; min-width:0}
+.cell .n{font-size:14px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1.1}
+.cell.blank{background:transparent; border-color:transparent}
+.cell.past{background:var(--past); border-color:transparent}
+.cell.past .n{color:var(--faint)}
+.cell.adj{border-style:dashed}
+.cell.adj .n{color:var(--muted)}
+.cell.has{border-color:var(--line)}
+.cell.has:hover{border-color:var(--sn)}
+.cell.sel{border-color:var(--ink); border-width:2px; padding:5.5px 3.5px 4.5px}
+.cell.off{background:var(--off-bg); border-color:var(--off-line)} .cell.off .n,.cell.off .lbl{color:var(--off-ink)}
+.cell.shut{background:var(--shut-bg); border-color:var(--shut-line)} .cell.shut .n,.cell.shut .lbl{color:var(--shut-ink)}
+.cell .lbl{font-size:10.5px; font-weight:700; margin-top:auto; line-height:1.2; letter-spacing:-.03em; overflow-wrap:anywhere}
+.pill{display:flex; align-items:center; justify-content:space-between; gap:3px; border-radius:5px;
+  font-size:10px; font-weight:800; padding:2px 3px; letter-spacing:-.03em; font-variant-numeric:tabular-nums; color:var(--on-accent); line-height:1.25}
+.pill.sn{background:var(--sn)} .pill.yi{background:var(--yi)}
+.pill.full{background:transparent; color:var(--faint); border:1px dashed var(--line); text-decoration:line-through}
+.pill .t{display:none}
+.pill .t-mini{white-space:nowrap; margin-inline:auto}
+.detail{margin-top:16px}
+.detail h2{font-size:16px; font-weight:800; letter-spacing:-.02em; margin:0 0 10px}
+.legend{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--muted)}
+.legend span{display:flex; align-items:center; gap:5px}
+.legend i{width:11px; height:11px; border-radius:3px; border:1px solid transparent}
+
+@media (min-width:720px){
+  .cell{min-height:104px; padding:8px 7px 7px}
+  .cell.sel{padding:7.5px 6.5px 6.5px}
+  .cell .n{font-size:17px}
+  .cell .lbl{font-size:12px}
+  .pill{font-size:11.5px; padding:3px 6px}
+  .pill .t{display:inline} .pill .t-mini{display:none} .pill{letter-spacing:-.01em}
+}
+
+.foot{margin-top:30px; padding-top:16px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); line-height:1.7}
+.foot b{color:var(--ink)}
+
+/* ---------- bottom sheet ---------- */
+.scrim{position:fixed; inset:0; background:rgba(6,20,28,.45); display:flex; align-items:flex-end; justify-content:center; z-index:10}
+.sheet{background:var(--surface); width:100%; max-width:480px; border-radius:18px 18px 0 0; box-shadow:var(--shadow);
+  padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px))}
+@media (min-width:560px){ .scrim{align-items:center} .sheet{border-radius:18px} }
+.sheet .grab{width:38px; height:4px; border-radius:2px; background:var(--line); margin:-6px auto 14px}
+.sheet h3{margin:0; font-size:20px; font-weight:900; letter-spacing:-.03em}
+.sheet dl{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; margin:14px 0 0; font-size:14px}
+.sheet dt{color:var(--muted); font-weight:600}
+.sheet dd{margin:0; font-weight:700}
+.prefill{margin-top:14px; font:11.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; color:var(--muted);
+  background:var(--line-soft); border-radius:8px; padding:9px 10px; overflow-wrap:anywhere}
+.sheet .row{display:flex; gap:8px; margin-top:16px}
+.sheet .row .book{flex:1; padding:13px}
+.ghost{border:1px solid var(--line); background:transparent; border-radius:9px; padding:13px 16px; font-weight:700; color:var(--muted)}
+.sheet .fine{font-size:12px; color:var(--muted); margin-top:10px}
+.toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%);
+  background:var(--ink); color:var(--bg); font-size:13.5px; font-weight:600; padding:11px 16px; border-radius:10px;
+  z-index:20; max-width:calc(100% - 32px); box-shadow:var(--shadow)}
+@media (prefers-reduced-motion:no-preference){
+  .sheet{animation:up .22s ease-out}
+  @keyframes up{from{transform:translateY(24px); opacity:.6}}
+}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="eyebrow" id="eyebrow"></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="lang-ko" data-lang="ko">KO</button>
+      <button id="lang-en" data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <div class="head"><h1 id="title"></h1></div>
+  <nav class="months" id="months" aria-label="month"></nav>
+
+  <div class="controls">
+    <div class="seg" role="group" id="viewseg">
+      <button id="view-list" data-view="list"></button>
+      <button id="view-cal" data-view="cal"></button>
+    </div>
+    <div class="chips" role="group" id="chips"></div>
+  </div>
+
+  <div class="sample" id="sample"><b id="sampletag"></b><span id="sampletxt"></span></div>
+
+  <main id="main"></main>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title">
+    <div class="grab"></div>
+    <h3 id="sh-title"></h3>
+    <dl id="sh-dl"></dl>
+    <div class="prefill" id="sh-url"></div>
+    <div class="row">
+      <button class="ghost" id="sh-close"></button>
+      <a class="book" id="sh-go" href="#" target="_blank" rel="noopener"></a>
+    </div>
+    <div class="fine" id="sh-fine"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ===== 설정 =====
+   Apps Script 웹 앱 URL(…/exec)을 넣으면 구글 시트의 실제 일정을 읽어옴.
+   비워두면 아래 예시 데이터로 보여줌. */
+const CONFIG = {
+  API: 'https://script.google.com/macros/s/AKfycbx30Q63SjKa35Vts8PlN9p-8aSwbLuNUHo5orEJcrLUK1HAlgpxbZijGMIf1YVqXIiJ/exec',
+};
+
+/* 예시 데이터 — 시트 연결 전 미리보기용.
+   d=날짜, s=am|pm, t=[시작,끝], p=sn(성남 아쿠아라인)|yi(용인 딥스테이션), cap=정원, bk=신청수, st=open|off */
+const SAMPLE = [
+  {d:'2026-09-26',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:2},
+  {d:'2026-09-26',s:'pm',t:['13:00','15:00'],p:'yi',cap:2,bk:2},
+  {d:'2026-09-27',s:'pm',t:['13:00','15:00'],p:'yi',cap:4,bk:1},
+  {d:'2026-09-30',st:'off'},
+  {d:'2026-10-03',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:1},
+  {d:'2026-10-03',s:'pm',t:['14:00','16:00'],p:'sn',cap:4,bk:0},
+  {d:'2026-10-04',s:'am',t:['09:30','11:30'],p:'yi',cap:3,bk:3},
+  {d:'2026-10-07',st:'off'},
+  {d:'2026-10-09',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:0},
+  {d:'2026-10-10',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:2},
+  {d:'2026-10-10',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:1},
+  {d:'2026-10-11',s:'am',t:['09:30','11:30'],p:'yi',cap:2,bk:0,memo:{ko:'레벨2 이상',en:'Level 2+'}},
+  {d:'2026-10-14',s:'pm',t:['16:00','18:00'],p:'sn',cap:2,bk:0},
+  {d:'2026-10-17',st:'off'},
+  {d:'2026-10-18',st:'off'},
+  {d:'2026-10-24',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:4},
+  {d:'2026-10-24',s:'pm',t:['14:00','16:00'],p:'sn',cap:4,bk:1},
+  {d:'2026-10-25',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:0},
+  {d:'2026-10-31',s:'am',t:['10:30','13:00'],p:'yi',cap:3,bk:0,memo:{ko:'펀다이빙',en:'Fun dive'}},
+  {d:'2026-11-01',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:0},
+  {d:'2026-11-07',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:0},
+  {d:'2026-11-07',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:0},
+  {d:'2026-11-14',st:'off'},
+  {d:'2026-11-15',st:'off'},
+  {d:'2026-11-21',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:1},
+  {d:'2026-11-28',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:0},
+];
+
+const T = {
+  ko:{
+    eyebrow:'ALOHA DIVING · 프리다이빙 수업',
+    month:(y,m)=>`${m}월 <em>수업 일정</em>`,
+    list:'목록', cal:'달력', all:'전체',
+    place:{sn:'성남 아쿠아라인', yi:'용인 딥스테이션'},
+    short:{sn:'성남', yi:'용인'},
+    slot:{am:'오전', pm:'오후'},
+    left:(n,c)=>`잔여 ${n} / ${c}석`,
+    full:'마감', book:'신청',
+    off:'외부일정', shut:'정기휴무',
+    dow:['일','월','화','수','목','금','토'],
+    date:(dt)=>`${dt.getMonth()+1}월 ${dt.getDate()}일 (${'일월화수목금토'[dt.getDay()]})`,
+    mtab:(y,m)=>`${m}월`,
+    seats:n=> n ? `잔여 ${n}석` : '마감',
+    swipe:'← 달력을 옆으로 밀면 다른 달로 넘어가요 →',
+    loading:'일정을 불러오는 중…',
+    error:'일정을 불러오지 못했어요. 잠시 후 다시 시도하거나 카카오톡 채널로 문의해 주세요.',
+    retry:'다시 시도',
+    empty:'이 달에 남은 수업이 없어요. 다음 달을 확인해 보세요.',
+    noslot:'이 날은 수업이 없어요.',
+    pick:'날짜를 눌러 수업을 확인하세요.',
+    sampletag:'예시', sampletxt:'가짜 일정으로 만든 목업입니다',
+    sheetTitle:'수업 신청',
+    dl:['날짜','시간','장소','남은 자리','안내'],
+    go:'신청서 작성하기', close:'닫기',
+    fine:'신청서 제출 후 개별 연락으로 확정됩니다.',
+    toast:'목업이라 실제 구글폼은 아직 연결 전이에요',
+    legend:{sn:'성남 아쿠아라인', yi:'용인 딥스테이션', off:'외부일정', shut:'아쿠아라인 정기휴무 (2·4번째 일요일)'},
+    foot:'<b>신청 방법</b> — 원하는 시간의 [신청]을 누르면 날짜·장소가 채워진 신청서가 열립니다. 제출 후 개별 연락으로 확정돼요.<br><b>문의</b> — 카카오톡 채널 @알로하다이빙',
+  },
+  en:{
+    eyebrow:'ALOHA DIVING · FREEDIVING CLASSES',
+    month:(y,m)=>`<em>${['January','February','March','April','May','June','July','August','September','October','November','December'][m-1]}</em> classes`,
+    list:'List', cal:'Calendar', all:'All',
+    place:{sn:'Seongnam · Aqualine', yi:'Yongin · Deep Station'},
+    short:{sn:'Seongnam', yi:'Yongin'},
+    slot:{am:'AM', pm:'PM'},
+    left:(n,c)=>`${n} of ${c} spots left`,
+    full:'Full', book:'Book',
+    off:'Unavailable', shut:'Pool closed',
+    dow:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    date:(dt)=>dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),
+    mtab:(y,m)=>['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1],
+    seats:n=> n ? `${n} spots left` : 'Full',
+    swipe:'← Swipe the calendar to change month →',
+    loading:'Loading schedule…',
+    error:'Could not load the schedule. Please try again, or message us on KakaoTalk.',
+    retry:'Try again',
+    empty:'No classes left this month — check next month.',
+    noslot:'No classes on this day.',
+    pick:'Tap a date to see its classes.',
+    sampletag:'SAMPLE', sampletxt:'Mockup built with example dates',
+    sheetTitle:'Book a class',
+    dl:['Date','Time','Venue','Spots left','Note'],
+    go:'Fill in the booking form', close:'Close',
+    fine:'We will contact you to confirm after you submit the form.',
+    toast:'Mockup — the Google Form is not connected yet',
+    legend:{sn:'Seongnam · Aqualine', yi:'Yongin · Deep Station', off:'Unavailable', shut:'Aqualine closed (2nd & 4th Sun)'},
+    foot:'<b>How to book</b> — Tap [Book] on a class to open a form with the date and venue filled in. We confirm each booking personally.<br><b>Questions</b> — KakaoTalk channel @alohadiving',
+  }
+};
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,'0');
+const key = dt => `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); };
+const monthOf = dt => new Date(dt.getFullYear(), dt.getMonth(), 1);
+const addMonths = (m,n) => new Date(m.getFullYear(), m.getMonth()+n, 1);
+const store = { get(k){ try{return localStorage.getItem(k)}catch(e){return null} },
+                set(k,v){ try{localStorage.setItem(k,v)}catch(e){} } };
+
+const now = new Date(); now.setHours(0,0,0,0);
+const TODAY = key(now);
+const firstMonth = monthOf(now);
+
+let DATA = [];          // 슬롯 {d,s,t,p,cap,bk,memo} + 외부일정 {d,st:'off'}
+let FORM = null;        // {url, entry} — 시트 연결 시 Apps Script 가 알려줌
+let MODE = 'loading';   // loading | sample | live | error
+
+const state = {
+  lang: store.get('aloha.lang') || ((navigator.language||'ko').startsWith('ko') ? 'ko' : 'en'),
+  view: store.get('aloha.view') || (matchMedia('(min-width:720px)').matches ? 'cal' : 'list'),
+  place: 'all',
+  month: firstMonth,
+  sel: null,
+};
+
+/* 아쿠아라인 정기휴무: 매달 2·4번째 일요일 */
+const aqClosed = dt => dt.getDay()===0 && [2,4].includes(Math.ceil(dt.getDate()/7));
+
+const slotId = r => r.id || `${r.d.replace(/-/g,'')}-${r.s}-${r.p}`;
+const placeOk = r => state.place==='all' || r.p===state.place;
+const slotsOn = k => DATA.filter(r => r.d===k && r.s && placeOk(r)).sort((a,b)=> (a.t[0]).localeCompare(b.t[0]));
+const isOff = k => DATA.some(r => r.d===k && r.st==='off');
+const inMonth = (d, m) => d.startsWith(`${m.getFullYear()}-${pad(m.getMonth()+1)}`);
+
+function monthList(){
+  const last = DATA.reduce((a,r)=> r.d>a ? r.d : a, TODAY);
+  const out = [];
+  for(let m=firstMonth; m<=monthOf(parse(last)); m=addMonths(m,1)) out.push(m);
+  return out;
+}
+const seatsIn = m => DATA.filter(r=> r.s && inMonth(r.d,m) && r.d>=TODAY && placeOk(r))
+                         .reduce((a,r)=> a + Math.max(0, r.cap-r.bk), 0);
+
+function slotHTML(r){
+  const t = T[state.lang], left = r.cap - r.bk, full = left<=0;
+  const pips = Array.from({length:r.cap}, (_,i)=> `<i class="${i<r.bk?'taken':''}"></i>`).join('');
+  const memo = r.memo ? `<span class="memo">${r.memo[state.lang]}</span>` : '';
+  const act = full ? `<span class="fullbadge">${t.full}</span>`
+                   : `<button class="book" data-id="${DATA.indexOf(r)}">${t.book}</button>`;
+  return `<div class="slot ${r.p}${full?' is-full':''}">
+    <div class="when"><small>${t.slot[r.s]}</small><b>${r.t[0]}</b><small>~${r.t[1]}</small></div>
+    <div class="where"><span class="dot"></span>${t.place[r.p]}</div>
+    <div class="meta"><span class="pips" aria-hidden="true">${pips}</span><span>${full? t.full : t.left(left,r.cap)}</span>${memo}</div>
+    <div class="act">${act}</div></div>`;
+}
+
+function renderList(){
+  const t = T[state.lang], m = state.month;
+  const days = [...new Set(DATA.filter(r => r.s && inMonth(r.d,m) && r.d>=TODAY).map(r=>r.d))].sort()
+                 .filter(k => slotsOn(k).length);
+  if(!days.length) return `<div class="empty">${t.empty}</div>`;
+  return `<div class="list">` + days.map(k=>{
+    const dt = parse(k), dw = dt.getDay();
+    return `<section class="day"><div class="dlabel ${dw===0?'sun':dw===6?'sat':''}">
+      <div class="dn">${dt.getDate()}</div><div class="dw">${t.dow[dw]}</div></div>
+      <div class="slots">${slotsOn(k).map(slotHTML).join('')}</div></section>`;
+  }).join('') + `</div>`;
+}
+
+/* 달력은 그 달 1일이 있는 주의 일요일 ~ 말일이 있는 주의 토요일까지 */
+function calRange(m){
+  const y = m.getFullYear(), mo = m.getMonth(), last = new Date(y,mo+1,0);
+  return [new Date(y,mo,1-new Date(y,mo,1).getDay()), new Date(y,mo,last.getDate()+6-last.getDay())];
+}
+
+function renderCal(){
+  const t = T[state.lang], m = state.month, [start,end] = calRange(m);
+  let h = `<div class="cal">` + t.dow.map((d,i)=>`<div class="dow ${i===0?'sun':i===6?'sat':''}">${d}</div>`).join('');
+  for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+    const k = key(dt), ss = slotsOn(k), adj = dt.getMonth()!==m.getMonth();
+    const num = adj && dt.getDate()===1 ? `${dt.getMonth()+1}/1` : dt.getDate();
+    const cls = adj ? ' adj' : '';
+    if(k < TODAY){ h += `<div class="cell past${cls}"><span class="n">${num}</span></div>`; continue; }
+    if(ss.length){
+      const pills = ss.map(r=>{ const left=r.cap-r.bk;
+        return left>0
+          ? `<span class="pill ${r.p}"><span class="t">${r.t[0]} ${t.short[r.p]}</span><span class="t-mini">${r.t[0]}</span><span class="t">${left}</span></span>`
+          : `<span class="pill full"><span class="t">${r.t[0]} ${t.short[r.p]}</span><span class="t-mini">${r.t[0]}</span></span>`;
+      }).join('');
+      h += `<button class="cell has${cls}${state.sel===k?' sel':''}" data-day="${k}" aria-label="${t.date(dt)}"><span class="n">${num}</span>${pills}</button>`;
+    } else if(isOff(k)){
+      h += `<div class="cell off${cls}"><span class="n">${num}</span><span class="lbl">${t.off}</span></div>`;
+    } else if(aqClosed(dt) && state.place!=='yi'){
+      h += `<div class="cell shut${cls}"><span class="n">${num}</span><span class="lbl">${t.shut}</span></div>`;
+    } else {
+      h += `<div class="cell${cls}"><span class="n">${num}</span></div>`;
+    }
+  }
+  h += `</div><div class="swipehint">${t.swipe}</div>`;
+  h += `<div class="legend">
+    <span><i style="background:var(--sn)"></i>${t.legend.sn}</span>
+    <span><i style="background:var(--yi)"></i>${t.legend.yi}</span>
+    <span><i style="background:var(--off-bg);border-color:var(--off-line)"></i>${t.legend.off}</span>
+    <span><i style="background:var(--shut-bg);border-color:var(--shut-line)"></i>${t.legend.shut}</span></div>`;
+  const sel = state.sel;
+  h += `<div class="detail">` + (sel
+      ? `<h2>${t.date(parse(sel))}</h2><div class="slots">${slotsOn(sel).map(slotHTML).join('') || `<div class="empty">${t.noslot}</div>`}</div>`
+      : `<div class="empty">${t.pick}</div>`) + `</div>`;
+  return h;
+}
+
+function firstOpenDay(){
+  const [start,end] = calRange(state.month).map(key);
+  const days = DATA.filter(r=> r.s && r.d>=start && r.d<=end && r.d>=TODAY && r.cap>r.bk && placeOk(r))
+                   .map(r=>r.d).sort();
+  return days.find(d => inMonth(d,state.month)) || days[0] || null;
+}
+
+function render(){
+  const t = T[state.lang], m = state.month;
+  document.documentElement.lang = state.lang;
+  $('eyebrow').textContent = t.eyebrow;
+  $('title').innerHTML = t.month(m.getFullYear(), m.getMonth()+1);
+  $('lang-ko').setAttribute('aria-pressed', state.lang==='ko');
+  $('lang-en').setAttribute('aria-pressed', state.lang==='en');
+  $('view-list').textContent = t.list; $('view-cal').textContent = t.cal;
+  $('view-list').setAttribute('aria-pressed', state.view==='list');
+  $('view-cal').setAttribute('aria-pressed', state.view==='cal');
+  $('chips').innerHTML = ['all','sn','yi'].map(p=>
+    `<button class="chip" id="chip-${p}" data-place="${p}" aria-pressed="${state.place===p}">${p==='all'?'':`<span class="sw" style="background:var(--${p})"></span>`}${p==='all'?t.all:t.place[p]}</button>`).join('');
+  $('sample').hidden = MODE!=='sample';
+  $('sampletag').textContent = t.sampletag; $('sampletxt').textContent = t.sampletxt;
+  $('foot').innerHTML = t.foot;
+
+  if(MODE==='loading'){ $('months').innerHTML=''; $('main').innerHTML = `<div class="empty">${t.loading}</div>`; return; }
+  if(MODE==='error'){ $('months').innerHTML=''; $('main').innerHTML = `<div class="empty">${t.error}<br><button class="retry" id="retry">${t.retry}</button></div>`; return; }
+
+  $('months').innerHTML = monthList().map(mm=>{
+    const n = seatsIn(mm), on = +mm===+m;
+    return `<button class="mtab" data-month="${key(mm)}" aria-pressed="${on}"><span class="m">${t.mtab(mm.getFullYear(), mm.getMonth()+1)}</span><span class="c${n?'':' zero'}">${t.seats(n)}</span></button>`;
+  }).join('');
+  if(state.view==='cal'){
+    const [start,end] = calRange(m).map(key);
+    if(!state.sel || state.sel<start || state.sel>end) state.sel = firstOpenDay();
+  }
+  $('main').innerHTML = state.view==='list' ? renderList() : renderCal();
+}
+
+function setMonth(mm){
+  const ms = monthList();
+  if(mm < ms[0] || mm > ms[ms.length-1]) return;
+  state.month = mm; state.sel = null; render();
+  const tab = document.querySelector('.mtab[aria-pressed="true"]');
+  if(tab) tab.scrollIntoView({block:'nearest', inline:'nearest'});
+}
+
+/* 신청서에 들어갈 수업 문구. 끝의 #코드로 Apps Script 가 슬롯별 신청 수를 셈 */
+function classCode(r){
+  const dt = parse(r.d);
+  return `${r.d} (${'일월화수목금토'[dt.getDay()]}) ${T.ko.slot[r.s]} ${r.t[0]}-${r.t[1]} · ${T.ko.place[r.p]} #${slotId(r)}`;
+}
+
+function openSheet(r){
+  const t = T[state.lang], left = r.cap - r.bk;
+  $('sh-title').textContent = t.sheetTitle;
+  const rows = [[t.dl[0], t.date(parse(r.d))],[t.dl[1], `${t.slot[r.s]} ${r.t[0]}–${r.t[1]}`],[t.dl[2], t.place[r.p]],[t.dl[3], t.left(left,r.cap)]];
+  if(r.memo) rows.push([t.dl[4], r.memo[state.lang]]);
+  $('sh-dl').innerHTML = rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('');
+  const go = $('sh-go');
+  if(FORM){
+    go.href = `${FORM.url}${FORM.url.includes('?')?'&':'?'}usp=pp_url&${FORM.entry}=${encodeURIComponent(classCode(r))}`;
+    go.dataset.mock = '';
+    $('sh-url').hidden = true;
+  } else {
+    go.href = '#'; go.dataset.mock = '1';
+    $('sh-url').hidden = false;
+    $('sh-url').textContent = `docs.google.com/forms/…/viewform?usp=pp_url&entry.…=${classCode(r)}`;
+  }
+  $('sh-close').textContent = t.close; go.textContent = t.go; $('sh-fine').textContent = t.fine;
+  $('scrim').hidden = false; go.focus();
+}
+const closeSheet = () => { $('scrim').hidden = true; };
+let toastTimer;
+function toast(msg){ const el=$('toast'); el.textContent=msg; el.hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.hidden=true, 2600); }
+
+async function load(quiet){
+  if(!CONFIG.API){ DATA = SAMPLE; MODE = 'sample'; render(); return; }
+  if(!quiet){ MODE = 'loading'; render(); }
+  try{
+    const res = await fetch(CONFIG.API, {cache:'no-store'});
+    if(!res.ok) throw new Error(res.status);
+    const j = await res.json();
+    DATA = [...j.slots, ...j.off.map(d => ({d, st:'off'}))];
+    FORM = j.form && j.form.url && j.form.entry ? j.form : null;
+    MODE = 'live';
+  }catch(e){
+    if(quiet) return;
+    MODE = 'error';
+  }
+  render();
+}
+
+document.addEventListener('click', e=>{
+  const go = e.target.closest('#sh-go');
+  if(go){ if(go.dataset.mock){ e.preventDefault(); toast(T[state.lang].toast); } closeSheet(); return; }
+  const b = e.target.closest('button'); if(!b) { if(e.target.id==='scrim') closeSheet(); return; }
+  if(b.dataset.lang){ state.lang=b.dataset.lang; store.set('aloha.lang',state.lang); render(); }
+  else if(b.dataset.view){ state.view=b.dataset.view; store.set('aloha.view',state.view); render(); }
+  else if(b.dataset.place){ state.place=b.dataset.place; state.sel=null; render(); }
+  else if(b.dataset.month){ setMonth(parse(b.dataset.month)); }
+  else if(b.dataset.day){ state.sel=b.dataset.day; render(); }
+  else if(b.dataset.id){ openSheet(DATA[+b.dataset.id]); }
+  else if(b.id==='retry'){ load(); }
+  else if(b.id==='sh-close'){ closeSheet(); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
+
+/* 달력 좌우로 밀어서 달 넘기기 */
+let sx = null, sy = 0;
+$('main').addEventListener('touchstart', e=>{ const p=e.touches[0]; sx=p.clientX; sy=p.clientY; }, {passive:true});
+$('main').addEventListener('touchend', e=>{
+  if(sx===null || state.view!=='cal') return;
+  const p = e.changedTouches[0], dx = p.clientX-sx, dy = p.clientY-sy; sx = null;
+  if(Math.abs(dx)>60 && Math.abs(dy)<40) setMonth(addMonths(state.month, dx<0 ? 1 : -1));
+});
+
+/* 신청서 탭에서 돌아오면 잔여석 새로 읽기 */
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && MODE==='live') load(true); });
+
+load();
+</script>
