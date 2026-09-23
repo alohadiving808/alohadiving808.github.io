@@ -1,10 +1,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>알로하 수업 일정</title>
-<meta name="description" content="알로하다이빙 프리다이빙 수업 일정 — 성남 아쿠아라인·용인 딥스테이션, 남은 자리 확인하고 바로 신청하세요.">
+<meta name="description" content="알로하다이빙 프리다이빙 수업 일정·가격·후기 — 성남 아쿠아라인·용인 딥스테이션, 남은 자리 확인하고 바로 신청하세요.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="알로하다이빙 수업 일정">
-<meta property="og:description" content="성남 아쿠아라인·용인 딥스테이션 프리다이빙 수업 — 남은 자리 확인하고 바로 신청하세요. / Freediving class schedule & booking.">
+<meta property="og:title" content="알로하다이빙 · 프리다이빙 수업">
+<meta property="og:description" content="수업 일정·가격·후기 — 성남 아쿠아라인·용인 딥스테이션. 남은 자리 확인하고 바로 신청하세요. / Freediving classes, prices & booking.">
 <meta name="theme-color" content="#0D7C8A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +56,25 @@ body{
   font-family:"Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,sans-serif;
   font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:880px; margin:0 auto; padding-inline:16px; padding-block:22px 64px}
+.wrap{max-width:880px; margin:0 auto; padding-inline:16px; padding-block:22px calc(96px + env(safe-area-inset-bottom,0px))}
+@media (min-width:720px){ .wrap{padding-block:22px 64px} }
+
+/* ---------- main menu: bottom bar on phones, top bar on wide screens ---------- */
+.tabbar{position:fixed; left:0; right:0; bottom:0; z-index:6; display:flex; justify-content:space-around;
+  background:var(--surface); border-top:1px solid var(--line);
+  padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabbar button{flex:1; min-width:0; border:0; background:none; display:flex; flex-direction:column; align-items:center; gap:3px;
+  font-size:11px; font-weight:700; letter-spacing:-.02em; color:var(--muted); padding:4px 0; border-radius:10px}
+.tabbar svg{width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.tabbar button[aria-current="page"]{color:var(--sn)}
+.tabbar button[aria-current="page"] svg{stroke-width:2.3}
+@media (min-width:720px){
+  .tabbar{position:sticky; top:env(safe-area-inset-top,0px); bottom:auto; justify-content:center; gap:4px;
+    border-top:0; border-bottom:1px solid var(--line); padding:8px 16px}
+  .tabbar button{flex:none; flex-direction:row; gap:7px; font-size:14px; padding:8px 14px}
+  .tabbar svg{width:18px; height:18px}
+  .tabbar button[aria-current="page"]{background:var(--sn-tint); color:var(--sn-ink)}
+}
 button{font:inherit; color:inherit; cursor:pointer}
 button:focus-visible{outline:2.5px solid var(--sn); outline-offset:2px}
 
@@ -124,6 +142,7 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .fullbadge{display:inline-block; font-size:13px; font-weight:700; color:var(--faint); padding:9px 12px;
   border:1.5px dashed var(--line); border-radius:9px}
 .slot.is-full .where, .slot.is-full .when{opacity:.55}
+.grp{background:var(--sn-tint); color:var(--sn-ink); border-radius:5px; padding:1px 7px; font-weight:700; font-size:11.5px}
 .mine{background:var(--ink); color:var(--bg); border-radius:5px; padding:1px 7px; font-weight:800; font-size:11.5px}
 
 /* ---------- my bookings ---------- */
@@ -204,6 +223,62 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .foot b{color:var(--ink)}
 .foot a{color:var(--sn); font-weight:700}
 
+/* ---------- classes / places / reviews / about ---------- */
+.sec{margin-top:26px}
+.sec > h2{font-size:17px; font-weight:900; letter-spacing:-.02em; margin:0 0 12px}
+.cards{display:grid; gap:12px}
+@media (min-width:720px){ .cards.two{grid-template-columns:1fr 1fr} }
+.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px}
+.gsum{display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+.gsum .score{font-size:44px; font-weight:900; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums}
+.gsum .meta2{flex:1; min-width:140px}
+.gsum .btns{display:flex; gap:8px; flex-wrap:wrap; width:100%}
+.stars{color:var(--cta); letter-spacing:1px; font-size:15px}
+.stars .off{color:var(--line)}
+.rv .who{display:flex; align-items:center; gap:10px}
+.rv .av{width:34px; height:34px; border-radius:50%; background:var(--sn-tint); color:var(--sn-ink); display:grid; place-items:center;
+  font-weight:900; flex:none; overflow:hidden}
+.rv .av img{width:100%; height:100%; object-fit:cover}
+.rv .nm{font-weight:800; font-size:14.5px; line-height:1.2}
+.rv .sub{font-size:12px; color:var(--muted)}
+.src{margin-left:auto; font-size:11px; font-weight:800; border-radius:5px; padding:2px 7px; background:var(--line-soft); color:var(--muted); white-space:nowrap}
+.src.g{background:var(--yi-tint); color:var(--yi-ink)}
+.rv p{margin:10px 0 0; font-size:14.5px; line-height:1.7; white-space:pre-line; overflow-wrap:anywhere}
+.attrib{font-size:11.5px; color:var(--muted); margin-top:10px}
+.imgs{display:grid; gap:12px; margin-top:20px; max-width:640px; margin-inline:auto}
+.imgs img{display:block; width:100%; height:auto; border-radius:14px; border:1px solid var(--line); background:var(--surface)}
+.imgph{border:1.5px dashed var(--line); border-radius:14px; padding:56px 18px; text-align:center; color:var(--muted); font-size:14px; background:var(--surface)}
+
+/* ---------- loading: freediver doing dynamic with a monofin ---------- */
+.loader{margin-top:26px; padding:18px 12px 20px; border-radius:16px; background:var(--sn-tint); text-align:center; overflow:hidden}
+.loader svg{display:block; width:100%; max-width:420px; height:auto; margin:0 auto; overflow:visible}
+.loader .surf{fill:none; stroke:var(--sn); stroke-width:1.6; opacity:.45}
+.loader .floor{stroke:var(--sn); stroke-width:2; stroke-dasharray:14 10; opacity:.3}
+.loader .head{fill:var(--sn-ink)}
+.loader .body{stroke:var(--sn-ink); stroke-width:9; stroke-linecap:round}
+.loader .arm{stroke:var(--sn-ink); stroke-width:3.4; stroke-linecap:round}
+.loader .leg{stroke:var(--sn-ink); stroke-width:6; stroke-linecap:round}
+.loader .fin{fill:var(--sn)}
+.loader .bubbles circle{fill:none; stroke:var(--sn); stroke-width:1.2; opacity:0}
+.ltxt{margin-top:10px; font-size:13.5px; font-weight:700; color:var(--sn-ink)}
+@media (prefers-reduced-motion:no-preference){
+  .loader .swim{animation:swim 3.6s linear infinite}
+  .loader .bob{animation:bob .9s ease-in-out infinite}
+  .loader .kick{animation:kick .9s ease-in-out infinite}
+  .loader .surf{animation:surf 2.4s linear infinite}
+  .loader .bubbles{animation:trail 3.6s linear infinite}
+  .loader .bubbles circle{animation:rise 1.2s ease-out infinite}
+  .loader .bubbles circle:nth-child(2){animation-delay:.35s}
+  .loader .bubbles circle:nth-child(3){animation-delay:.7s}
+  @keyframes swim{from{transform:translateX(-90px)} to{transform:translateX(260px)}}
+  @keyframes bob{0%,100%{transform:translateY(-2px)} 50%{transform:translateY(2px)}}
+  @keyframes kick{0%,100%{transform:rotate(-13deg)} 50%{transform:rotate(13deg)}}
+  @keyframes surf{from{transform:translateX(0)} to{transform:translateX(-32px)}}
+  @keyframes trail{from{transform:translate(-30px,44px)} to{transform:translate(320px,44px)}}
+  @keyframes rise{0%{opacity:.8; transform:translateY(0)} 100%{opacity:0; transform:translateY(-26px)}}
+}
+@media (prefers-reduced-motion:reduce){ .loader .swim{transform:translateX(70px)} }
+
 /* ---------- bottom sheet ---------- */
 .scrim{position:fixed; inset:0; background:rgba(6,20,28,.45); display:flex; align-items:flex-end; justify-content:center; z-index:10}
 .sheet{background:var(--surface); width:100%; max-width:480px; border-radius:18px 18px 0 0; box-shadow:var(--shadow);
@@ -220,7 +295,7 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .sheet .row .book{flex:1; padding:13px}
 .ghost{border:1px solid var(--line); background:transparent; border-radius:9px; padding:13px 16px; font-weight:700; color:var(--muted)}
 .sheet .fine{font-size:12px; color:var(--muted); margin-top:10px}
-.toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%);
+.toast{position:fixed; left:50%; bottom:calc(84px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%);
   background:var(--ink); color:var(--bg); font-size:13.5px; font-weight:600; padding:11px 16px; border-radius:10px;
   z-index:20; max-width:calc(100% - 32px); box-shadow:var(--shadow)}
 @media (prefers-reduced-motion:no-preference){
@@ -229,6 +304,7 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 }
 </style>
 
+<nav class="tabbar" id="tabbar" aria-label="menu"></nav>
 <div class="wrap">
   <div class="top">
     <div class="eyebrow" id="eyebrow"></div>
@@ -239,15 +315,16 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
   </div>
 
   <div class="head"><h1 id="title"></h1></div>
+  <div id="schedctl">
   <nav class="months" id="months" aria-label="month"></nav>
 
   <div class="controls">
     <div class="seg" role="group" id="viewseg">
-      <button id="view-list" data-view="list"></button>
       <button id="view-cal" data-view="cal"></button>
-      <button id="view-my" data-view="my"></button>
+      <button id="view-list" data-view="list"></button>
     </div>
     <div class="chips" role="group" id="chips"></div>
+  </div>
   </div>
 
   <div class="sample" id="sample"><b id="sampletag"></b><span id="sampletxt"></span></div>
@@ -278,37 +355,39 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
    비워두면 아래 예시 데이터로 보여줌. */
 const CONFIG = {
   API: 'https://script.google.com/macros/s/AKfycbx30Q63SjKa35Vts8PlN9p-8aSwbLuNUHo5orEJcrLUK1HAlgpxbZijGMIf1YVqXIiJ/exec',
-  CLIENT_ID: '305522737266-2p597sk7hl3ibqsrak2o14giicg3e0ks.apps.googleusercontent.com',   // Google 로그인용 OAuth 클라이언트 ID(…apps.googleusercontent.com). 비워두면 '내 예약' 탭 숨김
+  CLIENT_ID: '305522737266-2p597sk7hl3ibqsrak2o14giicg3e0ks.apps.googleusercontent.com',
+  // 수업·가격 / 강사 탭에 보여줄 이미지 — GitHub 저장소에 올린 파일 이름. 여러 장이면 순서대로 적기
+  IMAGES: { classes: ['classes.jpg'], about: ['about.jpg'] },   // Google 로그인용 OAuth 클라이언트 ID(…apps.googleusercontent.com). 비워두면 '내 예약' 탭 숨김
 };
 
 /* 예시 데이터 — 시트 연결 전 미리보기용.
    d=날짜, s=am|pm, t=[시작,끝], p=sn(성남 아쿠아라인)|yi(용인 딥스테이션), cap=정원, bk=신청수, st=open|off */
 const SAMPLE = [
-  {d:'2026-09-26',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:2},
+  {d:'2026-09-26',s:'am',t:['10:00','12:00'],p:'sn',cap:3,bk:2},
   {d:'2026-09-26',s:'pm',t:['13:00','15:00'],p:'yi',cap:2,bk:2},
-  {d:'2026-09-27',s:'pm',t:['13:00','15:00'],p:'yi',cap:4,bk:1},
+  {d:'2026-09-27',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:1},
   {d:'2026-09-30',st:'off'},
-  {d:'2026-10-03',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:1},
-  {d:'2026-10-03',s:'pm',t:['14:00','16:00'],p:'sn',cap:4,bk:0},
+  {d:'2026-10-03',s:'am',t:['10:00','12:00'],p:'sn',cap:3,bk:1},
+  {d:'2026-10-03',s:'pm',t:['14:00','16:00'],p:'sn',cap:3,bk:0},
   {d:'2026-10-04',s:'am',t:['09:30','11:30'],p:'yi',cap:3,bk:3},
   {d:'2026-10-07',st:'off'},
-  {d:'2026-10-09',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:0},
-  {d:'2026-10-10',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:2},
+  {d:'2026-10-09',s:'am',t:['10:00','12:00'],p:'sn',cap:3,bk:0},
+  {d:'2026-10-10',s:'am',t:['10:00','12:00'],p:'sn',cap:3,bk:2},
   {d:'2026-10-10',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:1},
   {d:'2026-10-11',s:'am',t:['09:30','11:30'],p:'yi',cap:2,bk:0,memo:{ko:'레벨2 이상',en:'Level 2+'}},
   {d:'2026-10-14',s:'pm',t:['16:00','18:00'],p:'sn',cap:2,bk:0},
   {d:'2026-10-17',st:'off'},
   {d:'2026-10-18',st:'off'},
-  {d:'2026-10-24',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:4},
-  {d:'2026-10-24',s:'pm',t:['14:00','16:00'],p:'sn',cap:4,bk:1},
+  {d:'2026-10-24',s:'am',t:['10:00','12:00'],p:'sn',cap:3,bk:3},
+  {d:'2026-10-24',s:'pm',t:['14:00','16:00'],p:'sn',cap:3,bk:1},
   {d:'2026-10-25',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:0},
   {d:'2026-10-31',s:'am',t:['10:30','13:00'],p:'yi',cap:3,bk:0,memo:{ko:'펀다이빙',en:'Fun dive'}},
-  {d:'2026-11-01',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:0},
-  {d:'2026-11-07',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:0},
+  {d:'2026-11-01',s:'am',t:['10:00','12:00'],p:'sn',cap:3,bk:0},
+  {d:'2026-11-07',s:'am',t:['10:00','12:00'],p:'sn',cap:3,bk:0},
   {d:'2026-11-07',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:0},
   {d:'2026-11-14',st:'off'},
   {d:'2026-11-15',st:'off'},
-  {d:'2026-11-21',s:'am',t:['10:00','12:00'],p:'sn',cap:4,bk:1},
+  {d:'2026-11-21',s:'am',t:['10:00','12:00'],p:'sn',cap:3,bk:1},
   {d:'2026-11-28',s:'pm',t:['13:00','15:00'],p:'yi',cap:3,bk:0},
 ];
 
@@ -321,6 +400,12 @@ const SAMPLE_MY = [
   {id:'20260913-am-sn', d:'2026-09-13', s:'am', p:'sn', t:['10:00','12:00'], n:1, st:'ok'},
 ];
 
+/* 예시 후기 — 시트 연결 전 미리보기용 (실제 버전은 시트 '후기' 탭 + 구글 후기) */
+const SAMPLE_CONTENT = {
+  reviews:[{date:'2026-09-20', name:'예시 수강생', stars:5, text:'(예시 후기) 시트 후기 탭에 옮겨 적은 후기가 이렇게 보여요.', src:'인스타그램'}],
+  google:{rating:5.0, count:1, url:'', write:'', reviews:[{author:'예시 사용자', photo:'', rating:5, text:'(예시) 구글 지도 후기가 이렇게 보여요.', when:'1주 전', url:''}]},
+};
+
 const T = {
   ko:{
     eyebrow:'ALOHA DIVING · 프리다이빙 수업',
@@ -329,7 +414,7 @@ const T = {
     place:{sn:'성남 아쿠아라인', yi:'용인 딥스테이션'},
     short:{sn:'성남', yi:'용인'},
     slot:{am:'오전', pm:'오후'},
-    left:(n,c)=>`잔여 ${n} / ${c}석`,
+    left:n=>`잔여 ${n}석`,
     full:'마감', book:'신청',
     off:'외부일정', shut:'정기휴무',
     dow:['일','월','화','수','목','금','토'],
@@ -337,10 +422,20 @@ const T = {
     mtab:(y,m)=>`${m}월`,
     seats:n=> n ? `잔여 ${n}석` : '마감',
     swipe:'← 달력을 옆으로 밀면 다른 달로 넘어가요 →',
-    loading:'일정을 불러오는 중…',
+    loading:'잠수해서 일정 가져오는 중…',
     error:'일정을 불러오지 못했어요. 잠시 후 다시 시도하거나 카카오톡 채널로 문의해 주세요.',
     retry:'다시 시도',
     my:'내 예약', myTitle:'내 <em>예약</em>',
+    nav:{schedule:'일정', classes:'수업·가격', reviews:'후기', about:'강사', my:'내 예약'},
+    ttl:{classes:'수업 <em>& 가격</em>', reviews:'수강 <em>후기</em>', about:'강사 <em>소개</em>'},
+    cDur:'소요', cWho:'대상', cIncl:'포함', cExcl:'불포함', cGo:'일정 보고 신청하기',
+    placesH:'장소 · 수영장 입장료', placesSub:'입장료는 수업료와 별도로 현장에서 내요.', weekday:'주중', weekend:'주말', map:'지도 보기', bringH:'준비물',
+    gTitle:'Google 후기', gCount:n=>`후기 ${n}개`, gAll:'Google에서 전체 후기 보기', gWrite:'후기 남기기',
+    gAttrib:'Google 후기는 Google 지도에서 가져왔어요.', rvOthers:'수강생 후기', rvEmpty:'아직 등록된 후기가 없어요.',
+    certH:'자격', careerH:'경력', contactH:'문의', insta:'인스타그램', kakao:'카카오톡 채널',
+    notReady:'준비 중이에요.',
+    imgMissing:'이미지 준비 중이에요.', imgSample:f=>`여기에 GitHub에 올린 <b>${esc(f)}</b> 이미지가 보여요`,
+    footMini:'<b>문의</b> — 카카오톡 채널 @알로하다이빙 · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>',
     myIntro:'신청할 때 로그인한 구글 계정으로 로그인하면 내 예약을 볼 수 있어요.',
     logout:'로그아웃',
     myEmpty:'아직 신청 내역이 없어요.',
@@ -355,12 +450,15 @@ const T = {
     pick:'날짜를 눌러 수업을 확인하세요.',
     sampletag:'예시', sampletxt:'가짜 일정으로 만든 목업입니다',
     sheetTitle:'수업 신청',
-    dl:['날짜','시간','장소','남은 자리','안내'],
+    dl:['날짜','시간','장소','남은 자리','안내','인원'],
+    group:'4인 그룹·가족 가능',
+    ppl:n=>`최대 ${n}명`,
+    pplGroup:n=>`최대 ${n}명 · 4인 그룹·가족은 이 시간 단독으로 가능`,
     go:'신청서 작성하기', close:'닫기',
     fine:'신청서 제출 후 개별 연락으로 확정됩니다.',
     toast:'목업이라 실제 구글폼은 아직 연결 전이에요',
     legend:{sn:'성남 아쿠아라인', yi:'용인 딥스테이션', off:'외부일정', shut:'아쿠아라인 정기휴무 (2·4번째 일요일)'},
-    foot:'<b>신청 방법</b> — 원하는 시간의 [신청]을 누르면 날짜·장소가 채워진 신청서가 열립니다. 제출 후 개별 연락으로 확정돼요.<br><b>문의</b> — 카카오톡 채널 @알로하다이빙 · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>',
+    foot:'<b>신청 방법</b> — 원하는 시간의 [신청]을 누르면 날짜·장소가 채워진 신청서가 열립니다. 제출 후 개별 연락으로 확정돼요.<br><b>인원</b> — 한 시간대 최대 3명이에요. 4명은 그룹·가족만, 아직 신청자가 없는 시간대를 단독으로 신청할 수 있어요.<br><b>문의</b> — 카카오톡 채널 @알로하다이빙 · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>',
   },
   en:{
     eyebrow:'ALOHA DIVING · FREEDIVING CLASSES',
@@ -369,7 +467,7 @@ const T = {
     place:{sn:'Seongnam · Aqualine', yi:'Yongin · Deep Station'},
     short:{sn:'Seongnam', yi:'Yongin'},
     slot:{am:'AM', pm:'PM'},
-    left:(n,c)=>`${n} of ${c} spots left`,
+    left:n=>`${n} spot${n>1?'s':''} left`,
     full:'Full', book:'Book',
     off:'Unavailable', shut:'Pool closed',
     dow:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
@@ -377,10 +475,20 @@ const T = {
     mtab:(y,m)=>['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1],
     seats:n=> n ? `${n} spots left` : 'Full',
     swipe:'← Swipe the calendar to change month →',
-    loading:'Loading schedule…',
+    loading:'Diving for the schedule…',
     error:'Could not load the schedule. Please try again, or message us on KakaoTalk.',
     retry:'Try again',
     my:'My bookings', myTitle:'My <em>bookings</em>',
+    nav:{schedule:'Schedule', classes:'Classes', reviews:'Reviews', about:'Instructor', my:'Bookings'},
+    ttl:{classes:'Classes <em>& prices</em>', reviews:'Student <em>reviews</em>', about:'Your <em>instructor</em>'},
+    cDur:'Length', cWho:'For', cIncl:'Included', cExcl:'Not included', cGo:'See dates & book',
+    placesH:'Venues · pool entry fees', placesSub:'Pool entry is paid at the venue, separate from the class fee.', weekday:'Weekday', weekend:'Weekend', map:'Open map', bringH:'What to bring',
+    gTitle:'Google reviews', gCount:n=>`${n} review${n===1?'':'s'}`, gAll:'See all reviews on Google', gWrite:'Write a review',
+    gAttrib:'Google reviews are shown from Google Maps.', rvOthers:'From our students', rvEmpty:'No reviews yet.',
+    certH:'Certifications', careerH:'Experience', contactH:'Contact', insta:'Instagram', kakao:'KakaoTalk channel',
+    notReady:'Coming soon.',
+    imgMissing:'Image coming soon.', imgSample:f=>`Your uploaded image <b>${esc(f)}</b> appears here`,
+    footMini:'<b>Questions</b> — KakaoTalk channel @alohadiving · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">Privacy policy</a>',
     myIntro:'Sign in with the Google account you used on the booking form to see your bookings.',
     logout:'Sign out',
     myEmpty:'No bookings yet.',
@@ -395,12 +503,15 @@ const T = {
     pick:'Tap a date to see its classes.',
     sampletag:'SAMPLE', sampletxt:'Mockup built with example dates',
     sheetTitle:'Book a class',
-    dl:['Date','Time','Venue','Spots left','Note'],
+    dl:['Date','Time','Venue','Spots left','Note','People'],
+    group:'Group of 4 OK',
+    ppl:n=>`Up to ${n}`,
+    pplGroup:n=>`Up to ${n} · or a group/family of 4 as a private session`,
     go:'Fill in the booking form', close:'Close',
     fine:'We will contact you to confirm after you submit the form.',
     toast:'Mockup — the Google Form is not connected yet',
     legend:{sn:'Seongnam · Aqualine', yi:'Yongin · Deep Station', off:'Unavailable', shut:'Aqualine closed (2nd & 4th Sun)'},
-    foot:'<b>How to book</b> — Tap [Book] on a class to open a form with the date and venue filled in. We confirm each booking personally.<br><b>Questions</b> — KakaoTalk channel @alohadiving · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">Privacy policy</a>',
+    foot:'<b>How to book</b> — Tap [Book] on a class to open a form with the date and venue filled in. We confirm each booking personally.<br><b>Group size</b> — Up to 3 people per class. A group or family of 4 can book an empty class as a private session.<br><b>Questions</b> — KakaoTalk channel @alohadiving · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">Privacy policy</a>',
   }
 };
 
@@ -423,11 +534,13 @@ let MODE = 'loading';   // loading | sample | live | error
 let USER = null;        // {name,email,picture,cred,exp} — 구글 로그인
 let MY = null;          // 내 예약 목록
 let MYSTATE = 'idle';   // idle | loading | ok | error
+let CONTENT = null;     // 후기 (시트 후기 + 구글 후기)
 let gisReady = false;
 
 const state = {
   lang: store.get('aloha.lang') || ((navigator.language||'ko').startsWith('ko') ? 'ko' : 'en'),
-  view: store.get('aloha.view') || (matchMedia('(min-width:720px)').matches ? 'cal' : 'list'),
+  page: 'schedule',      // schedule | classes | reviews | about | my  (주소 뒤 #classes 처럼 링크 가능)
+  view: ['cal','list'].includes(store.get('aloha.view')) ? store.get('aloha.view') : (matchMedia('(min-width:720px)').matches ? 'cal' : 'list'),
   place: 'all',
   month: firstMonth,
   sel: null,
@@ -456,12 +569,13 @@ function slotHTML(r){
   const pips = Array.from({length:r.cap}, (_,i)=> `<i class="${i<r.bk?'taken':''}"></i>`).join('');
   const memo = r.memo ? `<span class="memo">${r.memo[state.lang]}</span>` : '';
   const mine = myIds().has(slotId(r)) ? `<span class="mine">${t.booked}</span>` : '';
+  const grp = r.bk===0 && r.cap>=3 ? `<span class="grp">${t.group}</span>` : '';
   const act = full ? `<span class="fullbadge">${t.full}</span>`
                    : `<button class="book" data-id="${DATA.indexOf(r)}">${t.book}</button>`;
   return `<div class="slot ${r.p}${full?' is-full':''}">
     <div class="when"><small>${t.slot[r.s]}</small><b>${r.t[0]}</b><small>~${r.t[1]}</small></div>
     <div class="where"><span class="dot"></span>${t.place[r.p]}</div>
-    <div class="meta"><span class="pips" aria-hidden="true">${pips}</span><span>${full? t.full : t.left(left,r.cap)}</span>${mine}${memo}</div>
+    <div class="meta"><span class="pips" aria-hidden="true">${pips}</span><span>${full? t.full : t.left(left)}</span>${mine}${grp}${memo}</div>
     <div class="act">${act}</div></div>`;
 }
 
@@ -544,7 +658,7 @@ function renderMy(){
   const av = user.picture ? `<img src="${user.picture}" alt="" referrerpolicy="no-referrer">` : (user.name||'?').slice(0,1);
   let h = `<div class="me"><div class="av">${av}</div><div class="who"><b>${user.name||''}</b><small>${user.email}</small></div>
     <button class="ghost sm" id="logout">${t.logout}</button></div>`;
-  if(MODE!=='sample' && MYSTATE==='loading') return h + `<div class="empty">${t.loading}</div>`;
+  if(MODE!=='sample' && MYSTATE==='loading') return h + loaderHTML(t.loading);
   if(MODE!=='sample' && MYSTATE==='error') return h + `<div class="empty">${t.myErr}</div>`;
   const list = myList();
   if(!list.length) return h + `<div class="empty">${t.myEmpty}</div><div class="myhelp">${t.myHelp}</div>`;
@@ -552,6 +666,88 @@ function renderMy(){
   if(up.length) h += `<section class="mysec"><h2>${t.myUp}</h2><div class="slots">${up.map(bookingHTML).join('')}</div></section>`;
   if(past.length) h += `<section class="mysec"><h2>${t.myPast}</h2><div class="slots">${past.map(bookingHTML).join('')}</div></section>`;
   return h + `<div class="myhelp">${t.myHelp}</div>`;
+}
+
+const PAGES = ['schedule','classes','reviews','about','my'];
+const ICONS = {
+  schedule:'<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  classes:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/>',
+  reviews:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3l-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/>',
+  about:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>',
+  my:'<path d="M6 3h12v18l-6-4-6 4z"/>',
+};
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl = u => /^https:\/\//i.test(String(u||'').trim()) ? String(u).trim() : '';
+const L = o => o ? (o[state.lang] || o.ko || '') : '';
+const content = () => MODE==='sample' ? SAMPLE_CONTENT : CONTENT;
+const starsHTML = n => { n = Math.round(n||0); return `<span class="stars" aria-label="${n}/5">${'★'.repeat(n)}<span class="off">${'★'.repeat(5-n)}</span></span>`; };
+
+function renderReviews(){
+  const t = T[state.lang], c = content();
+  if(!c) return `<div class="empty">${t.notReady}</div>`;
+  const g = c.google;
+  let h = '';
+  if(g && (g.count || (g.reviews||[]).length)){
+    const all = safeUrl(g.url), write = safeUrl(g.write);
+    h += `<section class="sec"><div class="card gsum">
+      <div class="score">${g.rating ? Number(g.rating).toFixed(1) : '–'}</div>
+      <div class="meta2"><div>${starsHTML(g.rating)}</div><div class="sub">${t.gTitle} · ${t.gCount(g.count||0)}</div></div>
+      ${all||write ? `<div class="btns">${write?`<a class="book" href="${esc(write)}" target="_blank" rel="noopener">${t.gWrite}</a>`:''}${all?`<a class="linkbtn" href="${esc(all)}" target="_blank" rel="noopener">${t.gAll} ↗</a>`:''}</div>` : ''}
+    </div>`;
+    if((g.reviews||[]).length){
+      h += `<div class="cards" style="margin-top:12px">` + g.reviews.map(r => {
+        const ph = safeUrl(r.photo);
+        return `<article class="card rv"><div class="who">
+          <div class="av">${ph?`<img src="${esc(ph)}" alt="" referrerpolicy="no-referrer">`:esc((r.author||'?').slice(0,1))}</div>
+          <div><div class="nm">${esc(r.author)}</div><div class="sub">${starsHTML(r.rating)} · ${esc(r.when)}</div></div>
+          <span class="src g">Google</span></div>
+          ${r.text?`<p>${esc(r.text)}</p>`:''}</article>`;
+      }).join('') + `</div><div class="attrib">${t.gAttrib}</div>`;
+    }
+    h += `</section>`;
+  }
+  if((c.reviews||[]).length){
+    h += `<section class="sec"><h2>${t.rvOthers}</h2><div class="cards">` + c.reviews.map(r => `<article class="card rv"><div class="who">
+      <div class="av">${esc((r.name||'?').slice(0,1))}</div>
+      <div><div class="nm">${esc(r.name)}</div><div class="sub">${starsHTML(r.stars)}${r.date?` · ${esc(r.date)}`:''}</div></div>
+      ${r.src?`<span class="src">${esc(r.src)}</span>`:''}</div>
+      <p>${esc(r.text)}</p></article>`).join('') + `</div></section>`;
+  }
+  return h || `<div class="empty">${t.rvEmpty}</div>`;
+}
+
+function renderImages(pg){
+  const t = T[state.lang], files = (CONFIG.IMAGES && CONFIG.IMAGES[pg]) || [];
+  if(MODE==='sample' || !files.length){
+    return `<div class="imgs">${(files.length?files:['—']).map(f=>`<div class="imgph">${t.imgSample(f)}</div>`).join('')}</div>`;
+  }
+  return `<div class="imgs">${files.map(f=>`<img src="${esc(f)}" alt="${esc(t.nav[pg])}" loading="lazy" onerror="this.outerHTML='<div class=&quot;imgph&quot;>${esc(t.imgMissing)}</div>'">`).join('')}</div>`;
+}
+
+/* 로딩 애니메이션: 모노핀 다이버가 돌핀킥으로 수평 잠영(다이나믹) */
+const DIVER = `<div class="loader" role="status"><svg viewBox="0 0 260 96" aria-hidden="true">
+  <path class="surf" d="M0 14 q16 -6 32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0"/>
+  <line class="floor" x1="0" y1="86" x2="260" y2="86"/>
+  <g class="swim"><g class="bob">
+    <g transform="translate(0,50)">
+      <line class="arm" x1="62" y1="-2" x2="84" y2="-2"/>
+      <circle class="head" cx="60" cy="0" r="6"/>
+      <line class="body" x1="52" y1="1" x2="24" y2="1"/>
+      <g transform="translate(24,1)"><g class="kick">
+        <line class="leg" x1="0" y1="0" x2="-26" y2="0"/>
+        <path class="fin" d="M-24 0 L-44 -11 Q-39 0 -44 11 Z"/>
+      </g></g>
+    </g>
+  </g></g>
+  <g class="bubbles"><circle cx="0" cy="0" r="2.4"/><circle cx="5" cy="-6" r="1.6"/><circle cx="-3" cy="-11" r="1.2"/></g>
+</svg><div class="ltxt"></div></div>`;
+const loaderHTML = msg => DIVER.replace('<div class="ltxt"></div>', `<div class="ltxt">${esc(msg)}</div>`);
+
+function setPage(p, push){
+  if(!PAGES.includes(p) || (p==='my' && !myOn())) p = 'schedule';
+  state.page = p;
+  if(push !== false){ try{ history.replaceState(null, '', p==='schedule' ? location.pathname + location.search : '#'+p); }catch(e){} }
+  render(); window.scrollTo(0,0);
 }
 
 function firstOpenDay(){
@@ -565,30 +761,35 @@ function render(){
   const t = T[state.lang], m = state.month;
   document.documentElement.lang = state.lang;
   $('eyebrow').textContent = t.eyebrow;
-  $('title').innerHTML = state.view==='my' ? t.myTitle : t.month(m.getFullYear(), m.getMonth()+1);
+  if(state.page==='my' && !myOn()) state.page = 'schedule';
+  const pg = state.page;
+  $('title').innerHTML = pg==='schedule' ? t.month(m.getFullYear(), m.getMonth()+1) : pg==='my' ? t.myTitle : t.ttl[pg];
+  $('tabbar').innerHTML = PAGES.filter(p => p!=='my' || myOn()).map(p =>
+    `<button data-page="${p}"${p===pg?' aria-current="page"':''}><svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[p]}</svg><span>${t.nav[p]}</span></button>`).join('');
   $('lang-ko').setAttribute('aria-pressed', state.lang==='ko');
   $('lang-en').setAttribute('aria-pressed', state.lang==='en');
-  if(state.view==='my' && !myOn()) state.view = 'list';
-  const isMy = state.view==='my';
-  $('view-list').textContent = t.list; $('view-cal').textContent = t.cal; $('view-my').textContent = t.my;
-  $('view-my').hidden = !myOn();
-  $('view-my').setAttribute('aria-pressed', isMy);
-  $('chips').hidden = isMy; $('months').hidden = isMy;
+  const isMy = pg==='my';
+  $('view-list').textContent = t.list; $('view-cal').textContent = t.cal;
+  $('schedctl').hidden = pg!=='schedule';
   $('view-list').setAttribute('aria-pressed', state.view==='list');
   $('view-cal').setAttribute('aria-pressed', state.view==='cal');
   $('chips').innerHTML = ['all','sn','yi'].map(p=>
     `<button class="chip" id="chip-${p}" data-place="${p}" aria-pressed="${state.place===p}">${p==='all'?'':`<span class="sw" style="background:var(--${p})"></span>`}${p==='all'?t.all:t.place[p]}</button>`).join('');
   $('sample').hidden = MODE!=='sample';
   $('sampletag').textContent = t.sampletag; $('sampletxt').textContent = t.sampletxt;
-  $('foot').innerHTML = t.foot;
+  $('foot').innerHTML = pg==='schedule' ? t.foot : t.footMini;
 
-  if(MODE==='loading'){ $('months').innerHTML=''; $('main').innerHTML = `<div class="empty">${t.loading}</div>`; return; }
+  if(MODE==='loading' && (pg==='classes' || pg==='about')){ $('main').innerHTML = renderImages(pg); return; }
+  if(MODE==='loading'){ $('months').innerHTML=''; $('main').innerHTML = loaderHTML(t.loading); return; }
   if(MODE==='error'){ $('months').innerHTML=''; $('main').innerHTML = `<div class="empty">${t.error}<br><button class="retry" id="retry">${t.retry}</button></div>`; return; }
 
   $('months').innerHTML = monthList().map(mm=>{
     const n = seatsIn(mm), on = +mm===+m;
     return `<button class="mtab" data-month="${key(mm)}" aria-pressed="${on}"><span class="m">${t.mtab(mm.getFullYear(), mm.getMonth()+1)}</span><span class="c${n?'':' zero'}">${t.seats(n)}</span></button>`;
   }).join('');
+  if(pg==='classes'){ $('main').innerHTML = renderImages('classes'); return; }
+  if(pg==='reviews'){ $('main').innerHTML = renderReviews(); return; }
+  if(pg==='about'){ $('main').innerHTML = renderImages('about'); return; }
   if(state.view==='cal'){
     const [start,end] = calRange(m).map(key);
     if(!state.sel || state.sel<start || state.sel>end) state.sel = firstOpenDay();
@@ -614,7 +815,7 @@ function classCode(r){
 function openSheet(r){
   const t = T[state.lang], left = r.cap - r.bk;
   $('sh-title').textContent = t.sheetTitle;
-  const rows = [[t.dl[0], t.date(parse(r.d))],[t.dl[1], `${t.slot[r.s]} ${r.t[0]}–${r.t[1]}`],[t.dl[2], t.place[r.p]],[t.dl[3], t.left(left,r.cap)]];
+  const rows = [[t.dl[0], t.date(parse(r.d))],[t.dl[1], `${t.slot[r.s]} ${r.t[0]}–${r.t[1]}`],[t.dl[2], t.place[r.p]],[t.dl[3], t.left(left)], [t.dl[5], r.bk===0 && r.cap>=3 ? t.pplGroup(left) : t.ppl(left)]];
   if(r.memo) rows.push([t.dl[4], r.memo[state.lang]]);
   $('sh-dl').innerHTML = rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('');
   const go = $('sh-go');
@@ -650,7 +851,7 @@ function initGIS(){
   if(!window.google || !google.accounts || !google.accounts.id) return;
   google.accounts.id.initialize({client_id:CONFIG.CLIENT_ID, callback:onCredential, auto_select:true, cancel_on_tap_outside:true});
   gisReady = true;
-  if(state.view==='my') render();
+  if(state.page==='my') render();
 }
 function onCredential(resp){
   const p = decodeJwt(resp.credential);
@@ -685,7 +886,7 @@ function restoreUser(){
 }
 
 async function load(quiet){
-  if(!CONFIG.API){ DATA = SAMPLE; MODE = 'sample'; render(); return; }
+  if(!CONFIG.API){ DATA = SAMPLE; CONTENT = SAMPLE_CONTENT; MODE = 'sample'; render(); return; }
   if(!quiet){ MODE = 'loading'; render(); }
   try{
     const res = await fetch(CONFIG.API, {cache:'no-store'});
@@ -693,6 +894,7 @@ async function load(quiet){
     const j = await res.json();
     DATA = [...j.slots, ...j.off.map(d => ({d, st:'off'}))];
     FORM = j.form && j.form.url && j.form.entry ? j.form : null;
+    CONTENT = j.content || null;
     MODE = 'live';
   }catch(e){
     if(quiet) return;
@@ -706,6 +908,7 @@ document.addEventListener('click', e=>{
   if(go){ if(go.dataset.mock){ e.preventDefault(); toast(T[state.lang].toast); } closeSheet(); return; }
   const b = e.target.closest('button'); if(!b) { if(e.target.id==='scrim') closeSheet(); return; }
   if(b.dataset.lang){ state.lang=b.dataset.lang; store.set('aloha.lang',state.lang); render(); }
+  else if(b.dataset.page){ setPage(b.dataset.page); }
   else if(b.dataset.view){ state.view=b.dataset.view; store.set('aloha.view',state.view); render(); }
   else if(b.dataset.place){ state.place=b.dataset.place; state.sel=null; render(); }
   else if(b.dataset.month){ setMonth(parse(b.dataset.month)); }
@@ -721,7 +924,7 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
 let sx = null, sy = 0;
 $('main').addEventListener('touchstart', e=>{ const p=e.touches[0]; sx=p.clientX; sy=p.clientY; }, {passive:true});
 $('main').addEventListener('touchend', e=>{
-  if(sx===null || state.view!=='cal') return;
+  if(sx===null || state.page!=='schedule' || state.view!=='cal') return;
   const p = e.changedTouches[0], dx = p.clientX-sx, dy = p.clientY-sy; sx = null;
   if(Math.abs(dx)>60 && Math.abs(dy)<40) setMonth(addMonths(state.month, dx<0 ? 1 : -1));
 });
@@ -738,5 +941,7 @@ if(CONFIG.CLIENT_ID){
   g.src = 'https://accounts.google.com/gsi/client'; g.async = true; g.onload = initGIS;
   document.head.appendChild(g);
 }
+window.addEventListener('hashchange', () => setPage(location.hash.slice(1) || 'schedule', false));
+state.page = PAGES.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'schedule';
 load().then(() => { if(USER) loadMy(true); });
 </script>
