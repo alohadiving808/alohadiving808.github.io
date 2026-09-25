@@ -249,6 +249,51 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .imgs img{display:block; width:100%; height:auto; border-radius:14px; border:1px solid var(--line); background:var(--surface)}
 .imgph{border:1.5px dashed var(--line); border-radius:14px; padding:56px 18px; text-align:center; color:var(--muted); font-size:14px; background:var(--surface)}
 
+/* ---------- filters (pool / class) ---------- */
+.filters{display:flex; flex-direction:column; gap:9px; margin-top:18px}
+.fgrp{display:flex; align-items:baseline; gap:8px 10px; flex-wrap:wrap}
+.fgrp .chips{flex:1 1 0; min-width:0}
+.flabel{font-size:13px; font-weight:800; color:var(--muted); letter-spacing:-.01em; white-space:nowrap; flex:none}
+@media (max-width:420px){ .chip{padding:6px 9px; font-size:12.5px} }
+
+/* ---------- classes & instructor ---------- */
+.lede{margin:18px 0 0; font-size:14.5px; line-height:1.7; color:var(--muted); text-wrap:pretty}
+.cls{margin-top:22px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:18px 16px}
+.cls .tag{display:inline-block; font-size:11.5px; font-weight:800; letter-spacing:.01em; padding:3px 9px; border-radius:999px;
+  background:var(--sn-tint); color:var(--sn-ink)}
+.cls h2{font-size:22px; font-weight:900; letter-spacing:-.035em; margin:9px 0 0; line-height:1.15}
+.cls .lead{margin:10px 0 0; font-size:15px; line-height:1.75; text-wrap:pretty}
+.cls h3{font-size:13px; font-weight:800; color:var(--muted); letter-spacing:.02em; margin:18px 0 8px}
+.cls ul{margin:0; padding-left:2px; list-style:none; display:flex; flex-direction:column; gap:6px}
+.cls ul li{font-size:14.5px; line-height:1.6; padding-left:15px; position:relative}
+.cls ul li::before{content:'·'; position:absolute; left:3px; font-weight:900; color:var(--sn)}
+.cls ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:7px}
+.cls ol li{font-size:14.5px; line-height:1.6}
+.cls ol li::marker{font-weight:900; color:var(--sn)}
+.kv{display:grid; grid-template-columns:auto 1fr; gap:7px 14px; margin-top:16px; font-size:14px; line-height:1.6}
+.kv dt{color:var(--muted); font-weight:700; white-space:nowrap}
+.kv dd{margin:0; overflow-wrap:anywhere}
+.pricebox{margin-top:16px; border:1.5px solid var(--sn); border-radius:12px; padding:13px 14px; background:var(--sn-tint)}
+.pricebox .ph{font-size:11.5px; font-weight:800; letter-spacing:.1em; color:var(--sn-ink); opacity:.8}
+.pricerow{display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-top:8px}
+.pricerow span{font-size:14px; color:var(--sn-ink); font-weight:600}
+.pricerow b{font-size:16px; font-weight:900; letter-spacing:-.02em; color:var(--sn-ink); font-variant-numeric:tabular-nums; white-space:nowrap}
+.pricebox .pnote{margin-top:10px; font-size:12.5px; color:var(--sn-ink); opacity:.85; line-height:1.55}
+.callout{margin-top:16px; border-left:3px solid var(--cta); background:var(--line-soft); border-radius:0 9px 9px 0;
+  padding:11px 13px; font-size:13.5px; line-height:1.65}
+.callout b{font-weight:800}
+.tbl{width:100%; border-collapse:collapse; margin-top:12px; font-size:14px}
+.tbl th,.tbl td{border-bottom:1px solid var(--line); padding:10px 8px; text-align:left; vertical-align:top}
+.tbl th{font-size:12px; font-weight:800; color:var(--muted); letter-spacing:.02em; white-space:nowrap}
+.tbl td.num{text-align:right; font-variant-numeric:tabular-nums; font-weight:700; white-space:nowrap}
+.tbl td small{display:block; color:var(--muted); font-weight:400; font-size:12px; margin-top:3px}
+.maplink{color:var(--sn); font-weight:700; text-decoration:none; font-size:12.5px; white-space:nowrap}
+.photo{margin-top:16px; border:1.5px dashed var(--line); border-radius:13px; padding:34px 16px; text-align:center;
+  color:var(--faint); font-size:13px; font-weight:700; background:var(--bg)}
+.bio{margin-top:20px}
+.bio p{margin:0 0 12px; font-size:15.5px; line-height:1.8; text-wrap:pretty}
+.bio p.sig{font-size:19px; font-weight:900; letter-spacing:-.03em; margin-bottom:16px}
+
 /* ---------- loading: freediver doing dynamic with a monofin ---------- */
 .loader{margin-top:26px; padding:18px 12px 20px; border-radius:16px; background:var(--sn-tint); text-align:center; overflow:hidden}
 .loader svg{display:block; width:100%; max-width:420px; height:auto; margin:0 auto; overflow:visible}
@@ -318,12 +363,9 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
   <div id="schedctl">
   <nav class="months" id="months" aria-label="month"></nav>
 
-  <div class="controls">
-    <div class="seg" role="group" id="viewseg">
-      <button id="view-cal" data-view="cal"></button>
-      <button id="view-list" data-view="list"></button>
-    </div>
-    <div class="chips" role="group" id="chips"></div>
+  <div class="filters">
+    <div class="fgrp"><span class="flabel" id="lab-place"></span><div class="chips" role="group" id="chips-place"></div></div>
+    <div class="fgrp"><span class="flabel" id="lab-class"></span><div class="chips" role="group" id="chips-class"></div></div>
   </div>
   </div>
 
@@ -357,8 +399,14 @@ const CONFIG = {
   API: 'https://script.google.com/macros/s/AKfycbx30Q63SjKa35Vts8PlN9p-8aSwbLuNUHo5orEJcrLUK1HAlgpxbZijGMIf1YVqXIiJ/exec',
   CLIENT_ID: '305522737266-2p597sk7hl3ibqsrak2o14giicg3e0ks.apps.googleusercontent.com',
   // 수업·가격 / 강사 탭에 보여줄 이미지 — GitHub 저장소에 올린 파일 이름. 여러 장이면 순서대로 적기
-  IMAGES: { classes: ['classes.jpg'], about: ['about.jpg'] },   // Google 로그인용 OAuth 클라이언트 ID(…apps.googleusercontent.com). 비워두면 '내 예약' 탭 숨김
+  IMAGES: { classes: [], about: [] },
+  // 일정에 보여줄 달 수. 0 = 이번 달만, 1 = 이번 달 + 다음 달
+  MONTHS_AHEAD: 0,
 };
+
+/* 수업 종류. 코드 = 시트 '일정' 탭 '수업' 칸에 적는 값(여러 개면 쉼표로).
+   시트 칸이 비어 있으면 어느 수업을 골라도 그 슬롯이 보임 */
+const CLASS_KEYS = { ko: ['expko','cw','ow','fun'], en: ['expen','padien','fun'] };
 
 /* 예시 데이터 — 시트 연결 전 미리보기용.
    d=날짜, s=am|pm, t=[시작,끝], p=sn(성남 아쿠아라인)|yi(용인 딥스테이션), cap=정원, bk=신청수, st=open|off */
@@ -410,7 +458,9 @@ const T = {
   ko:{
     eyebrow:'ALOHA DIVING · 프리다이빙 수업',
     month:(y,m)=>`${m}월 <em>수업 일정</em>`,
-    list:'목록', cal:'달력', all:'전체',
+    fPlace:'다이빙풀', fClass:'수업',
+    cls:{expko:'체험 다이빙', cw:'PADI 제한수역', ow:'PADI 개방수역', fun:'펀다이빙',
+         expen:'체험 다이빙 (영어)', padien:'PADI 프리다이버 (영어)'},
     place:{sn:'성남 아쿠아라인', yi:'용인 딥스테이션'},
     short:{sn:'성남', yi:'용인'},
     slot:{am:'오전', pm:'오후'},
@@ -450,7 +500,9 @@ const T = {
     pick:'날짜를 눌러 수업을 확인하세요.',
     sampletag:'예시', sampletxt:'가짜 일정으로 만든 목업입니다',
     sheetTitle:'수업 신청',
-    dl:['날짜','시간','장소','남은 자리','안내','인원'],
+    dl:['날짜','시간','장소','남은 자리','안내','인원','수업'],
+    priceH:'가격', photoSlot:'사진 자리',
+    venueH:'장소 · 수영장 입장료', mapGo:'지도',
     group:'4인 그룹·가족 가능',
     ppl:n=>`최대 ${n}명`,
     pplGroup:n=>`최대 ${n}명 · 4인 그룹·가족은 이 시간 단독으로 가능`,
@@ -463,7 +515,9 @@ const T = {
   en:{
     eyebrow:'ALOHA DIVING · FREEDIVING CLASSES',
     month:(y,m)=>`<em>${['January','February','March','April','May','June','July','August','September','October','November','December'][m-1]}</em> classes`,
-    list:'List', cal:'Calendar', all:'All',
+    fPlace:'Pool', fClass:'Class',
+    cls:{expen:'Try Freediving', padien:'PADI Freediver', fun:'Fun Diving',
+         expko:'Try Freediving (Korean)', cw:'PADI confined water', ow:'PADI open water'},
     place:{sn:'Seongnam · Aqualine', yi:'Yongin · Deep Station'},
     short:{sn:'Seongnam', yi:'Yongin'},
     slot:{am:'AM', pm:'PM'},
@@ -503,7 +557,9 @@ const T = {
     pick:'Tap a date to see its classes.',
     sampletag:'SAMPLE', sampletxt:'Mockup built with example dates',
     sheetTitle:'Book a class',
-    dl:['Date','Time','Venue','Spots left','Note','People'],
+    dl:['Date','Time','Venue','Spots left','Note','People','Class'],
+    priceH:'PRICE', photoSlot:'Photo goes here',
+    venueH:'Venues · pool entry fees', mapGo:'Map',
     group:'Group of 4 OK',
     ppl:n=>`Up to ${n}`,
     pplGroup:n=>`Up to ${n} · or a group/family of 4 as a private session`,
@@ -537,11 +593,16 @@ let MYSTATE = 'idle';   // idle | loading | ok | error
 let CONTENT = null;     // 후기 (시트 후기 + 구글 후기)
 let gisReady = false;
 
+const uiLang = () => {
+  const ls = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language||'ko']);
+  return ls.some(l => String(l).toLowerCase().startsWith('ko')) ? 'ko' : 'en';
+};
+
 const state = {
-  lang: store.get('aloha.lang') || ((navigator.language||'ko').startsWith('ko') ? 'ko' : 'en'),
+  lang: store.get('aloha.lang') || uiLang(),
   page: 'schedule',      // schedule | classes | reviews | about | my  (주소 뒤 #classes 처럼 링크 가능)
-  view: ['cal','list'].includes(store.get('aloha.view')) ? store.get('aloha.view') : (matchMedia('(min-width:720px)').matches ? 'cal' : 'list'),
-  place: 'all',
+  place: null,           // null = 다이빙풀 전체
+  cls: null,             // null = 수업 전체
   month: firstMonth,
   sel: null,
 };
@@ -550,18 +611,23 @@ const state = {
 const aqClosed = dt => dt.getDay()===0 && [2,4].includes(Math.ceil(dt.getDate()/7));
 
 const slotId = r => r.id || `${r.d.replace(/-/g,'')}-${r.s}-${r.p}`;
-const placeOk = r => state.place==='all' || r.p===state.place;
-const slotsOn = k => DATA.filter(r => r.d===k && r.s && placeOk(r)).sort((a,b)=> (a.t[0]).localeCompare(b.t[0]));
+const placeOk = r => !state.place || r.p===state.place;
+/* 슬롯에 수업이 안 적혀 있으면 어느 수업을 골라도 보임 */
+const classOk = r => !state.cls || !r.c || !r.c.length || r.c.indexOf(state.cls)>=0;
+const shown = r => placeOk(r) && classOk(r);
+const slotsOn = k => DATA.filter(r => r.d===k && r.s && shown(r)).sort((a,b)=> (a.t[0]).localeCompare(b.t[0]));
 const isOff = k => DATA.some(r => r.d===k && r.st==='off');
 const inMonth = (d, m) => d.startsWith(`${m.getFullYear()}-${pad(m.getMonth()+1)}`);
 
 function monthList(){
   const last = DATA.reduce((a,r)=> r.d>a ? r.d : a, TODAY);
+  const cap = addMonths(firstMonth, Math.max(0, CONFIG.MONTHS_AHEAD|0));
+  let end = monthOf(parse(last)); if(end > cap) end = cap;
   const out = [];
-  for(let m=firstMonth; m<=monthOf(parse(last)); m=addMonths(m,1)) out.push(m);
+  for(let m=firstMonth; m<=end; m=addMonths(m,1)) out.push(m);
   return out;
 }
-const seatsIn = m => DATA.filter(r=> r.s && inMonth(r.d,m) && r.d>=TODAY && placeOk(r))
+const seatsIn = m => DATA.filter(r=> r.s && inMonth(r.d,m) && r.d>=TODAY && shown(r))
                          .reduce((a,r)=> a + Math.max(0, r.cap-r.bk), 0);
 
 function slotHTML(r){
@@ -577,19 +643,6 @@ function slotHTML(r){
     <div class="where"><span class="dot"></span>${t.place[r.p]}</div>
     <div class="meta"><span class="pips" aria-hidden="true">${pips}</span><span>${full? t.full : t.left(left)}</span>${mine}${grp}${memo}</div>
     <div class="act">${act}</div></div>`;
-}
-
-function renderList(){
-  const t = T[state.lang], m = state.month;
-  const days = [...new Set(DATA.filter(r => r.s && inMonth(r.d,m) && r.d>=TODAY).map(r=>r.d))].sort()
-                 .filter(k => slotsOn(k).length);
-  if(!days.length) return `<div class="empty">${t.empty}</div>`;
-  return `<div class="list">` + days.map(k=>{
-    const dt = parse(k), dw = dt.getDay();
-    return `<section class="day"><div class="dlabel ${dw===0?'sun':dw===6?'sat':''}">
-      <div class="dn">${dt.getDate()}</div><div class="dw">${t.dow[dw]}</div></div>
-      <div class="slots">${slotsOn(k).map(slotHTML).join('')}</div></section>`;
-  }).join('') + `</div>`;
 }
 
 /* 달력은 그 달 1일이 있는 주의 일요일 ~ 말일이 있는 주의 토요일까지 */
@@ -621,7 +674,7 @@ function renderCal(){
       h += `<div class="cell${cls}"><span class="n">${num}</span></div>`;
     }
   }
-  h += `</div><div class="swipehint">${t.swipe}</div>`;
+  h += `</div>` + (monthList().length>1 ? `<div class="swipehint">${t.swipe}</div>` : '');
   h += `<div class="legend">
     <span><i style="background:var(--sn)"></i>${t.legend.sn}</span>
     <span><i style="background:var(--yi)"></i>${t.legend.yi}</span>
@@ -724,6 +777,232 @@ function renderImages(pg){
   return `<div class="imgs">${files.map(f=>`<img src="${esc(f)}" alt="${esc(t.nav[pg])}" loading="lazy" onerror="this.outerHTML='<div class=&quot;imgph&quot;>${esc(t.imgMissing)}</div>'">`).join('')}</div>`;
 }
 
+
+/* ===== 수업·강사 본문 — 수업_강사_투어_초안_v4.docx (2026-09-25) 기준 =====
+   고칠 일이 생기면 이 DOC 객체만 손보면 됨 */
+const DOC = {
+ko: {
+  intro: '한 번에 최대 4명만 받습니다. 모든 수업에 수중 사진·영상 촬영이 포함되고, 수영장 입장료만 따로 내시면 됩니다.',
+  items: [
+    { key:'expko', tag:'1~4인 · 약 3시간', name:'체험 다이빙',
+      lead:['숨 한 번으로 물속에 들어가 보는 첫날입니다.',
+            '수영을 잘 못해도, 깊은 물이 조금 무서워도 괜찮습니다.',
+            '한 번에 최대 4명만 받아서, 한 분 한 분의 호흡과 긴장을 보면서 속도를 맞춥니다.'],
+      learnH:'무엇을 배우나요',
+      learn:['스트레칭과 호흡법 — 몸의 힘을 빼는 것부터',
+             '프리다이빙 기초 이론 — 수압, 부력, 안전 수칙',
+             '이퀄라이징 — 귀가 아프지 않게 내려가는 법',
+             '기초 다이빙 기술 — 덕다이브, 편하게 내려가고 올라오기'],
+      rows:[['시간','이론 20~30분 + 수영장 2~3시간'],
+            ['장소','성남 아쿠아라인(5m) 또는 용인 딥스테이션(36m)'],
+            ['포함','강습, 마스크·스노클·핀 대여, 수업 중 사진·영상 촬영'],
+            ['별도','수영장 입장료'],
+            ['준비물','수영복·수모, 세면용품, 수건, 신분증']],
+      price:[['1인','100,000원'],['2인 이상 동반','1인 80,000원'],['1:1 맞춤수업','150,000원']],
+      pnote:'수영장 입장료는 별도입니다. 아래 장소 표를 참고하세요.' },
+
+    { key:'padi', tag:'1~4인 · 이론 + 제한수역 1회 + 딥 세션 2회', name:'PADI 프리다이버',
+      lead:['전 세계에서 통하는 PADI 프리다이버 자격증 과정입니다.',
+            '끝나고 나면 바다에서 버디와 함께 10~16m까지 스스로 프리다이빙을 할 수 있습니다.',
+            '오키나와 혹등고래 스윔처럼 자격증이 필요한 해외 투어에도 참가할 수 있습니다.'],
+      stepsH:'과정 구성',
+      steps:['이론 — PADI e러닝 + 대면 이론 (호흡, 이퀄라이징, 안전, 버디 시스템)',
+             '제한수역 1회 · 아쿠아라인 5m — 스태틱 90초, 다이내믹 25m',
+             '딥 세션 2회 · 딥스테이션 — 컨스턴트 웨이트 10m 이상, 레스큐'],
+      rows:[['수료 기준','스태틱 1분 30초 · 다이내믹 25m · 컨스턴트 웨이트 10m'],
+            ['대상','만 15세 이상, 자격증 없이 바로 시작할 수 있어요'],
+            ['포함','강습, e러닝·교재, <b>PADI 자격증 발급비</b>, 장비 대여, 사진·영상'],
+            ['별도','수영장 입장료']],
+      price:[['기본','380,000원'],['1:1 맞춤수업','500,000원'],['2인 동반 등록','1인 40,000원 할인']],
+      pnote:'자격증 발급비와 교재가 모두 포함된 가격입니다.' },
+
+    { key:'fun', tag:'자격증 보유자 · 1~4인', name:'펀다이빙',
+      lead:['수업이 아니라, 같이 물에 들어가는 시간입니다.',
+            '자격증을 딴 뒤에도 감각을 잃지 않으려면 꾸준히 들어가는 게 가장 좋습니다.',
+            '버디를 맞춰 드리고 안전을 보면서, 연습하고 싶은 걸 편하게 하실 수 있게 돕습니다.'],
+      rows:[['대상','프리다이버 자격증 보유자 (레벨1 이상)'],
+            ['장소','성남 아쿠아라인(5m) 또는 용인 딥스테이션(36m)'],
+            ['포함','버디·안전 확보, 사진·영상 촬영'],
+            ['별도','수영장 입장료, 개인 장비가 없으시면 장비 대여']],
+      price:[],
+      pnote:'요금은 아직 정리 중이에요. 카카오톡 채널로 문의해 주시면 안내해 드릴게요.' },
+  ],
+  venueH:'장소 · 수영장 입장료',
+  venueSub:'입장료는 수업료와 별도로 현장에서 내요.',
+  venues:[
+    {name:'성남 아쿠아라인 · 5m', addr:'경기 성남시 중원구 제일로 60 성남종합스포츠센터 B동 지하2층', wd:'15,000원', we:'20,000원'},
+    {name:'용인 딥스테이션 · 36m', addr:'경기 용인시 처인구 포곡읍 성산로 523', wd:'48,000원', we:'66,000원'},
+  ],
+  venueNote:'아쿠아라인은 매월 <b>2번째·4번째 일요일이 정기휴무</b>라 그날은 수업을 열지 않습니다. 일정표에도 표시돼 있어요.',
+  bringH:'준비물',
+  bring:['수영복 · 수모','세면용품','수건','신분증'],
+  bringNote:'마스크·스노클·핀은 빌려드려요. 아쿠아라인 오리발 대여는 현장에서 3,000원입니다.',
+  about:{
+    name:'알로하다이빙 강사 신광우',
+    bio:['유도와 크로스핏, 마라톤을 하면서 "힘을 쓰는 법"을 배웠고, 프리다이빙에서 "힘을 빼는 법"을 배웠습니다.',
+         '물속에서는 몸에 힘을 뺄수록 더 오래, 더 멀리 갑니다. 그 감각을 처음 오신 분도 느낄 수 있게 돕는 게 제 일입니다.',
+         '한 번에 최대 4명만 가르칩니다. 숨이 짧아지는 순간, 귀가 막히는 순간을 놓치지 않으려면 그 인원이 맞다고 생각합니다.',
+         '물리학을 공부한 덕분에 수압이나 부력 같은 원리를 쉽게 풀어서 설명합니다.'],
+    forH:'이런 분께 추천해요',
+    forYou:['수영은 서툴지만 물속이 궁금한 분',
+            '여행 가서 스노클링 말고 한 번 내려가 보고 싶은 분',
+            '운동을 좋아하고 새로운 종목을 찾는 분',
+            '친구·연인과 특별한 하루를 보내고 싶은 분'],
+    after:'수업이 끝나도 펀다이빙, 국내 그리고 해외 투어로 함께 물에 들어갑니다.',
+    certH:'자격',
+    certs:['PADI Freediver Instructor',
+           'EFR (Emergency First Response) Instructor',
+           'Professional Safety Freediver for AIDA Depth &amp; Pool Competition',
+           '생활체육 유도 대회 다수 입상',
+           '10km · 하프 마라톤 다수 완주',
+           '서울대학교 물리학 박사'],
+    contactH:'문의', insta:'@alohadiving808', kakao:'@알로하다이빙',
+  },
+},
+en: {
+  intro: 'Four people at most, every time. Every class includes proper underwater photos and video.',
+  items: [
+    { key:'expen', tag:'Half-day from DDP · 1–4 people', name:'Try Freediving',
+      lead:['Hold one breath and see how far your body can go.',
+            'You don\u2019t need to be a strong swimmer — most of our guests have never freedived before.',
+            'We take four people at most, so you get real attention.'],
+      stepsH:'Your day',
+      steps:['<b>09:30</b> · Meet at DDP (Dongdaemun Design Plaza) and travel to the pool together',
+             '<b>10:30</b> · Theory — breathing, pressure, equalizing and safety (20–30 min)',
+             '<b>11:00</b> · Pool session — relaxation, equalizing, duck dive, your first descents',
+             '<b>13:30</b> · Lunch together (optional, you pay your own)',
+             '<b>15:00</b> · Back at DDP'],
+      learnH:'What you\u2019ll learn',
+      learn:['Breathing and relaxation — the part that makes everything else work',
+             'How pressure and buoyancy change your body underwater',
+             'Equalizing, so your ears stay comfortable',
+             'The duck dive, and how to descend and come back up calmly'],
+      callout:'<b>Photos and video</b> — we film the whole session with an Insta360 X5 and shoot stills on a Sony A7C in an underwater housing, then send you the edited files. No phone in a plastic bag — proper underwater photography.',
+      rows:[['Meeting point','DDP, Dongdaemun — we travel to the pool together'],
+            ['Pool','Deep Station, Yongin — 36 m, the deepest in Korea'],
+            ['Included','Instruction in English, all gear, <b>pool entry fee</b>, photos and video'],
+            ['Not included','Lunch (optional), personal expenses'],
+            ['Bring','Swimsuit, towel, toiletries']],
+      price:[['1 person','\u20a9250,000'],['2 people','\u20a9460,000'],['3 people','\u20a9690,000'],
+             ['4 people','\u20a9900,000'],['Private 1:1','\u20a9400,000']],
+      pnote:'\u20a9230,000 each for 2–3 people, \u20a9225,000 each for 4. Pool entry is already included.' },
+
+    { key:'padien', tag:'Small groups of 1–4', name:'PADI Freediver',
+      lead:['An internationally recognized PADI Freediver certification.',
+            'When you finish, you can freedive to 10–16 m in open water with a buddy.',
+            'It also qualifies you for trips that require a certification, such as our humpback whale swim in Okinawa.'],
+      stepsH:'Course outline',
+      steps:['Theory — PADI eLearning + in-person session (breathing, equalizing, safety, buddy system)',
+             'One confined water session · Aqualine 5 m — 90 s static, 25 m dynamic',
+             'Two deep sessions · Deep Station — constant weight 10 m+, rescue'],
+      rows:[['To certify','90 s static · 25 m dynamic · 10 m constant weight'],
+            ['Who','Age 15+, no prior certification needed'],
+            ['Included','Instruction, eLearning and materials, <b>PADI certification fee</b>, gear, photos and video'],
+            ['Not included','Pool entry fees']],
+      price:[['Course','\u20a9380,000'],['Private 1:1','\u20a9500,000'],['Two of you together','\u20a940,000 off each']],
+      pnote:'The certification fee and materials are already in the price.' },
+
+    { key:'fun', tag:'Certified freedivers · 1–4 people', name:'Fun Diving',
+      lead:['Not a class — just diving together.',
+            'The best way to keep what you learned is to keep getting in the water.',
+            'We pair you with a buddy and watch your safety while you work on whatever you want.'],
+      rows:[['Who','Certified freedivers (Level 1 and up)'],
+            ['Pool','Aqualine, Seongnam (5 m) or Deep Station, Yongin (36 m)'],
+            ['Included','Buddy and safety supervision, photos and video'],
+            ['Not included','Pool entry fee, gear rental if you don\u2019t have your own']],
+      price:[],
+      pnote:'Fun dive pricing is still being finalised — message us on KakaoTalk and we will sort it out.' },
+  ],
+  venueH:'Venues · pool entry fees',
+  venueSub:'Pool entry is paid at the venue, separate from the class fee — except on the English half-day, where it is included.',
+  venues:[
+    {name:'Aqualine, Seongnam · 5 m', addr:'B2, Building B, Seongnam Sports Complex, 60 Jeil-ro, Jungwon-gu, Seongnam', wd:'\u20a915,000', we:'\u20a920,000'},
+    {name:'Deep Station, Yongin · 36 m', addr:'523 Seongsan-ro, Pogok-eup, Cheoin-gu, Yongin', wd:'\u20a948,000', we:'\u20a966,000'},
+  ],
+  venueNote:'Aqualine is closed on the <b>2nd and 4th Sunday</b> of every month, so there are no classes on those days. The schedule marks them for you.',
+  bringH:'What to bring',
+  bring:['Swimsuit and swim cap','Toiletries','Towel','Photo ID'],
+  bringNote:'Mask, snorkel and fins are provided. Fin rental at Aqualine is \u20a93,000, paid on site.',
+  about:{
+    name:'Your instructor · Kwangwoo Shin',
+    bio:['Years of judo, CrossFit and distance running taught me how to push through. Freediving taught me how to let go.',
+         'Underwater, the more you relax, the longer and farther you go. My job is to help you feel that on your very first day.',
+         'I teach four people at most. That\u2019s how I make sure I never miss the moment your breath gets short or your ears won\u2019t clear.',
+         'With a background in physics, I like to explain pressure and buoyancy in plain words.'],
+    forH:'Good for you if',
+    forYou:['you\u2019re not a strong swimmer but curious about what\u2019s below',
+            'you want to do more than snorkel on your next trip',
+            'you love sport and want something new',
+            'you want a memorable day with a friend or partner'],
+    after:'After class, we keep diving together — fun dives and trips in Korea and abroad.',
+    certH:'Credentials',
+    certs:['PADI Freediver Instructor',
+           'EFR (Emergency First Response) Instructor',
+           'Professional Safety Freediver for AIDA Depth &amp; Pool Competition',
+           'Judo — placed in several amateur competitions',
+           'Several 10 km and half-marathon finishes',
+           'PhD in Physics, Seoul National University'],
+    contactH:'Contact', insta:'@alohadiving808', kakao:'@alohadiving',
+  },
+},
+};
+
+const INSTA = 'https://www.instagram.com/alohadiving808/';
+const mapUrl = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+
+/* 사진 자리 — CONFIG.IMAGES 에 파일 이름을 넣으면 그 자리에 사진이 들어감 */
+function photoSlot(files, i, alt){
+  const t = T[state.lang], f = files[i];
+  if(!f) return `<div class="photo">${t.photoSlot}</div>`;
+  return `<img src="${esc(f)}" alt="${esc(alt)}" loading="lazy" style="display:block;width:100%;height:auto;border-radius:13px;margin-top:16px;border:1px solid var(--line)"
+    onerror="this.outerHTML='<div class=&quot;photo&quot;>${esc(t.photoSlot)}</div>'">`;
+}
+
+function classCard(it, files, i){
+  const t = T[state.lang];
+  let h = `<section class="cls" id="cls-${it.key}"><span class="tag">${it.tag}</span><h2>${it.name}</h2>`;
+  h += it.lead.map(p=>`<p class="lead">${p}</p>`).join('');
+  if(it.steps) h += `<h3>${it.stepsH}</h3><ol>${it.steps.map(x=>`<li>${x}</li>`).join('')}</ol>`;
+  if(it.learn) h += `<h3>${it.learnH}</h3><ul>${it.learn.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  if(it.callout) h += `<div class="callout">${it.callout}</div>`;
+  h += `<dl class="kv">${it.rows.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl>`;
+  h += `<div class="pricebox">` + (it.price.length ? `<div class="ph">${t.priceH}</div>` : '') +
+       it.price.map(r=>`<div class="pricerow"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('') +
+       (it.pnote?`<div class="pnote"${it.price.length?'':' style="margin-top:0;font-weight:700"'}>${it.pnote}</div>`:'') + `</div>`;
+  h += photoSlot(files, i, it.name);
+  h += `<button class="book" data-page="schedule" style="margin-top:16px">${t.cGo}</button></section>`;
+  return h;
+}
+
+function renderClasses(){
+  const t = T[state.lang], d = DOC[state.lang];
+  const files = (CONFIG.IMAGES && CONFIG.IMAGES.classes) || [];
+  let h = `<p class="lede">${d.intro}</p>`;
+  h += d.items.map((it,i)=> classCard(it, files, i)).join('');
+  h += `<section class="sec"><h2>${d.venueH}</h2><p class="lede" style="margin-top:6px">${d.venueSub}</p>
+    <table class="tbl"><thead><tr><th>${t.dl[2]}</th><th>${t.weekday}</th><th>${t.weekend}</th></tr></thead><tbody>` +
+    d.venues.map(v=>`<tr><td>${v.name}<small>${v.addr} · <a class="maplink" href="${mapUrl(v.addr)}" target="_blank" rel="noopener">${t.mapGo} ↗</a></small></td>
+      <td class="num">${v.wd}</td><td class="num">${v.we}</td></tr>`).join('') +
+    `</tbody></table><div class="callout">${d.venueNote}</div></section>`;
+  h += `<section class="sec"><h2>${d.bringH}</h2><div class="cls" style="margin-top:0"><ul>` +
+    d.bring.map(x=>`<li>${x}</li>`).join('') + `</ul><div class="callout">${d.bringNote}</div></div></section>`;
+  return h;
+}
+
+function renderAbout(){
+  const t = T[state.lang], a = DOC[state.lang].about;
+  const files = (CONFIG.IMAGES && CONFIG.IMAGES.about) || [];
+  let h = photoSlot(files, 0, a.name).replace('margin-top:16px','margin-top:4px');
+  h += `<div class="bio"><p class="sig">${a.name}</p>` + a.bio.map(p=>`<p>${p}</p>`).join('') + `</div>`;
+  h += `<section class="cls"><h3 style="margin-top:0">${a.forH}</h3><ul>` + a.forYou.map(x=>`<li>${x}</li>`).join('') + `</ul>
+    <div class="callout">${a.after}</div></section>`;
+  h += `<section class="cls"><h3 style="margin-top:0">${a.certH}</h3><ul>` + a.certs.map(x=>`<li>${x}</li>`).join('') + `</ul></section>`;
+  h += `<section class="cls"><h3 style="margin-top:0">${a.contactH}</h3><dl class="kv" style="margin-top:0">
+    <dt>${t.insta}</dt><dd><a class="maplink" href="${INSTA}" target="_blank" rel="noopener">${a.insta} ↗</a></dd>
+    <dt>${t.kakao}</dt><dd>${a.kakao}</dd></dl></section>`;
+  return h;
+}
+
 /* 로딩 애니메이션: 모노핀 다이버가 돌핀킥으로 수평 잠영(다이나믹) */
 const DIVER = `<div class="loader" role="status"><svg viewBox="0 0 260 96" aria-hidden="true">
   <path class="surf" d="M0 14 q16 -6 32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0"/>
@@ -752,7 +1031,7 @@ function setPage(p, push){
 
 function firstOpenDay(){
   const [start,end] = calRange(state.month).map(key);
-  const days = DATA.filter(r=> r.s && r.d>=start && r.d<=end && r.d>=TODAY && r.cap>r.bk && placeOk(r))
+  const days = DATA.filter(r=> r.s && r.d>=start && r.d<=end && r.d>=TODAY && r.cap>r.bk && shown(r))
                    .map(r=>r.d).sort();
   return days.find(d => inMonth(d,state.month)) || days[0] || null;
 }
@@ -769,32 +1048,34 @@ function render(){
   $('lang-ko').setAttribute('aria-pressed', state.lang==='ko');
   $('lang-en').setAttribute('aria-pressed', state.lang==='en');
   const isMy = pg==='my';
-  $('view-list').textContent = t.list; $('view-cal').textContent = t.cal;
   $('schedctl').hidden = pg!=='schedule';
-  $('view-list').setAttribute('aria-pressed', state.view==='list');
-  $('view-cal').setAttribute('aria-pressed', state.view==='cal');
-  $('chips').innerHTML = ['all','sn','yi'].map(p=>
-    `<button class="chip" id="chip-${p}" data-place="${p}" aria-pressed="${state.place===p}">${p==='all'?'':`<span class="sw" style="background:var(--${p})"></span>`}${p==='all'?t.all:t.place[p]}</button>`).join('');
+  $('lab-place').textContent = t.fPlace + ' :';
+  $('lab-class').textContent = t.fClass + ' :';
+  $('chips-place').innerHTML = ['sn','yi'].map(p=>
+    `<button class="chip" data-place="${p}" aria-pressed="${state.place===p}"><span class="sw" style="background:var(--${p})"></span>${t.place[p]}</button>`).join('');
+  $('chips-class').innerHTML = CLASS_KEYS[state.lang].map(c=>
+    `<button class="chip" data-cls="${c}" aria-pressed="${state.cls===c}">${t.cls[c]}</button>`).join('');
   $('sample').hidden = MODE!=='sample';
   $('sampletag').textContent = t.sampletag; $('sampletxt').textContent = t.sampletxt;
   $('foot').innerHTML = pg==='schedule' ? t.foot : t.footMini;
 
-  if(MODE==='loading' && (pg==='classes' || pg==='about')){ $('main').innerHTML = renderImages(pg); return; }
+  if(pg==='classes'){ $('main').innerHTML = renderClasses(); return; }
+  if(pg==='about'){ $('main').innerHTML = renderAbout(); return; }
   if(MODE==='loading'){ $('months').innerHTML=''; $('main').innerHTML = loaderHTML(t.loading); return; }
   if(MODE==='error'){ $('months').innerHTML=''; $('main').innerHTML = `<div class="empty">${t.error}<br><button class="retry" id="retry">${t.retry}</button></div>`; return; }
 
-  $('months').innerHTML = monthList().map(mm=>{
+  const ms = monthList();
+  $('months').hidden = ms.length < 2;
+  $('months').innerHTML = ms.map(mm=>{
     const n = seatsIn(mm), on = +mm===+m;
     return `<button class="mtab" data-month="${key(mm)}" aria-pressed="${on}"><span class="m">${t.mtab(mm.getFullYear(), mm.getMonth()+1)}</span><span class="c${n?'':' zero'}">${t.seats(n)}</span></button>`;
   }).join('');
-  if(pg==='classes'){ $('main').innerHTML = renderImages('classes'); return; }
+  if(pg==='classes'){ $('main').innerHTML = renderClasses(); return; }
   if(pg==='reviews'){ $('main').innerHTML = renderReviews(); return; }
-  if(pg==='about'){ $('main').innerHTML = renderImages('about'); return; }
-  if(state.view==='cal'){
-    const [start,end] = calRange(m).map(key);
-    if(!state.sel || state.sel<start || state.sel>end) state.sel = firstOpenDay();
-  }
-  $('main').innerHTML = isMy ? renderMy() : state.view==='list' ? renderList() : renderCal();
+  if(pg==='about'){ $('main').innerHTML = renderAbout(); return; }
+  const [cstart,cend] = calRange(m).map(key);
+  if(!state.sel || state.sel<cstart || state.sel>cend) state.sel = firstOpenDay();
+  $('main').innerHTML = isMy ? renderMy() : renderCal();
   if(isMy) showGoogleButton();
 }
 
@@ -809,13 +1090,15 @@ function setMonth(mm){
 /* 신청서에 들어갈 수업 문구. 끝의 #코드로 Apps Script 가 슬롯별 신청 수를 셈 */
 function classCode(r){
   const dt = parse(r.d);
-  return `${r.d} (${'일월화수목금토'[dt.getDay()]}) ${T.ko.slot[r.s]} ${r.t[0]}-${r.t[1]} · ${T.ko.place[r.p]} #${slotId(r)}`;
+  const c = state.cls ? ` · ${T.ko.cls[state.cls]}` : '';
+  return `${r.d} (${'일월화수목금토'[dt.getDay()]}) ${T.ko.slot[r.s]} ${r.t[0]}-${r.t[1]} · ${T.ko.place[r.p]}${c} #${slotId(r)}`;
 }
 
 function openSheet(r){
   const t = T[state.lang], left = r.cap - r.bk;
   $('sh-title').textContent = t.sheetTitle;
   const rows = [[t.dl[0], t.date(parse(r.d))],[t.dl[1], `${t.slot[r.s]} ${r.t[0]}–${r.t[1]}`],[t.dl[2], t.place[r.p]],[t.dl[3], t.left(left)], [t.dl[5], r.bk===0 && r.cap>=3 ? t.pplGroup(left) : t.ppl(left)]];
+  if(state.cls) rows.splice(3, 0, [t.dl[6], t.cls[state.cls]]);
   if(r.memo) rows.push([t.dl[4], r.memo[state.lang]]);
   $('sh-dl').innerHTML = rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('');
   const go = $('sh-go');
@@ -907,10 +1190,12 @@ document.addEventListener('click', e=>{
   const go = e.target.closest('#sh-go');
   if(go){ if(go.dataset.mock){ e.preventDefault(); toast(T[state.lang].toast); } closeSheet(); return; }
   const b = e.target.closest('button'); if(!b) { if(e.target.id==='scrim') closeSheet(); return; }
-  if(b.dataset.lang){ state.lang=b.dataset.lang; store.set('aloha.lang',state.lang); render(); }
+  if(b.dataset.lang){ state.lang=b.dataset.lang; store.set('aloha.lang',state.lang);
+    if(state.cls && CLASS_KEYS[state.lang].indexOf(state.cls)<0) state.cls = null;
+    render(); }
   else if(b.dataset.page){ setPage(b.dataset.page); }
-  else if(b.dataset.view){ state.view=b.dataset.view; store.set('aloha.view',state.view); render(); }
-  else if(b.dataset.place){ state.place=b.dataset.place; state.sel=null; render(); }
+  else if(b.dataset.place){ state.place = state.place===b.dataset.place ? null : b.dataset.place; state.sel=null; render(); }
+  else if(b.dataset.cls){ state.cls = state.cls===b.dataset.cls ? null : b.dataset.cls; state.sel=null; render(); }
   else if(b.dataset.month){ setMonth(parse(b.dataset.month)); }
   else if(b.dataset.day){ state.sel=b.dataset.day; render(); }
   else if(b.dataset.id){ openSheet(DATA[+b.dataset.id]); }
@@ -924,7 +1209,7 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheet(); });
 let sx = null, sy = 0;
 $('main').addEventListener('touchstart', e=>{ const p=e.touches[0]; sx=p.clientX; sy=p.clientY; }, {passive:true});
 $('main').addEventListener('touchend', e=>{
-  if(sx===null || state.page!=='schedule' || state.view!=='cal') return;
+  if(sx===null || state.page!=='schedule' || monthList().length<2) return;
   const p = e.changedTouches[0], dx = p.clientX-sx, dy = p.clientY-sy; sx = null;
   if(Math.abs(dx)>60 && Math.abs(dy)<40) setMonth(addMonths(state.month, dx<0 ? 1 : -1));
 });
