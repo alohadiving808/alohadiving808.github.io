@@ -11,8 +11,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
 <style>
 :root{
-  --bg:#F4F8F9; --surface:#FFFFFF; --ink:#0A2130; --muted:#5C7A86; --faint:#A2B4BB;
-  --line:#DCE7EB; --line-soft:#E9EFF1;
+  --bg:#F1F2F4; --surface:#FFFFFF; --ink:#111417; --muted:#5C7A86; --faint:#A2B4BB;
+  --line:#D9DDE1; --line-soft:#ECEEF1;
+  --whale:#3A6E97; --whale-top:#17395B; --whale-belly:#F2F8FB;
   --sn:#0D7C8A; --sn-tint:#E6F4F5; --sn-ink:#0A5760;
   --yi:#3557A8; --yi-tint:#E9EEF9; --yi-ink:#27427F;
   --cta:#F0A202; --cta-ink:#2A1C00;
@@ -26,6 +27,7 @@
   :root:not([data-theme="light"]){
     --bg:#0B1A22; --surface:#11252F; --ink:#E4EEF1; --muted:#8FA9B3; --faint:#557480;
     --line:#1F3A46; --line-soft:#18303A;
+    --whale:#6FA3C8; --whale-top:#2F5E84; --whale-belly:#E8F2F8;
     --sn:#3FB4C2; --sn-tint:#0F343A; --sn-ink:#8FDCE5;
     --yi:#7E9BE0; --yi-tint:#1A2748; --yi-ink:#B9CAF2;
     --cta:#F5B434; --cta-ink:#2A1C00;
@@ -39,6 +41,7 @@
 :root[data-theme="dark"]{
   --bg:#0B1A22; --surface:#11252F; --ink:#E4EEF1; --muted:#8FA9B3; --faint:#557480;
   --line:#1F3A46; --line-soft:#18303A;
+  --whale:#6FA3C8; --whale-top:#2F5E84; --whale-belly:#E8F2F8;
   --sn:#3FB4C2; --sn-tint:#0F343A; --sn-ink:#8FDCE5;
   --yi:#7E9BE0; --yi-tint:#1A2748; --yi-ink:#B9CAF2;
   --cta:#F5B434; --cta-ink:#2A1C00;
@@ -143,6 +146,11 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
   border:1.5px dashed var(--line); border-radius:9px}
 .slot.is-full .where, .slot.is-full .when{opacity:.55}
 .grp{background:var(--sn-tint); color:var(--sn-ink); border-radius:5px; padding:1px 7px; font-weight:700; font-size:11.5px}
+.slot .clsname{overflow:hidden; text-overflow:ellipsis}
+.slot.otherlang{opacity:.62}
+.slot.otherlang .when{background:var(--line-soft); color:var(--muted)}
+.slot.otherlang .where .dot{background:var(--faint)}
+.slot.otherlang .pips i{background:var(--faint)}
 .mine{background:var(--ink); color:var(--bg); border-radius:5px; padding:1px 7px; font-weight:800; font-size:11.5px}
 
 /* ---------- my bookings ---------- */
@@ -181,29 +189,36 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .empty{margin-top:28px; padding:28px 16px; text-align:center; color:var(--muted); border:1.5px dashed var(--line); border-radius:14px}
 
 /* ---------- calendar ---------- */
-.cal{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; margin-top:20px}
-.dow{text-align:center; font-size:12px; font-weight:700; color:var(--muted); padding-bottom:4px; letter-spacing:.04em}
-.dow.sun{color:var(--sun)} .dow.sat{color:var(--sat)}
-.cell{border:1.5px solid var(--line-soft); background:var(--surface); border-radius:10px; min-height:66px;
-  padding:6px 4px 5px; display:flex; flex-direction:column; gap:3px; text-align:left; min-width:0}
-.cell .n{font-size:14px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1.1}
-.cell.blank{background:transparent; border-color:transparent}
-.cell.past{background:var(--past); border-color:transparent}
+.cal{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:0; margin-top:18px;
+  background:var(--surface); border:1px solid var(--line); border-top:2px solid var(--ink)}
+.dow{text-align:center; font-size:12px; font-weight:800; color:var(--ink); padding:9px 0 8px;
+  background:var(--line-soft); border-bottom:1px solid var(--line); border-right:1px solid var(--line)}
+.dow:last-of-type{border-right:0}
+.dow.sun{color:var(--sun)}
+.cell{border:0; border-right:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);
+  background:var(--surface); border-radius:0; min-height:74px;
+  padding:5px 4px 6px; display:flex; flex-direction:column; gap:3px; text-align:left; min-width:0}
+.cell:nth-child(7n){border-right:0}
+.cell .n{font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.1; color:var(--muted)}
+.cell.has .n{color:var(--ink); font-weight:800}
+.cell.past{background:var(--past)}
 .cell.past .n{color:var(--faint)}
-.cell.adj{border-style:dashed}
-.cell.adj .n{color:var(--muted)}
-.cell.has{border-color:var(--line)}
-.cell.has:hover{border-color:var(--sn)}
-.cell.sel{border-color:var(--ink); border-width:2px; padding:5.5px 3.5px 4.5px}
-.cell.off{background:var(--off-bg); border-color:var(--off-line)} .cell.off .n,.cell.off .lbl{color:var(--off-ink)}
-.cell.shut{background:var(--shut-bg); border-color:var(--shut-line)} .cell.shut .n,.cell.shut .lbl{color:var(--shut-ink)}
+.cell.adj .n{opacity:.5}
+.cell.has:hover{background:var(--line-soft)}
+.cell.sel{box-shadow:inset 0 0 0 2px var(--ink)}
+.cell.off{background:var(--off-bg)} .cell.off .n,.cell.off .lbl{color:var(--off-ink)}
+.cell.shut{background:var(--shut-bg)} .cell.shut .n,.cell.shut .lbl{color:var(--shut-ink)}
 .cell .lbl{font-size:10.5px; font-weight:700; margin-top:auto; line-height:1.2; letter-spacing:-.03em; overflow-wrap:anywhere}
-.pill{display:flex; align-items:center; justify-content:space-between; gap:3px; border-radius:5px;
-  font-size:10px; font-weight:800; padding:2px 3px; letter-spacing:-.03em; font-variant-numeric:tabular-nums; color:var(--on-accent); line-height:1.25}
-.pill.sn{background:var(--sn)} .pill.yi{background:var(--yi)}
-.pill.full{background:transparent; color:var(--faint); border:1px dashed var(--line); text-decoration:line-through}
-.pill .t{display:none}
-.pill .t-mini{white-space:nowrap; margin-inline:auto}
+/* 달력 한 칸 안의 수업 한 줄: ● 시간 수업 잔여/정원 */
+.ev{display:flex; flex-wrap:wrap; align-items:center; gap:1px 4px; font-size:10px; font-weight:700;
+  line-height:1.35; letter-spacing:-.03em; color:var(--ink); font-variant-numeric:tabular-nums}
+.ev i{width:6px; height:6px; border-radius:50%; background:var(--c); flex:none}
+.ev.sn{--c:var(--sn)} .ev.yi{--c:var(--yi)}
+.ev.full{--c:var(--line); color:var(--faint)}
+.ev.otherlang{--c:var(--faint); color:var(--faint); opacity:.6}
+.ev .cn{display:none; color:var(--muted); font-weight:700}
+.ev em{font-style:normal; font-weight:800; margin-left:auto}
+.ev.full em{text-decoration:line-through}
 .detail{margin-top:16px}
 .detail h2{font-size:16px; font-weight:800; letter-spacing:-.02em; margin:0 0 10px}
 .legend{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--muted)}
@@ -211,12 +226,12 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .legend i{width:11px; height:11px; border-radius:3px; border:1px solid transparent}
 
 @media (min-width:720px){
-  .cell{min-height:104px; padding:8px 7px 7px}
-  .cell.sel{padding:7.5px 6.5px 6.5px}
-  .cell .n{font-size:17px}
+  .cell{min-height:112px; padding:9px 8px 8px; gap:4px}
+  .cell .n{font-size:16px}
   .cell .lbl{font-size:12px}
-  .pill{font-size:11.5px; padding:3px 6px}
-  .pill .t{display:inline} .pill .t-mini{display:none} .pill{letter-spacing:-.01em}
+  .ev{font-size:12px; gap:2px 6px; letter-spacing:-.01em}
+  .ev i{width:7px; height:7px}
+  .ev .cn{display:inline}
 }
 
 .foot{margin-top:30px; padding-top:16px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); line-height:1.7}
@@ -248,6 +263,24 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .imgs{display:grid; gap:12px; margin-top:20px; max-width:640px; margin-inline:auto}
 .imgs img{display:block; width:100%; height:auto; border-radius:14px; border:1px solid var(--line); background:var(--surface)}
 .imgph{border:1.5px dashed var(--line); border-radius:14px; padding:56px 18px; text-align:center; color:var(--muted); font-size:14px; background:var(--surface)}
+
+/* ---------- 오픈 특가 띠배너 ---------- */
+.promo{display:flex; align-items:center; gap:10px; width:100%; margin-top:16px; text-align:left; cursor:pointer;
+  background:linear-gradient(100deg,var(--cta),#F7C956); color:var(--cta-ink); border:0; border-radius:13px;
+  padding:11px 13px; font-size:14px; font-weight:700; letter-spacing:-.02em; box-shadow:0 8px 20px -10px var(--cta)}
+.promo .tag{font-weight:900; background:var(--cta-ink); color:var(--cta); border-radius:6px;
+  padding:4px 8px; font-size:11px; letter-spacing:.08em; white-space:nowrap; flex:none}
+.promo .txt{flex:1; min-width:0; line-height:1.35}
+.promo .go{font-weight:900; white-space:nowrap; flex:none}
+.promo:hover{filter:brightness(1.04)}
+/* 수업 카드 안의 특가 안내 */
+.promobox{margin-top:16px; border:1.5px solid var(--cta); border-radius:12px; padding:13px 14px;
+  background:rgba(240,162,2,.12); background:color-mix(in srgb,var(--cta) 12%,transparent)}
+.promobox .ph{font-size:11.5px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:var(--cta-ink)}
+:root:not([data-theme="light"]) .promobox .ph{color:var(--cta)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .promobox .ph{color:var(--cta)} }
+.promobox p{margin:7px 0 0; font-size:14px; line-height:1.7}
+.promobox .fine{margin-top:8px; font-size:12.5px; color:var(--muted); line-height:1.6}
 
 /* ---------- filters (pool / class) ---------- */
 .filters{display:flex; flex-direction:column; gap:9px; margin-top:18px}
@@ -288,11 +321,37 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .tbl td.num{text-align:right; font-variant-numeric:tabular-nums; font-weight:700; white-space:nowrap}
 .tbl td small{display:block; color:var(--muted); font-weight:400; font-size:12px; margin-top:3px}
 .maplink{color:var(--sn); font-weight:700; text-decoration:none; font-size:12.5px; white-space:nowrap}
+.aboutgrid{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:24px; align-items:start; margin-top:18px}
+.aboutgrid .abtxt > :first-child{margin-top:0}
+.vids{display:grid; grid-template-columns:minmax(0,1fr); gap:12px}
+@media (max-width:719px){
+  .aboutgrid{grid-template-columns:minmax(0,1fr); gap:0}
+  .aboutgrid .vids{order:-1; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:6px}
+  .clsgrid .vids{order:0; grid-template-columns:minmax(0,1fr); width:min(100%,300px); margin:16px auto 0}
+}
+.clsgrid{margin-top:0}
 .photo{margin-top:16px; border:1.5px dashed var(--line); border-radius:13px; padding:34px 16px; text-align:center;
   color:var(--faint); font-size:13px; font-weight:700; background:var(--bg)}
 .bio{margin-top:20px}
 .bio p{margin:0 0 12px; font-size:15.5px; line-height:1.8; text-wrap:pretty}
 .bio p.sig{font-size:19px; font-weight:900; letter-spacing:-.03em; margin-bottom:16px}
+
+/* ---------- tour (coming soon) ---------- */
+.tourbox{margin-top:22px; border:1px solid var(--line); border-radius:18px; overflow:hidden; background:var(--surface)}
+.tourhero{position:relative; aspect-ratio:16/9; background:#0B2A44}
+.tourhero > img{display:block; width:100%; height:100%; object-fit:cover}
+.tourhero .scrim{position:absolute; inset:0; pointer-events:none; z-index:1;
+  background:linear-gradient(180deg,rgba(4,18,34,0) 30%,rgba(4,18,34,.12) 48%,rgba(4,18,34,.42) 66%,rgba(4,18,34,.78) 84%,rgba(4,18,34,.95) 100%)}
+.tourhero .cap{position:absolute; z-index:2; left:0; right:0; bottom:0; padding:16px 16px 18px; text-align:center}
+.tourhero .cap h2{margin:10px 0 0; color:#fff; font-size:clamp(19px,4.6vw,27px); font-weight:900;
+  letter-spacing:-.035em; line-height:1.2; text-wrap:balance; text-shadow:0 1px 3px rgba(0,0,0,.6),0 3px 18px rgba(0,0,0,.5)}
+.gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:4px; background:var(--line)}
+.gallery img{display:block; width:100%; aspect-ratio:4/3; object-fit:cover}
+.soon{display:inline-block; font-size:11px; font-weight:900; letter-spacing:.16em; text-transform:uppercase;
+  background:var(--cta); color:var(--cta-ink); padding:5px 12px; border-radius:999px}
+.tourtxt{padding:20px 18px 24px; text-align:center}
+.tourtxt p{margin:0 auto; max-width:34em; font-size:14.5px; line-height:1.75; color:var(--muted); text-wrap:pretty}
+.credit{margin-top:14px; font-size:11px; color:var(--faint)}
 
 /* ---------- loading: freediver doing dynamic with a monofin ---------- */
 .loader{margin-top:26px; padding:18px 12px 20px; border-radius:16px; background:var(--sn-tint); text-align:center; overflow:hidden}
@@ -360,11 +419,11 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
   </div>
 
   <div class="head"><h1 id="title"></h1></div>
+  <button class="promo" id="promo" data-page="classes" hidden></button>
   <div id="schedctl">
   <nav class="months" id="months" aria-label="month"></nav>
 
   <div class="filters">
-    <div class="fgrp"><span class="flabel" id="lab-place"></span><div class="chips" role="group" id="chips-place"></div></div>
     <div class="fgrp"><span class="flabel" id="lab-class"></span><div class="chips" role="group" id="chips-class"></div></div>
   </div>
   </div>
@@ -399,14 +458,32 @@ const CONFIG = {
   API: 'https://script.google.com/macros/s/AKfycbx30Q63SjKa35Vts8PlN9p-8aSwbLuNUHo5orEJcrLUK1HAlgpxbZijGMIf1YVqXIiJ/exec',
   CLIENT_ID: '305522737266-2p597sk7hl3ibqsrak2o14giicg3e0ks.apps.googleusercontent.com',
   // 수업·가격 / 강사 탭에 보여줄 이미지 — GitHub 저장소에 올린 파일 이름. 여러 장이면 순서대로 적기
-  IMAGES: { classes: [], about: [] },
+  IMAGES: { classes: ['class-exp.mp4', 'padi-freediver.webp'], about: ['instructor-1.mp4', 'instructor-2.mp4'] },   // .mp4 는 자동재생(무음·반복) 영상으로, 같은 이름 .jpg 가 있으면 로딩 전 표지로 씀
   // 일정에 보여줄 달 수. 0 = 이번 달만, 1 = 이번 달 + 다음 달
   MONTHS_AHEAD: 0,
+  // 오픈 특가 이벤트. 10명 다 차면 false 로 바꾸면 배너와 안내가 모두 사라짐
+  PROMO: true,
 };
 
-/* 수업 종류. 코드 = 시트 '일정' 탭 '수업' 칸에 적는 값(여러 개면 쉼표로).
-   시트 칸이 비어 있으면 어느 수업을 골라도 그 슬롯이 보임 */
-const CLASS_KEYS = { ko: ['expko','cw','ow','fun'], en: ['expen','padien','fun'] };
+/* 수업 8종. 각 수업은 언어(lang)와 수영장(p)이 고정.
+   시트 '일정' 탭 '수업' 칸이 비어 있으면 어느 수업을 골라도 그 슬롯이 보임 */
+const CLASSES = {
+  exp_ko:  { lang:'ko', p:'sn' },   // 체험 다이빙 — 성남
+  fd5_ko:  { lang:'ko', p:'sn' },   // 프리다이버 5m 과정 — 성남
+  fd15_ko: { lang:'ko', p:'yi' },   // 프리다이버 15m 과정 — 용인 딥스테이션
+  fun_ko:  { lang:'ko', p:'yi' },   // 펀다이빙 — 용인 딥스테이션
+  exp_en:  { lang:'en', p:'yi' },   // Try Freediving — 용인 딥스테이션
+  fd5_en:  { lang:'en', p:'sn' },   // Freediver 5 m — 성남
+  fd15_en: { lang:'en', p:'yi' },   // Freediver 15 m — 용인 딥스테이션
+  fun_en:  { lang:'en', p:'yi' },   // Fun Diving — 용인 딥스테이션
+};
+const CLASS_KEYS = { ko:['exp_ko','fd5_ko','fd15_ko','fun_ko'], en:['exp_en','fd5_en','fd15_en','fun_en'] };
+
+/* 구글폼 '신청 수업' 객관식 보기 글자 — Code.gs 의 CLASS_CHOICE 와 반드시 같아야 함 */
+const FORM_CLASS_LABEL = {
+  exp_ko:'체험 다이빙', fd5_ko:'프리다이버 5m 과정', fd15_ko:'프리다이버 15m 과정', fun_ko:'펀다이빙',
+  exp_en:'Try Freediving', fd5_en:'Freediver 5 m', fd15_en:'Freediver 15 m', fun_en:'Fun Diving',
+};
 
 /* 예시 데이터 — 시트 연결 전 미리보기용.
    d=날짜, s=am|pm, t=[시작,끝], p=sn(성남 아쿠아라인)|yi(용인 딥스테이션), cap=정원, bk=신청수, st=open|off */
@@ -458,9 +535,13 @@ const T = {
   ko:{
     eyebrow:'ALOHA DIVING · 프리다이빙 수업',
     month:(y,m)=>`${m}월 <em>수업 일정</em>`,
-    fPlace:'다이빙풀', fClass:'수업',
-    cls:{expko:'체험 다이빙', cw:'PADI 제한수역', ow:'PADI 개방수역', fun:'펀다이빙',
-         expen:'체험 다이빙 (영어)', padien:'PADI 프리다이버 (영어)'},
+    fClass:'수업',
+    cls:{exp_ko:'체험 다이빙', fd5_ko:'프리다이버 5m 과정', fd15_ko:'프리다이버 15m 과정', fun_ko:'펀다이빙',
+         exp_en:'체험 다이빙 (영어 수업)', fd5_en:'프리다이버 5m (영어 수업)',
+         fd15_en:'프리다이버 15m (영어 수업)', fun_en:'펀다이빙 (영어 수업)'},
+    clsShort:{exp_ko:'체험', fd5_ko:'5m', fd15_ko:'15m', fun_ko:'펀다이빙',
+              exp_en:'체험(영)', fd5_en:'5m(영)', fd15_en:'15m(영)', fun_en:'펀(영)'},
+    otherLang:'영어 수업',
     place:{sn:'성남 아쿠아라인', yi:'용인 딥스테이션'},
     short:{sn:'성남', yi:'용인'},
     slot:{am:'오전', pm:'오후'},
@@ -476,8 +557,16 @@ const T = {
     error:'일정을 불러오지 못했어요. 잠시 후 다시 시도하거나 카카오톡 채널로 문의해 주세요.',
     retry:'다시 시도',
     my:'내 예약', myTitle:'내 <em>예약</em>',
-    nav:{schedule:'일정', classes:'수업·가격', reviews:'후기', about:'강사', my:'내 예약'},
-    ttl:{classes:'수업 <em>& 가격</em>', reviews:'수강 <em>후기</em>', about:'강사 <em>소개</em>'},
+    nav:{schedule:'일정', classes:'수업·가격', tour:'투어', reviews:'후기', about:'강사', my:'내 예약'},
+    ttl:{classes:'수업 <em>& 가격</em>', tour:'해외 <em>투어</em>', reviews:'수강 <em>후기</em>', about:'강사 <em>소개</em>'},
+    promoTag:'오픈 특가',
+    promoBar:'PADI 프리다이버 <b>1+1</b> · 선착순 10명',
+    promoGo:'자세히 ›',
+    tourSoon:'Coming soon',
+    tourTitle:'2027 오키나와 혹등고래 스윔',
+    tourCredit:'사진 · NOAA 국립해양보호구역 (퍼블릭 도메인)',
+    tourAlt:['수면에서 함께 헤엄치는 어미와 새끼 혹등고래','물속의 혹등고래 어미와 새끼','수면 가까이 헤엄치는 혹등고래'],
+    tourBody:'매년 1월부터 3월까지, 혹등고래가 새끼를 낳고 기르러 오키나와 바다로 옵니다. 배를 타고 고래를 찾아 수면에서 조용히 함께 헤엄치는 투어를 준비하고 있어요.<br>일정과 가격은 곧 공개할게요.',
     cDur:'소요', cWho:'대상', cIncl:'포함', cExcl:'불포함', cGo:'일정 보고 신청하기',
     placesH:'장소 · 수영장 입장료', placesSub:'입장료는 수업료와 별도로 현장에서 내요.', weekday:'주중', weekend:'주말', map:'지도 보기', bringH:'준비물',
     gTitle:'Google 후기', gCount:n=>`후기 ${n}개`, gAll:'Google에서 전체 후기 보기', gWrite:'후기 남기기',
@@ -515,9 +604,13 @@ const T = {
   en:{
     eyebrow:'ALOHA DIVING · FREEDIVING CLASSES',
     month:(y,m)=>`<em>${['January','February','March','April','May','June','July','August','September','October','November','December'][m-1]}</em> classes`,
-    fPlace:'Pool', fClass:'Class',
-    cls:{expen:'Try Freediving', padien:'PADI Freediver', fun:'Fun Diving',
-         expko:'Try Freediving (Korean)', cw:'PADI confined water', ow:'PADI open water'},
+    fClass:'Class',
+    cls:{exp_en:'Try Freediving', fd5_en:'Freediver 5 m', fd15_en:'Freediver 15 m', fun_en:'Fun Diving',
+         exp_ko:'Try Freediving (in Korean)', fd5_ko:'Freediver 5 m (in Korean)',
+         fd15_ko:'Freediver 15 m (in Korean)', fun_ko:'Fun Diving (in Korean)'},
+    clsShort:{exp_en:'Try', fd5_en:'5 m', fd15_en:'15 m', fun_en:'Fun',
+              exp_ko:'Try(KR)', fd5_ko:'5 m(KR)', fd15_ko:'15 m(KR)', fun_ko:'Fun(KR)'},
+    otherLang:'Korean-language class',
     place:{sn:'Seongnam · Aqualine', yi:'Yongin · Deep Station'},
     short:{sn:'Seongnam', yi:'Yongin'},
     slot:{am:'AM', pm:'PM'},
@@ -533,8 +626,16 @@ const T = {
     error:'Could not load the schedule. Please try again, or message us on KakaoTalk.',
     retry:'Try again',
     my:'My bookings', myTitle:'My <em>bookings</em>',
-    nav:{schedule:'Schedule', classes:'Classes', reviews:'Reviews', about:'Instructor', my:'Bookings'},
-    ttl:{classes:'Classes <em>& prices</em>', reviews:'Student <em>reviews</em>', about:'Your <em>instructor</em>'},
+    nav:{schedule:'Schedule', classes:'Classes', tour:'Tours', reviews:'Reviews', about:'Instructor', my:'Bookings'},
+    ttl:{classes:'Classes <em>& prices</em>', tour:'<em>Tours</em>', reviews:'Student <em>reviews</em>', about:'Your <em>instructor</em>'},
+    promoTag:'Opening offer',
+    promoBar:'PADI Freediver <b>2 for 1</b> · first 10 sign-ups',
+    promoGo:'See details ›',
+    tourSoon:'Coming soon',
+    tourTitle:'Okinawa Humpback Whale Swim 2027',
+    tourCredit:'Photos · NOAA Office of National Marine Sanctuaries (public domain)',
+    tourAlt:['A humpback mother and calf at the surface','A humpback mother and calf underwater','A humpback whale near the surface'],
+    tourBody:'Every January to March, humpback whales come to Okinawa to give birth and raise their calves. We are putting together a trip to find them by boat and swim quietly alongside at the surface.<br>Dates and pricing coming soon.',
     cDur:'Length', cWho:'For', cIncl:'Included', cExcl:'Not included', cGo:'See dates & book',
     placesH:'Venues · pool entry fees', placesSub:'Pool entry is paid at the venue, separate from the class fee.', weekday:'Weekday', weekend:'Weekend', map:'Open map', bringH:'What to bring',
     gTitle:'Google reviews', gCount:n=>`${n} review${n===1?'':'s'}`, gAll:'See all reviews on Google', gWrite:'Write a review',
@@ -585,7 +686,8 @@ const TODAY = key(now);
 const firstMonth = monthOf(now);
 
 let DATA = [];          // 슬롯 {d,s,t,p,cap,bk,memo} + 외부일정 {d,st:'off'}
-let FORM = null;        // {url, entry} — 시트 연결 시 Apps Script 가 알려줌
+let FORM = null;        // {url, entry} — 옛 단일 신청서(호환용)
+let FORMS = null;       // {ko:{url,cls,slot}, en:{…}} — 한글·영어 신청서
 let MODE = 'loading';   // loading | sample | live | error
 let USER = null;        // {name,email,picture,cred,exp} — 구글 로그인
 let MY = null;          // 내 예약 목록
@@ -600,8 +702,7 @@ const uiLang = () => {
 
 const state = {
   lang: store.get('aloha.lang') || uiLang(),
-  page: 'schedule',      // schedule | classes | reviews | about | my  (주소 뒤 #classes 처럼 링크 가능)
-  place: null,           // null = 다이빙풀 전체
+  page: 'schedule',      // schedule | classes | tour | reviews | about | my  (주소 뒤 #classes 처럼 링크 가능)
   cls: null,             // null = 수업 전체
   month: firstMonth,
   sel: null,
@@ -611,10 +712,20 @@ const state = {
 const aqClosed = dt => dt.getDay()===0 && [2,4].includes(Math.ceil(dt.getDate()/7));
 
 const slotId = r => r.id || `${r.d.replace(/-/g,'')}-${r.s}-${r.p}`;
-const placeOk = r => !state.place || r.p===state.place;
 /* 슬롯에 수업이 안 적혀 있으면 어느 수업을 골라도 보임 */
-const classOk = r => !state.cls || !r.c || !r.c.length || r.c.indexOf(state.cls)>=0;
-const shown = r => placeOk(r) && classOk(r);
+const shown = r => !state.cls || !r.c || !r.c.length || r.c.indexOf(state.cls)>=0;
+/* 슬롯에 적힌 수업들 중 화면에 쓸 것 — 지금 언어 수업을 먼저 */
+const slotClass = r => {
+  const cs = (r.c||[]).filter(c => CLASSES[c]);
+  return cs.find(c => CLASSES[c].lang===state.lang) || cs[0] || null;
+};
+/* 지금 고른 언어와 다른 언어 수업이면 옅은 회색으로 */
+const otherLang = r => {
+  const ls = (r.c||[]).map(c => (CLASSES[c]||{}).lang).filter(Boolean);
+  return ls.length>0 && ls.indexOf(state.lang)<0;
+};
+/* 신청서에 넣을 수업 — 칩으로 고른 게 이 슬롯에 있으면 그것, 아니면 슬롯에 적힌 것 */
+const bookClass = r => (state.cls && (r.c||[]).indexOf(state.cls)>=0) ? state.cls : slotClass(r);
 const slotsOn = k => DATA.filter(r => r.d===k && r.s && shown(r)).sort((a,b)=> (a.t[0]).localeCompare(b.t[0]));
 const isOff = k => DATA.some(r => r.d===k && r.st==='off');
 const inMonth = (d, m) => d.startsWith(`${m.getFullYear()}-${pad(m.getMonth()+1)}`);
@@ -638,10 +749,12 @@ function slotHTML(r){
   const grp = r.bk===0 && r.cap>=3 ? `<span class="grp">${t.group}</span>` : '';
   const act = full ? `<span class="fullbadge">${t.full}</span>`
                    : `<button class="book" data-id="${DATA.indexOf(r)}">${t.book}</button>`;
-  return `<div class="slot ${r.p}${full?' is-full':''}">
+  const oth = otherLang(r) ? ' otherlang' : '';
+  const bc = slotClass(r), cname = bc ? `<span class="clsname">${t.cls[bc]}</span>` : '';
+  return `<div class="slot ${r.p}${full?' is-full':''}${oth}">
     <div class="when"><small>${t.slot[r.s]}</small><b>${r.t[0]}</b><small>~${r.t[1]}</small></div>
-    <div class="where"><span class="dot"></span>${t.place[r.p]}</div>
-    <div class="meta"><span class="pips" aria-hidden="true">${pips}</span><span>${full? t.full : t.left(left)}</span>${mine}${grp}${memo}</div>
+    <div class="where"><span class="dot"></span>${cname || t.place[r.p]}</div>
+    <div class="meta"><span>${t.place[r.p]}</span><span class="pips" aria-hidden="true">${pips}</span><span>${left}/${r.cap}</span>${mine}${grp}${memo}</div>
     <div class="act">${act}</div></div>`;
 }
 
@@ -660,15 +773,15 @@ function renderCal(){
     const cls = adj ? ' adj' : '';
     if(k < TODAY){ h += `<div class="cell past${cls}"><span class="n">${num}</span></div>`; continue; }
     if(ss.length){
-      const pills = ss.map(r=>{ const left=r.cap-r.bk;
-        return left>0
-          ? `<span class="pill ${r.p}"><span class="t">${r.t[0]} ${t.short[r.p]}</span><span class="t-mini">${r.t[0]}</span><span class="t">${left}</span></span>`
-          : `<span class="pill full"><span class="t">${r.t[0]} ${t.short[r.p]}</span><span class="t-mini">${r.t[0]}</span></span>`;
+      const pills = ss.map(r=>{
+        const left = r.cap-r.bk, bc = slotClass(r);
+        const tone = otherLang(r) ? 'otherlang' : (left>0 ? r.p : 'full');
+        return `<span class="ev ${tone}"><i></i><b>${r.t[0]}</b>${bc?`<span class="cn">${t.clsShort[bc]}</span>`:''}<em>${left}/${r.cap}</em></span>`;
       }).join('');
       h += `<button class="cell has${cls}${state.sel===k?' sel':''}" data-day="${k}" aria-label="${t.date(dt)}"><span class="n">${num}</span>${pills}</button>`;
     } else if(isOff(k)){
       h += `<div class="cell off${cls}"><span class="n">${num}</span><span class="lbl">${t.off}</span></div>`;
-    } else if(aqClosed(dt) && state.place!=='yi'){
+    } else if(aqClosed(dt) && (!state.cls || CLASSES[state.cls].p==='sn')){
       h += `<div class="cell shut${cls}"><span class="n">${num}</span><span class="lbl">${t.shut}</span></div>`;
     } else {
       h += `<div class="cell${cls}"><span class="n">${num}</span></div>`;
@@ -678,6 +791,7 @@ function renderCal(){
   h += `<div class="legend">
     <span><i style="background:var(--sn)"></i>${t.legend.sn}</span>
     <span><i style="background:var(--yi)"></i>${t.legend.yi}</span>
+    <span><i style="background:var(--faint)"></i>${t.otherLang}</span>
     <span><i style="background:var(--off-bg);border-color:var(--off-line)"></i>${t.legend.off}</span>
     <span><i style="background:var(--shut-bg);border-color:var(--shut-line)"></i>${t.legend.shut}</span></div>`;
   const sel = state.sel;
@@ -721,10 +835,11 @@ function renderMy(){
   return h + `<div class="myhelp">${t.myHelp}</div>`;
 }
 
-const PAGES = ['schedule','classes','reviews','about','my'];
+const PAGES = ['schedule','classes','tour','reviews','about','my'];
 const ICONS = {
   schedule:'<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   classes:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/>',
+  tour:'<path d="M3 15c2.2 0 2.2 2 4.4 2s2.2-2 4.4-2 2.2 2 4.4 2 2.2-2 4.4-2"/><path d="M20 9c-1.6-2.6-4.6-4-8-4-4 0-7 2-9 5 2.4 1 4.6 1.4 7 1.4"/><path d="M20 9l1.6-2.4L22 11z"/>',
   reviews:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3l-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/>',
   about:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>',
   my:'<path d="M6 3h12v18l-6-4-6 4z"/>',
@@ -782,50 +897,61 @@ function renderImages(pg){
    고칠 일이 생기면 이 DOC 객체만 손보면 됨 */
 const DOC = {
 ko: {
-  intro: '한 번에 최대 4명만 받습니다. 모든 수업에 수중 사진·영상 촬영이 포함되고, 수영장 입장료만 따로 내시면 됩니다.',
+  intro: '최대 수강 인원은 4명으로 제한합니다. 모든 수업에 수중 사진·영상 촬영이 포함되고, 수영장 입장료만 따로 내시면 됩니다.',
   items: [
     { key:'expko', tag:'1~4인 · 약 3시간', name:'체험 다이빙',
-      lead:['숨 한 번으로 물속에 들어가 보는 첫날입니다.',
+      lead:['한 번의 숨으로 물속에 들어가 보는 원데이 클래스입니다.',
             '수영을 잘 못해도, 깊은 물이 조금 무서워도 괜찮습니다.',
-            '한 번에 최대 4명만 받아서, 한 분 한 분의 호흡과 긴장을 보면서 속도를 맞춥니다.'],
+            '한 분 한 분의 호흡과 긴장을 보면서 속도를 맞춥니다.'],
       learnH:'무엇을 배우나요',
       learn:['스트레칭과 호흡법 — 몸의 힘을 빼는 것부터',
              '프리다이빙 기초 이론 — 수압, 부력, 안전 수칙',
              '이퀄라이징 — 귀가 아프지 않게 내려가는 법',
-             '기초 다이빙 기술 — 덕다이브, 편하게 내려가고 올라오기'],
+             '기초 다이빙 기술 — 덕다이빙, 편하게 내려가고 올라오기'],
       rows:[['시간','이론 20~30분 + 수영장 2~3시간'],
-            ['장소','성남 아쿠아라인(5m) 또는 용인 딥스테이션(36m)'],
+            ['장소','성남 아쿠아라인(5m)'],
             ['포함','강습, 마스크·스노클·핀 대여, 수업 중 사진·영상 촬영'],
             ['별도','수영장 입장료'],
             ['준비물','수영복·수모, 세면용품, 수건, 신분증']],
-      price:[['1인','100,000원'],['2인 이상 동반','1인 80,000원'],['1:1 맞춤수업','150,000원']],
+      price:[['1인','100,000원'],['2인 동반','1인 90,000원'],['3인 동반','1인 80,000원'],
+             ['4인 동반','1인 70,000원'],['1:1 맞춤수업','150,000원']],
       pnote:'수영장 입장료는 별도입니다. 아래 장소 표를 참고하세요.' },
 
     { key:'padi', tag:'1~4인 · 이론 + 제한수역 1회 + 딥 세션 2회', name:'PADI 프리다이버',
-      lead:['전 세계에서 통하는 PADI 프리다이버 자격증 과정입니다.',
-            '끝나고 나면 바다에서 버디와 함께 10~16m까지 스스로 프리다이빙을 할 수 있습니다.',
-            '오키나와 혹등고래 스윔처럼 자격증이 필요한 해외 투어에도 참가할 수 있습니다.'],
+      lead:['전 세계에서 통용되는 PADI 프리다이버 자격증 과정입니다.',
+            '끝나고 나면 바다에서 버디와 함께 10~16m까지 강사 없이 프리다이빙을 할 수 있습니다.',
+            '또한 프리다이버 자격증이 있으면 오키나와 혹등고래 스윔처럼 자격증이 필요한 해외 투어에도 참가할 수 있습니다.'],
       stepsH:'과정 구성',
-      steps:['이론 — PADI e러닝 + 대면 이론 (호흡, 이퀄라이징, 안전, 버디 시스템)',
-             '제한수역 1회 · 아쿠아라인 5m — 스태틱 90초, 다이내믹 25m',
-             '딥 세션 2회 · 딥스테이션 — 컨스턴트 웨이트 10m 이상, 레스큐'],
+      steps:['이론 — PADI e러닝 + 대면/원격 이론 (호흡, 이퀄라이징, 안전, 버디 시스템)',
+             '<b>프리다이버 5m 과정</b> 1회 · 성남 아쿠아라인 — 스태틱 90초, 다이내믹 25m',
+             '<b>프리다이버 15m 과정</b> 2회 · 용인 딥스테이션 — 컨스턴트 웨이트 10m 이상, 레스큐'],
+      callout:'일정표에서는 이 과정을 <b>프리다이버 5m 과정</b>(성남)과 <b>프리다이버 15m 과정</b>(용인 딥스테이션) 두 가지로 나눠 신청받아요. 세 번을 모두 듣고 수료 기준을 통과하면 자격증이 발급됩니다.',
       rows:[['수료 기준','스태틱 1분 30초 · 다이내믹 25m · 컨스턴트 웨이트 10m'],
-            ['대상','만 15세 이상, 자격증 없이 바로 시작할 수 있어요'],
+            ['대상','만 15세 이상'],
             ['포함','강습, e러닝·교재, <b>PADI 자격증 발급비</b>, 장비 대여, 사진·영상'],
             ['별도','수영장 입장료']],
-      price:[['기본','380,000원'],['1:1 맞춤수업','500,000원'],['2인 동반 등록','1인 40,000원 할인']],
+      termsH:'수료 기준의 세 종목이 뭔가요',
+      terms:[['스태틱 (STA)','물에 얼굴을 담근 채 움직이지 않고 숨을 참는 종목이에요. 수료 기준은 1분 30초입니다.'],
+             ['다이내믹 (DYN)','핀을 차고 수영장을 수평으로 이동하는 거리 종목이에요. 수료 기준은 25m입니다.'],
+             ['컨스턴트 웨이트 (CWT)','웨이트를 바꾸지 않고 줄을 따라 내려갔다 올라오는 수심 종목이에요. 수료 기준은 10m입니다.']],
+      promoH:'오픈 특가 · 선착순 10명',
+      promo:'알로하다이빙을 열면서 <b>PADI 프리다이버 과정을 1+1</b>로 드립니다. 두 분이 오시면 <b>한 분 수강료 380,000원</b>으로 두 분 다 수료하실 수 있어요.',
+      promoFine:'유료 등록 기준 선착순 10분까지만 드립니다(두 분씩 오시면 20분이 수강하시게 돼요). 함께 오시는 분은 수영장 입장료만 따로 내시면 되고, 강습·교재·자격증 발급비·장비·촬영은 모두 포함입니다. 아래 2·3·4인 동반 할인과는 중복되지 않아요.',
+      price:[['기본','380,000원'],['2인 동반','1인 20,000원 할인'],['3인 동반','1인 30,000원 할인'],
+             ['4인 동반','1인 40,000원 할인'],['1:1 맞춤수업','500,000원']],
       pnote:'자격증 발급비와 교재가 모두 포함된 가격입니다.' },
 
     { key:'fun', tag:'자격증 보유자 · 1~4인', name:'펀다이빙',
-      lead:['수업이 아니라, 같이 물에 들어가는 시간입니다.',
+      lead:['자격증을 위한 수업이 아니라, 같이 물에 들어가 트레이닝하는 시간입니다.',
             '자격증을 딴 뒤에도 감각을 잃지 않으려면 꾸준히 들어가는 게 가장 좋습니다.',
-            '버디를 맞춰 드리고 안전을 보면서, 연습하고 싶은 걸 편하게 하실 수 있게 돕습니다.'],
-      rows:[['대상','프리다이버 자격증 보유자 (레벨1 이상)'],
-            ['장소','성남 아쿠아라인(5m) 또는 용인 딥스테이션(36m)'],
+            '또한 더 깊은 수심에 들어가기 위한 새로운 스킬들을 배울 수 있습니다.',
+            '버디가 되어 안전을 보면서, 연습하고 싶은 걸 편하게 하실 수 있게 돕고 사진·영상 촬영이 포함됩니다.'],
+      rows:[['대상','프리다이버 자격증 보유자'],
+            ['장소','용인 딥스테이션(36m)'],
             ['포함','버디·안전 확보, 사진·영상 촬영'],
             ['별도','수영장 입장료, 개인 장비가 없으시면 장비 대여']],
-      price:[],
-      pnote:'요금은 아직 정리 중이에요. 카카오톡 채널로 문의해 주시면 안내해 드릴게요.' },
+      price:[['1회','10,000원']],
+      pnote:'수영장 입장료는 별도입니다.' },
   ],
   venueH:'장소 · 수영장 입장료',
   venueSub:'입장료는 수업료와 별도로 현장에서 내요.',
@@ -833,10 +959,16 @@ ko: {
     {name:'성남 아쿠아라인 · 5m', addr:'경기 성남시 중원구 제일로 60 성남종합스포츠센터 B동 지하2층', wd:'15,000원', we:'20,000원'},
     {name:'용인 딥스테이션 · 36m', addr:'경기 용인시 처인구 포곡읍 성산로 523', wd:'48,000원', we:'66,000원'},
   ],
-  venueNote:'아쿠아라인은 매월 <b>2번째·4번째 일요일이 정기휴무</b>라 그날은 수업을 열지 않습니다. 일정표에도 표시돼 있어요.',
+  costH:'실제로 내는 돈',
+  costHead:['수업','수강료','수영장 입장료','합계'],
+  costs:[['체험 다이빙 · 주중','100,000원','15,000원','<b>115,000원</b>'],
+         ['체험 다이빙 · 주말','100,000원','20,000원','<b>120,000원</b>'],
+         ['PADI 프리다이버 · 주중','380,000원','111,000원','<b>491,000원</b>'],
+         ['PADI 프리다이버 · 주말','380,000원','152,000원','<b>532,000원</b>']],
+  costNote:'1인 기준입니다. PADI 과정 입장료는 제한수역 1회(성남)와 딥 세션 2회(딥스테이션)를 더한 금액이에요. 2인 이상 함께 등록하시면 수강료가 내려갑니다.',
   bringH:'준비물',
   bring:['수영복 · 수모','세면용품','수건','신분증'],
-  bringNote:'마스크·스노클·핀은 빌려드려요. 아쿠아라인 오리발 대여는 현장에서 3,000원입니다.',
+  bringNote:'',
   about:{
     name:'알로하다이빙 강사 신광우',
     bio:['유도와 크로스핏, 마라톤을 하면서 "힘을 쓰는 법"을 배웠고, 프리다이빙에서 "힘을 빼는 법"을 배웠습니다.',
@@ -867,21 +999,22 @@ en: {
             'You don\u2019t need to be a strong swimmer — most of our guests have never freedived before.',
             'We take four people at most, so you get real attention.'],
       stepsH:'Your day',
-      steps:['<b>09:30</b> · Meet at DDP (Dongdaemun Design Plaza) and travel to the pool together',
+      steps:['<b>09:30</b> · Meet at DDP (Dongdaemun Design Plaza) — optional free carpool',
              '<b>10:30</b> · Theory — breathing, pressure, equalizing and safety (20–30 min)',
              '<b>11:00</b> · Pool session — relaxation, equalizing, duck dive, your first descents',
              '<b>13:30</b> · Lunch together (optional, you pay your own)',
              '<b>15:00</b> · Back at DDP'],
+      stepsNote:'Times may shift depending on the pool session we are able to book.',
       learnH:'What you\u2019ll learn',
       learn:['Breathing and relaxation — the part that makes everything else work',
              'How pressure and buoyancy change your body underwater',
              'Equalizing, so your ears stay comfortable',
              'The duck dive, and how to descend and come back up calmly'],
       callout:'<b>Photos and video</b> — we film the whole session with an Insta360 X5 and shoot stills on a Sony A7C in an underwater housing, then send you the edited files. No phone in a plastic bag — proper underwater photography.',
-      rows:[['Meeting point','DDP, Dongdaemun — we travel to the pool together'],
+      rows:[['Meeting point','DDP, Dongdaemun — optional free carpool'],
             ['Pool','Deep Station, Yongin — 36 m, the deepest in Korea'],
             ['Included','Instruction in English, all gear, <b>pool entry fee</b>, photos and video'],
-            ['Not included','Lunch (optional), personal expenses'],
+            ['Not included','Lunch (optional) and personal expenses'],
             ['Bring','Swimsuit, towel, toiletries']],
       price:[['1 person','\u20a9250,000'],['2 people','\u20a9460,000'],['3 people','\u20a9690,000'],
              ['4 people','\u20a9900,000'],['Private 1:1','\u20a9400,000']],
@@ -893,25 +1026,34 @@ en: {
             'It also qualifies you for trips that require a certification, such as our humpback whale swim in Okinawa.'],
       stepsH:'Course outline',
       steps:['Theory — PADI eLearning + in-person session (breathing, equalizing, safety, buddy system)',
-             'One confined water session · Aqualine 5 m — 90 s static, 25 m dynamic',
-             'Two deep sessions · Deep Station — constant weight 10 m+, rescue'],
+             'One <b>Freediver 5 m</b> session · Aqualine, Seongnam — 90 s static, 25 m dynamic',
+             'Two <b>Freediver 15 m</b> sessions · Deep Station, Yongin — constant weight 10 m+, rescue'],
+      callout:'On the schedule these are booked separately as <b>Freediver 5 m</b> (Seongnam) and <b>Freediver 15 m</b> (Deep Station). Complete all three sessions and meet the performance requirements, and you are certified.',
       rows:[['To certify','90 s static · 25 m dynamic · 10 m constant weight'],
             ['Who','Age 15+, no prior certification needed'],
             ['Included','Instruction, eLearning and materials, <b>PADI certification fee</b>, gear, photos and video'],
             ['Not included','Pool entry fees']],
-      price:[['Course','\u20a9380,000'],['Private 1:1','\u20a9500,000'],['Two of you together','\u20a940,000 off each']],
+      termsH:'What the three skills are',
+      terms:[['Static (STA)','Holding your breath face-down at the surface without moving. You need 90 seconds.'],
+             ['Dynamic (DYN)','Swimming horizontally across the pool with fins, measured in distance. You need 25 m.'],
+             ['Constant weight (CWT)','Descending and coming back up along a line without changing your weights. You need 10 m.']],
+      promoH:'Opening offer · first 10 sign-ups',
+      promo:'To celebrate our opening, the <b>PADI Freediver course is two for one</b>. Bring a friend and you both certify for <b>one tuition of \u20a9380,000</b>.',
+      promoFine:'Limited to the first 10 paid sign-ups (so up to 20 people in total). Your friend pays only the pool entry fee — instruction, materials, the PADI certification fee, gear and photos are all included. It cannot be combined with the group discounts below.',
+      price:[['Course','\u20a9380,000'],['Two together','\u20a920,000 off each'],['Three together','\u20a930,000 off each'],
+             ['Four together','\u20a940,000 off each'],['Private 1:1','\u20a9500,000']],
       pnote:'The certification fee and materials are already in the price.' },
 
     { key:'fun', tag:'Certified freedivers · 1–4 people', name:'Fun Diving',
       lead:['Not a class — just diving together.',
             'The best way to keep what you learned is to keep getting in the water.',
             'We pair you with a buddy and watch your safety while you work on whatever you want.'],
-      rows:[['Who','Certified freedivers (Level 1 and up)'],
-            ['Pool','Aqualine, Seongnam (5 m) or Deep Station, Yongin (36 m)'],
+      rows:[['Who','Certified freedivers'],
+            ['Pool','Deep Station, Yongin (36 m)'],
             ['Included','Buddy and safety supervision, photos and video'],
             ['Not included','Pool entry fee, gear rental if you don\u2019t have your own']],
-      price:[],
-      pnote:'Fun dive pricing is still being finalised — message us on KakaoTalk and we will sort it out.' },
+      price:[['Per session','\u20a910,000']],
+      pnote:'Pool entry is paid separately.' },
   ],
   venueH:'Venues · pool entry fees',
   venueSub:'Pool entry is paid at the venue, separate from the class fee — except on the English half-day, where it is included.',
@@ -919,10 +1061,15 @@ en: {
     {name:'Aqualine, Seongnam · 5 m', addr:'B2, Building B, Seongnam Sports Complex, 60 Jeil-ro, Jungwon-gu, Seongnam', wd:'\u20a915,000', we:'\u20a920,000'},
     {name:'Deep Station, Yongin · 36 m', addr:'523 Seongsan-ro, Pogok-eup, Cheoin-gu, Yongin', wd:'\u20a948,000', we:'\u20a966,000'},
   ],
-  venueNote:'Aqualine is closed on the <b>2nd and 4th Sunday</b> of every month, so there are no classes on those days. The schedule marks them for you.',
+  costH:'What you actually pay',
+  costHead:['Class','Tuition','Pool entry','Total'],
+  costs:[['Try Freediving','\u20a9250,000','included','<b>\u20a9250,000</b>'],
+         ['PADI Freediver · weekday','\u20a9380,000','\u20a9111,000','<b>\u20a9491,000</b>'],
+         ['PADI Freediver · weekend','\u20a9380,000','\u20a9152,000','<b>\u20a9532,000</b>']],
+  costNote:'Per person. The PADI entry figure adds one confined-water session in Seongnam and two deep sessions at Deep Station. Signing up with a friend lowers the tuition.',
   bringH:'What to bring',
   bring:['Swimsuit and swim cap','Toiletries','Towel','Photo ID'],
-  bringNote:'Mask, snorkel and fins are provided. Fin rental at Aqualine is \u20a93,000, paid on site.',
+  bringNote:'',
   about:{
     name:'Your instructor · Kwangwoo Shin',
     bio:['Years of judo, CrossFit and distance running taught me how to push through. Freediving taught me how to let go.',
@@ -954,24 +1101,31 @@ const mapUrl = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeU
 function photoSlot(files, i, alt){
   const t = T[state.lang], f = files[i];
   if(!f) return `<div class="photo">${t.photoSlot}</div>`;
+  if(/\.(mp4|webm)$/i.test(f)) return `<video src="${esc(f)}" poster="${esc(f.replace(/\.\w+$/,'.jpg'))}" autoplay muted loop playsinline preload="metadata" aria-label="${esc(alt)}"
+    style="display:block;width:100%;height:auto;border-radius:13px;margin-top:16px;border:1px solid var(--line);background:#0b3a4a"></video>`;
   return `<img src="${esc(f)}" alt="${esc(alt)}" loading="lazy" style="display:block;width:100%;height:auto;border-radius:13px;margin-top:16px;border:1px solid var(--line)"
     onerror="this.outerHTML='<div class=&quot;photo&quot;>${esc(t.photoSlot)}</div>'">`;
 }
 
 function classCard(it, files, i){
   const t = T[state.lang];
-  let h = `<section class="cls" id="cls-${it.key}"><span class="tag">${it.tag}</span><h2>${it.name}</h2>`;
+  const side = !!files[i];   // 사진·영상이 있으면 오른쪽 1/3 에
+  let h = `<span class="tag">${it.tag}</span><h2>${it.name}</h2>`;
   h += it.lead.map(p=>`<p class="lead">${p}</p>`).join('');
   if(it.steps) h += `<h3>${it.stepsH}</h3><ol>${it.steps.map(x=>`<li>${x}</li>`).join('')}</ol>`;
+  if(it.stepsNote) h += `<p class="lead" style="font-size:13.5px;color:var(--muted)">${it.stepsNote}</p>`;
   if(it.learn) h += `<h3>${it.learnH}</h3><ul>${it.learn.map(x=>`<li>${x}</li>`).join('')}</ul>`;
   if(it.callout) h += `<div class="callout">${it.callout}</div>`;
   h += `<dl class="kv">${it.rows.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl>`;
+  if(it.terms) h += `<h3>${it.termsH}</h3><ul>${it.terms.map(x=>`<li><b>${x[0]}</b> — ${x[1]}</li>`).join('')}</ul>`;
+  if(it.promo && CONFIG.PROMO) h += `<div class="promobox"><div class="ph">${it.promoH}</div><p>${it.promo}</p><div class="fine">${it.promoFine}</div></div>`;
   h += `<div class="pricebox">` + (it.price.length ? `<div class="ph">${t.priceH}</div>` : '') +
        it.price.map(r=>`<div class="pricerow"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('') +
        (it.pnote?`<div class="pnote"${it.price.length?'':' style="margin-top:0;font-weight:700"'}>${it.pnote}</div>`:'') + `</div>`;
-  h += photoSlot(files, i, it.name);
-  h += `<button class="book" data-page="schedule" style="margin-top:16px">${t.cGo}</button></section>`;
-  return h;
+  // 사진·영상이 있으면 글 2/3 + 오른쪽 1/3 (좁은 화면은 본문 아래 가운데)
+  h = side ? `<div class="aboutgrid clsgrid"><div class="abtxt">${h}</div><div class="vids">${photoSlot(files, i, it.name).replace('margin-top:16px','margin-top:0')}</div></div>`
+          : h + photoSlot(files, i, it.name);
+  return `<section class="cls" id="cls-${it.key}">${h}<button class="book" data-page="schedule" style="margin-top:16px">${t.cGo}</button></section>`;
 }
 
 function renderClasses(){
@@ -983,16 +1137,40 @@ function renderClasses(){
     <table class="tbl"><thead><tr><th>${t.dl[2]}</th><th>${t.weekday}</th><th>${t.weekend}</th></tr></thead><tbody>` +
     d.venues.map(v=>`<tr><td>${v.name}<small>${v.addr} · <a class="maplink" href="${mapUrl(v.addr)}" target="_blank" rel="noopener">${t.mapGo} ↗</a></small></td>
       <td class="num">${v.wd}</td><td class="num">${v.we}</td></tr>`).join('') +
-    `</tbody></table><div class="callout">${d.venueNote}</div></section>`;
+    `</tbody></table></section>`;
+  h += `<section class="sec"><h2>${d.costH}</h2>
+    <table class="tbl"><thead><tr>${d.costHead.map((c,i)=>`<th${i?' style="text-align:right"':''}>${c}</th>`).join('')}</tr></thead><tbody>` +
+    d.costs.map(r=>`<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td></tr>`).join('') +
+    `</tbody></table><div class="callout">${d.costNote}</div></section>`;
   h += `<section class="sec"><h2>${d.bringH}</h2><div class="cls" style="margin-top:0"><ul>` +
-    d.bring.map(x=>`<li>${x}</li>`).join('') + `</ul><div class="callout">${d.bringNote}</div></div></section>`;
+    d.bring.map(x=>`<li>${x}</li>`).join('') + `</ul>${d.bringNote?`<div class="callout">${d.bringNote}</div>`:''}</div></section>`;
   return h;
+}
+
+/* 혹등고래 어미 + 새끼 (옆모습). 코 = 오른쪽 */
+/* 투어 — 사진은 전부 NOAA 국립해양보호구역(하와이) 촬영, 퍼블릭 도메인 */
+function renderTour(){
+  const t = T[state.lang];
+  const g = (f,i) => `<img src="${f}" alt="${esc(t.tourAlt[i])}" loading="lazy">`;
+  return `<div class="tourbox">
+    <div class="tourhero">
+      <img src="whale-hero.webp" alt="${esc(t.tourTitle)}">
+      <div class="scrim"></div>
+      <div class="cap"><span class="soon">${t.tourSoon}</span><h2>${t.tourTitle}</h2></div>
+    </div>
+    <div class="gallery">${g('whale-1.webp',0)}${g('whale-2.webp',1)}${g('whale-3.webp',2)}</div>
+    <div class="tourtxt">
+      <p>${t.tourBody}</p>
+      <div class="credit">${t.tourCredit}</div>
+    </div>
+  </div>`;
 }
 
 function renderAbout(){
   const t = T[state.lang], a = DOC[state.lang].about;
   const files = (CONFIG.IMAGES && CONFIG.IMAGES.about) || [];
-  let h = photoSlot(files, 0, a.name).replace('margin-top:16px','margin-top:4px');
+  const multi = files.length > 1;
+  let h = multi ? '' : photoSlot(files, 0, a.name).replace('margin-top:16px','margin-top:4px');
   h += `<div class="bio"><p class="sig">${a.name}</p>` + a.bio.map(p=>`<p>${p}</p>`).join('') + `</div>`;
   h += `<section class="cls"><h3 style="margin-top:0">${a.forH}</h3><ul>` + a.forYou.map(x=>`<li>${x}</li>`).join('') + `</ul>
     <div class="callout">${a.after}</div></section>`;
@@ -1000,7 +1178,10 @@ function renderAbout(){
   h += `<section class="cls"><h3 style="margin-top:0">${a.contactH}</h3><dl class="kv" style="margin-top:0">
     <dt>${t.insta}</dt><dd><a class="maplink" href="${INSTA}" target="_blank" rel="noopener">${a.insta} ↗</a></dd>
     <dt>${t.kakao}</dt><dd>${a.kakao}</dd></dl></section>`;
-  return h;
+  if(!multi) return h;
+  // 영상 여러 개: 넓은 화면은 글 2/3 + 오른쪽 1/3 에 영상 세로로, 좁은 화면은 영상이 위에 나란히
+  const vids = files.map((f,i)=> photoSlot(files, i, a.name).replace('margin-top:16px','margin-top:0')).join('');
+  return `<div class="aboutgrid"><div class="abtxt">${h}</div><div class="vids">${vids}</div></div>`;
 }
 
 /* 로딩 애니메이션: 모노핀 다이버가 돌핀킥으로 수평 잠영(다이나믹) */
@@ -1049,18 +1230,19 @@ function render(){
   $('lang-en').setAttribute('aria-pressed', state.lang==='en');
   const isMy = pg==='my';
   $('schedctl').hidden = pg!=='schedule';
-  $('lab-place').textContent = t.fPlace + ' :';
   $('lab-class').textContent = t.fClass + ' :';
-  $('chips-place').innerHTML = ['sn','yi'].map(p=>
-    `<button class="chip" data-place="${p}" aria-pressed="${state.place===p}"><span class="sw" style="background:var(--${p})"></span>${t.place[p]}</button>`).join('');
   $('chips-class').innerHTML = CLASS_KEYS[state.lang].map(c=>
-    `<button class="chip" data-cls="${c}" aria-pressed="${state.cls===c}">${t.cls[c]}</button>`).join('');
+    `<button class="chip" data-cls="${c}" aria-pressed="${state.cls===c}"><span class="sw" style="background:var(--${CLASSES[c].p})"></span>${t.cls[c]}</button>`).join('');
   $('sample').hidden = MODE!=='sample';
   $('sampletag').textContent = t.sampletag; $('sampletxt').textContent = t.sampletxt;
   $('foot').innerHTML = pg==='schedule' ? t.foot : t.footMini;
+  const pr = $('promo');
+  pr.hidden = !CONFIG.PROMO;
+  if(CONFIG.PROMO) pr.innerHTML = `<span class="tag">${t.promoTag}</span><span class="txt">${t.promoBar}</span><span class="go">${t.promoGo}</span>`;
 
   if(pg==='classes'){ $('main').innerHTML = renderClasses(); return; }
   if(pg==='about'){ $('main').innerHTML = renderAbout(); return; }
+  if(pg==='tour'){ $('main').innerHTML = renderTour(); return; }
   if(MODE==='loading'){ $('months').innerHTML=''; $('main').innerHTML = loaderHTML(t.loading); return; }
   if(MODE==='error'){ $('months').innerHTML=''; $('main').innerHTML = `<div class="empty">${t.error}<br><button class="retry" id="retry">${t.retry}</button></div>`; return; }
 
@@ -1088,28 +1270,39 @@ function setMonth(mm){
 }
 
 /* 신청서에 들어갈 수업 문구. 끝의 #코드로 Apps Script 가 슬롯별 신청 수를 셈 */
-function classCode(r){
-  const dt = parse(r.d);
-  const c = state.cls ? ` · ${T.ko.cls[state.cls]}` : '';
-  return `${r.d} (${'일월화수목금토'[dt.getDay()]}) ${T.ko.slot[r.s]} ${r.t[0]}-${r.t[1]} · ${T.ko.place[r.p]}${c} #${slotId(r)}`;
+/* 신청서 '신청 일시' 칸에 들어갈 글. 끝의 #코드로 Apps Script 가 슬롯별 신청 수를 셈 */
+function classCode(r, lang){
+  const dt = parse(r.d), T2 = T[lang || 'ko'];
+  const dow = lang==='en' ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()] : '일월화수목금토'[dt.getDay()];
+  return `${r.d} (${dow}) ${T2.slot[r.s]} ${r.t[0]}-${r.t[1]} · ${T2.place[r.p]} #${slotId(r)}`;
 }
 
 function openSheet(r){
   const t = T[state.lang], left = r.cap - r.bk;
   $('sh-title').textContent = t.sheetTitle;
-  const rows = [[t.dl[0], t.date(parse(r.d))],[t.dl[1], `${t.slot[r.s]} ${r.t[0]}–${r.t[1]}`],[t.dl[2], t.place[r.p]],[t.dl[3], t.left(left)], [t.dl[5], r.bk===0 && r.cap>=3 ? t.pplGroup(left) : t.ppl(left)]];
-  if(state.cls) rows.splice(3, 0, [t.dl[6], t.cls[state.cls]]);
+  const bc = bookClass(r);
+  const rows = [[t.dl[0], t.date(parse(r.d))],[t.dl[1], `${t.slot[r.s]} ${r.t[0]}–${r.t[1]}`],[t.dl[2], t.place[r.p]],[t.dl[3], `${left}/${r.cap}`], [t.dl[5], t.ppl(left)]];
+  if(bc) rows.splice(3, 0, [t.dl[6], t.cls[bc]]);
   if(r.memo) rows.push([t.dl[4], r.memo[state.lang]]);
   $('sh-dl').innerHTML = rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('');
   const go = $('sh-go');
-  if(FORM){
-    go.href = `${FORM.url}${FORM.url.includes('?')?'&':'?'}usp=pp_url&${FORM.entry}=${encodeURIComponent(classCode(r))}`;
+  // 수업 언어에 맞는 신청서(한글/영어)로 보냄
+  const flang = bc ? CLASSES[bc].lang : state.lang;
+  const f = (FORMS && FORMS[flang] && FORMS[flang].url) ? FORMS[flang] : null;
+  if(f){
+    const q = [`${f.slot}=${encodeURIComponent(classCode(r, flang))}`];
+    if(bc && f.cls) q.push(`${f.cls}=${encodeURIComponent(FORM_CLASS_LABEL[bc])}`);
+    go.href = `${f.url}${f.url.includes('?')?'&':'?'}usp=pp_url&${q.join('&')}`;
+    go.dataset.mock = '';
+    $('sh-url').hidden = true;
+  } else if(FORM){
+    go.href = `${FORM.url}${FORM.url.includes('?')?'&':'?'}usp=pp_url&${FORM.entry}=${encodeURIComponent(classCode(r, 'ko'))}`;
     go.dataset.mock = '';
     $('sh-url').hidden = true;
   } else {
     go.href = '#'; go.dataset.mock = '1';
     $('sh-url').hidden = false;
-    $('sh-url').textContent = `docs.google.com/forms/…/viewform?usp=pp_url&entry.…=${classCode(r)}`;
+    $('sh-url').textContent = `docs.google.com/forms/…/viewform?usp=pp_url&entry.…=${classCode(r, flang)}`;
   }
   $('sh-close').textContent = t.close; go.textContent = t.go; $('sh-fine').textContent = t.fine;
   $('scrim').hidden = false; go.focus();
@@ -1177,6 +1370,7 @@ async function load(quiet){
     const j = await res.json();
     DATA = [...j.slots, ...j.off.map(d => ({d, st:'off'}))];
     FORM = j.form && j.form.url && j.form.entry ? j.form : null;
+    FORMS = j.forms || null;
     CONTENT = j.content || null;
     MODE = 'live';
   }catch(e){
@@ -1194,7 +1388,6 @@ document.addEventListener('click', e=>{
     if(state.cls && CLASS_KEYS[state.lang].indexOf(state.cls)<0) state.cls = null;
     render(); }
   else if(b.dataset.page){ setPage(b.dataset.page); }
-  else if(b.dataset.place){ state.place = state.place===b.dataset.place ? null : b.dataset.place; state.sel=null; render(); }
   else if(b.dataset.cls){ state.cls = state.cls===b.dataset.cls ? null : b.dataset.cls; state.sel=null; render(); }
   else if(b.dataset.month){ setMonth(parse(b.dataset.month)); }
   else if(b.dataset.day){ state.sel=b.dataset.day; render(); }
