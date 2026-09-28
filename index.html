@@ -224,6 +224,10 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
   .ev .cn{display:inline}
 }
 
+.askline{margin-top:14px; border:1px dashed var(--line); border-radius:11px; padding:11px 13px;
+  font-size:13.5px; line-height:1.7; color:var(--muted); background:var(--surface); text-wrap:pretty}
+.askline b{color:var(--ink); font-weight:700}
+.askline a{color:var(--sn); font-weight:700; text-decoration:none; white-space:nowrap}
 .foot{margin-top:30px; padding-top:16px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); line-height:1.7}
 .foot b{color:var(--ink)}
 .foot a{color:var(--sn); font-weight:700}
@@ -449,9 +453,10 @@ const CONFIG = {
   MONTHS_AHEAD: 1,
   // 오픈 특가 이벤트. 10명 다 차면 false 로 바꾸면 배너와 안내가 모두 사라짐
   PROMO: true,
-  // 카카오톡 채널. KAKAO_URL 에 채널 주소(http://pf.kakao.com/_xxxxx)를 넣으면 문의 자리를 누르면 채팅창이 바로 열림
+  // 카카오톡 채널. KAKAO_ID = 화면에 보일 채널 이름(검색용 아이디 @oasis1005 아님).
+  // KAKAO_URL 에 채널 주소(http://pf.kakao.com/_xxxxx)를 넣으면 누를 때 채팅창이 바로 열림
   // (채널 관리자센터 → 채널 정보 → 채널 URL). 비워두면 아이디만 글자로 보임
-  KAKAO_ID: '@oasis1005',
+  KAKAO_ID: '알로하다이빙',
   KAKAO_URL: 'http://pf.kakao.com/_TKhxiX',
 };
 
@@ -571,6 +576,7 @@ const T = {
     booked:'신청함',
     myErr:'내 예약을 불러오지 못했어요. 다시 로그인해 주세요.',
     myHelp:'신청 직후엔 "확인 중"으로 보이고, 확인 연락 후 "확정"으로 바뀌어요. 취소는 카카오톡 채널로 알려주세요.',
+    askSlot:'원하시는 시간대에 수업이 없나요? 카카오톡 채널 <b>{KAKAO}</b> 또는 <a href="INSTA_URL" target="_blank" rel="noopener">인스타그램 DM ↗</a>으로 말씀해 주시면 일정을 맞춰 열어드릴게요.',
     noslot:'이 날은 수업이 없어요.',
     pick:'날짜를 눌러 수업을 확인하세요.',
     sampletag:'예시', sampletxt:'가짜 일정으로 만든 목업입니다',
@@ -634,6 +640,7 @@ const T = {
     booked:'Booked',
     myErr:'Could not load your bookings. Please sign in again.',
     myHelp:'New bookings show as Pending until we contact you to confirm. To cancel, message us on KakaoTalk.',
+    askSlot:'No time that works for you? Message us on KakaoTalk <b>{KAKAO}</b> or by <a href="INSTA_URL" target="_blank" rel="noopener">Instagram DM ↗</a> and we will try to open one that fits.',
     noslot:'No classes on this day.',
     pick:'Tap a date to see its classes.',
     sampletag:'SAMPLE', sampletxt:'Mockup built with example dates',
@@ -698,8 +705,9 @@ const slotClass = r => {
   const cs = (r.c||[]).filter(c => CLASSES[c]);
   return cs.find(c => CLASSES[c].lang===state.lang) || cs[0] || null;
 };
-/* 수업 종류 색 클래스 (exp_ko → k-exp). 수업 칸이 빈 슬롯은 고른 수업 색, 아무것도 안 골랐으면 회색 */
-const kCls = r => { const c = slotClass(r) || state.cls; return c ? ' k-' + c.split('_')[0] : ' k-none'; };
+/* 수업 종류 색 클래스 (exp_ko → k-exp).
+   시트 '수업' 칸이 빈 슬롯은 항상 회색(k-none) — 고른 칩 색으로 칠하면 전부 같은 색으로 보임 */
+const kCls = r => { const c = slotClass(r); return c ? ' k-' + c.split('_')[0] : ' k-none'; };
 /* 지금 고른 언어와 다른 언어 수업이면 옅은 회색으로 */
 const otherLang = r => {
   const ls = (r.c||[]).map(c => (CLASSES[c]||{}).lang).filter(Boolean);
@@ -717,7 +725,14 @@ function monthList(){
   let end = monthOf(parse(last)); if(end > cap) end = cap;
   const out = [];
   for(let m=firstMonth; m<=end; m=addMonths(m,1)) out.push(m);
-  return out;
+  /* 오늘 이후 수업이 하나도 없는 달은 빼기 — 월말에 지난 달 달력이 남지 않게 */
+  const live = out.filter(m => DATA.some(r => r.s && r.d>=TODAY && inMonth(r.d,m)));
+  return live.length ? live : out.slice(0,1);
+}
+/* 보고 있는 달이 목록에서 빠졌으면 첫 달로 옮김 */
+function fixMonth(){
+  const ms = monthList();
+  if(!ms.some(mm => +mm===+state.month)){ state.month = ms[0]; state.sel = null; }
 }
 const seatsIn = m => DATA.filter(r=> r.s && inMonth(r.d,m) && r.d>=TODAY && shown(r))
                          .reduce((a,r)=> a + Math.max(0, r.cap-r.bk), 0);
@@ -773,6 +788,7 @@ function renderCal(){
     <span><i style="background:var(--faint)"></i>${t.otherLang}</span>
     <span><i style="background:var(--off-bg);border-color:var(--off-line)"></i>${t.legend.off}</span>
     <span><i style="background:var(--shut-bg);border-color:var(--shut-line)"></i>${t.legend.shut}</span></div>`;
+  h += `<div class="askline">${kakaoHTML(t.askSlot).split('INSTA_URL').join(INSTA)}</div>`;
   const sel = state.sel;
   h += `<div class="detail">` + (sel
       ? `<h2>${t.date(parse(sel))}</h2><div class="slots">${slotsOn(sel).map(slotHTML).join('') || `<div class="empty">${t.noslot}</div>`}</div>`
@@ -1191,7 +1207,9 @@ function firstOpenDay(){
 }
 
 function render(){
-  const t = T[state.lang], m = state.month;
+  const t = T[state.lang];
+  if(MODE==='live' || MODE==='sample') fixMonth();
+  const m = state.month;
   document.documentElement.lang = state.lang;
   $('eyebrow').textContent = t.eyebrow;
   if(state.page==='my' && !myOn()) state.page = 'schedule';
