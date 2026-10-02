@@ -254,6 +254,34 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .rv p{margin:10px 0 0; font-size:14.5px; line-height:1.7; white-space:pre-line; overflow-wrap:anywhere}
 .attrib{font-size:11.5px; color:var(--muted); margin-top:10px}
 
+/* ---------- 관리자 화면 ---------- */
+.adm{margin-top:18px}
+.adm h2{font-size:15px; font-weight:900; letter-spacing:-.02em; margin:0 0 10px; display:flex; align-items:center; gap:8px}
+.adm h2 .cnt{font-size:12px; font-weight:800; color:var(--muted); background:var(--line-soft); border-radius:999px; padding:2px 9px}
+.arow{display:grid; grid-template-columns:auto 1fr auto; gap:6px 11px; align-items:center;
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:11px 12px; margin-bottom:8px}
+.arow .when{grid-row:span 2; min-width:62px; text-align:center; padding:5px 6px; border-radius:8px;
+  background:var(--line-soft); line-height:1.2; font-variant-numeric:tabular-nums}
+.arow .when b{display:block; font-size:14px; font-weight:900; letter-spacing:-.02em}
+.arow .when small{font-size:10.5px; color:var(--muted); font-weight:700}
+.arow .who{font-weight:800; font-size:14.5px; letter-spacing:-.02em; display:flex; gap:7px; align-items:center; flex-wrap:wrap}
+.arow .sub{grid-column:2; font-size:12.5px; color:var(--muted); display:flex; gap:9px; flex-wrap:wrap; overflow-wrap:anywhere}
+.arow .act{grid-row:span 2; display:flex; gap:5px; flex-direction:column}
+.abtn{border:1px solid var(--line); background:var(--surface); border-radius:8px; padding:6px 11px; font-size:12.5px; font-weight:800; white-space:nowrap}
+.abtn.ok{background:var(--sn); border-color:var(--sn); color:var(--on-accent)}
+.abtn.no{color:var(--sun); border-color:var(--sun)}
+.abtn.del{color:var(--muted)}
+.abtn[disabled]{opacity:.4}
+.admform{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:13px 13px 14px; display:grid; gap:9px}
+.admform label{font-size:12px; font-weight:800; color:var(--muted); display:block; margin-bottom:4px}
+.admform input,.admform select{width:100%; font:inherit; font-size:14px; padding:9px 10px; border:1px solid var(--line);
+  border-radius:9px; background:var(--bg); color:var(--ink)}
+.admform .two{display:grid; grid-template-columns:1fr 1fr; gap:9px}
+.admmsg{font-size:13px; font-weight:700; padding:9px 11px; border-radius:9px; margin-top:8px}
+.admmsg.good{background:var(--sn-tint); color:var(--sn-ink)}
+.admmsg.bad{background:#FDECEA; color:#A32B22}
+@media (prefers-color-scheme:dark){ .admmsg.bad{background:#3A1D1A; color:#F0A9A1} }
+
 /* ---------- 오픈 특가 띠배너 ---------- */
 .promo{display:flex; align-items:center; gap:10px; width:100%; margin-top:16px; text-align:left; cursor:pointer;
   background:linear-gradient(100deg,var(--cta),#F7C956); color:var(--cta-ink); border:0; border-radius:13px;
@@ -542,7 +570,7 @@ const T = {
     left:n=>`${n}자리 남음`,
     full:'마감', book:'신청',
     off:'외부일정', shut:'정기휴무',
-    dow:['일','월','화','수','목','금','토'],
+    dow:['월','화','수','목','금','토','일'],
     date:(dt)=>`${dt.getMonth()+1}월 ${dt.getDate()}일 (${'일월화수목금토'[dt.getDay()]})`,
     mtab:(y,m)=>`${m}월`,
     seats:n=> n ? `${n}자리 남음` : '마감',
@@ -550,7 +578,7 @@ const T = {
     loading:'잠수해서 일정 가져오는 중…',
     error:'일정을 불러오지 못했어요. 잠시 후 다시 시도하거나 카카오톡 채널로 문의해 주세요.',
     retry:'다시 시도',
-    myTitle:'내 <em>예약</em>',
+    myTitle:'내 <em>예약</em>', admTitle:'신청 <em>관리</em>',
     nav:{schedule:'일정', classes:'수업·가격', tour:'투어', reviews:'후기', about:'강사', my:'내 예약'},
     ttl:{classes:'수업 <em>& 가격</em>', tour:'해외 <em>투어</em>', reviews:'수강 <em>후기</em>', about:'강사 <em>소개</em>'},
     promoTag:'오픈 특가',
@@ -566,7 +594,7 @@ const T = {
     gAttrib:'Google 후기는 Google 지도에서 가져왔어요.', rvOthers:'수강생 후기', rvEmpty:'아직 등록된 후기가 없어요.',
     insta:'인스타그램', kakao:'카카오톡 채널',
     notReady:'준비 중이에요.',
-    footMini:'<b>문의</b> — 카카오톡 채널 {KAKAO} · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>',
+    footMini:'<b>문의</b> — 카카오톡 채널 {KAKAO} · <a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>',
     myIntro:'신청할 때 로그인한 구글 계정으로 로그인하면 내 예약을 볼 수 있어요.',
     logout:'로그아웃',
     myEmpty:'아직 신청 내역이 없어요.',
@@ -575,6 +603,10 @@ const T = {
     people:n=>`${n}명`,
     booked:'신청함',
     myErr:'내 예약을 불러오지 못했어요. 다시 로그인해 주세요.',
+    admNav:'관리', admBookings:'신청 관리', admAdd:'일정 추가', admSlots:'이번 달 일정',
+    admOk:'확정', admNo:'취소', admDel:'삭제', admSave:'추가하기',
+    admDate:'날짜', admCls:'수업', admFrom:'시작', admTo:'끝', admCap:'정원',
+    admNone:'신청이 없어요.', admNoSlot:'등록된 일정이 없어요.', admWorking:'처리 중…',
     myHelp:'신청 직후엔 "확인 중"으로 보이고, 확인 연락 후 "확정"으로 바뀌어요. 취소는 카카오톡 채널로 알려주세요.',
     askSlot:'원하시는 시간대에 수업이 없나요? 카카오톡 채널 <b>{KAKAO}</b> 또는 <a href="INSTA_URL" target="_blank" rel="noopener">인스타그램 DM ↗</a>으로 말씀해 주시면 일정을 맞춰 열어드릴게요.',
     noslot:'이 날은 수업이 없어요.',
@@ -589,7 +621,7 @@ const T = {
     fine:'신청서 제출 후 개별 연락으로 확정됩니다.',
     toast:'목업이라 실제 구글폼은 아직 연결 전이에요',
     legend:{off:'외부일정', shut:'아쿠아라인 정기휴무 (2·4번째 일요일)'},
-    foot:'<b>신청 방법</b> — 원하는 시간의 [신청]을 누르면 날짜·장소가 채워진 신청서가 열립니다. 제출 후 개별 연락으로 확정돼요.<br><b>인원</b> — 한 시간대 최대 4명이에요.<br><b>문의</b> — 카카오톡 채널 {KAKAO} · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>',
+    foot:'<b>신청 방법</b> — 원하는 시간의 [신청]을 누르면 날짜·장소가 채워진 신청서가 열립니다. 제출 후 개별 연락으로 확정돼요.<br><b>인원</b> — 한 시간대 최대 4명이에요.<br><b>문의</b> — 카카오톡 채널 {KAKAO} · <a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>',
   },
   en:{
     eyebrow:'ALOHA DIVING · FREEDIVING CLASSES',
@@ -606,7 +638,7 @@ const T = {
     left:n=>`${n} spot${n>1?'s':''} left`,
     full:'Full', book:'Book',
     off:'Unavailable', shut:'Pool closed',
-    dow:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    dow:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
     date:(dt)=>dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),
     mtab:(y,m)=>['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1],
     seats:n=> n ? `${n} spot${n>1?'s':''} left` : 'Full',
@@ -614,7 +646,7 @@ const T = {
     loading:'Diving for the schedule…',
     error:'Could not load the schedule. Please try again, or message us on KakaoTalk.',
     retry:'Try again',
-    myTitle:'My <em>bookings</em>',
+    myTitle:'My <em>bookings</em>', admTitle:'<em>Admin</em>',
     nav:{schedule:'Schedule', classes:'Classes', tour:'Tours', reviews:'Reviews', about:'Instructor', my:'Bookings'},
     ttl:{classes:'Classes <em>& prices</em>', tour:'<em>Tours</em>', reviews:'Student <em>reviews</em>', about:'Your <em>instructor</em>'},
     promoTag:'Opening offer',
@@ -630,7 +662,7 @@ const T = {
     gAttrib:'Google reviews are shown from Google Maps.', rvOthers:'From our students', rvEmpty:'No reviews yet.',
     insta:'Instagram', kakao:'KakaoTalk channel',
     notReady:'Coming soon.',
-    footMini:'<b>Questions</b> — KakaoTalk channel {KAKAO} · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">Privacy policy</a>',
+    footMini:'<b>Questions</b> — KakaoTalk channel {KAKAO} · <a href="/privacy.html" target="_blank" rel="noopener">Privacy policy</a>',
     myIntro:'Sign in with the Google account you used on the booking form to see your bookings.',
     logout:'Sign out',
     myEmpty:'No bookings yet.',
@@ -639,6 +671,10 @@ const T = {
     people:n=>`${n} ${n>1?'people':'person'}`,
     booked:'Booked',
     myErr:'Could not load your bookings. Please sign in again.',
+    admNav:'Admin', admBookings:'Bookings', admAdd:'Add a class', admSlots:'This month',
+    admOk:'Confirm', admNo:'Cancel', admDel:'Delete', admSave:'Add',
+    admDate:'Date', admCls:'Class', admFrom:'Start', admTo:'End', admCap:'Capacity',
+    admNone:'No bookings yet.', admNoSlot:'No classes yet.', admWorking:'Working…',
     myHelp:'New bookings show as Pending until we contact you to confirm. To cancel, message us on KakaoTalk.',
     askSlot:'No time that works for you? Message us on KakaoTalk <b>{KAKAO}</b> or by <a href="INSTA_URL" target="_blank" rel="noopener">Instagram DM ↗</a> and we will try to open one that fits.',
     noslot:'No classes on this day.',
@@ -653,7 +689,7 @@ const T = {
     fine:'We will contact you to confirm after you submit the form.',
     toast:'Mockup — the Google Form is not connected yet',
     legend:{off:'Unavailable', shut:'Aqualine closed (2nd & 4th Sun)'},
-    foot:'<b>How to book</b> — Tap [Book] on a class to open a form with the date and venue filled in. We confirm each booking personally.<br><b>Group size</b> — Up to 4 people per class.<br><b>Questions</b> — KakaoTalk channel {KAKAO} · <a href="https://alohadiving808.github.io/privacy.html" target="_blank" rel="noopener">Privacy policy</a>',
+    foot:'<b>How to book</b> — Tap [Book] on a class to open a form with the date and venue filled in. We confirm each booking personally.<br><b>Group size</b> — Up to 4 people per class.<br><b>Questions</b> — KakaoTalk channel {KAKAO} · <a href="/privacy.html" target="_blank" rel="noopener">Privacy policy</a>',
   }
 };
 
@@ -679,6 +715,9 @@ let USER = null;        // {name,email,picture,cred,exp} — 구글 로그인
 let MY = null;          // 내 예약 목록
 let MYSTATE = 'idle';   // idle | loading | ok | error
 let CONTENT = null;     // 후기 (시트 후기 + 구글 후기)
+let IS_ADMIN = false;   // 사장님 계정이면 '내 예약' 탭이 '관리' 로 바뀜
+let ADMIN = null;       // {rows, slots}
+let ADMMSG = null;      // 방금 한 작업 결과 문구
 let gisReady = false;
 
 const uiLang = () => {
@@ -752,15 +791,17 @@ function slotHTML(r){
     <div class="act">${act}</div></div>`;
 }
 
-/* 달력은 그 달 1일이 있는 주의 일요일 ~ 말일이 있는 주의 토요일까지 */
+/* 달력은 월요일 시작 — 그 달 1일이 있는 주의 월요일 ~ 말일이 있는 주의 일요일까지 */
 function calRange(m){
   const y = m.getFullYear(), mo = m.getMonth(), last = new Date(y,mo+1,0);
-  return [new Date(y,mo,1-new Date(y,mo,1).getDay()), new Date(y,mo,last.getDate()+6-last.getDay())];
+  const back = (new Date(y,mo,1).getDay() + 6) % 7;   // 1일이 월요일이면 0
+  const fwd  = (7 - last.getDay()) % 7;               // 말일이 일요일이면 0
+  return [new Date(y,mo,1-back), new Date(y,mo,last.getDate()+fwd)];
 }
 
 function renderCal(){
   const t = T[state.lang], m = state.month, [start,end] = calRange(m);
-  let h = `<div class="cal">` + t.dow.map((d,i)=>`<div class="dow ${i===0?'sun':i===6?'sat':''}">${d}</div>`).join('');
+  let h = `<div class="cal">` + t.dow.map((d,i)=>`<div class="dow ${i===6?'sun':''}">${d}</div>`).join('');
   for(let dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
     const k = key(dt), ss = slotsOn(k), adj = dt.getMonth()!==m.getMonth();
     const num = adj && dt.getDate()===1 ? `${dt.getMonth()+1}/1` : dt.getDate();
@@ -811,6 +852,77 @@ function bookingHTML(b){
     <div class="act"><span class="stpill st-${b.st}">${t.st[b.st]}</span></div></div>`;
 }
 
+/* ---------- 관리자 ---------- */
+async function adminPost(payload){
+  const res = await fetch(CONFIG.API, {method:'POST',
+    body: JSON.stringify(Object.assign({idToken: USER && USER.cred}, payload))});
+  return res.json();
+}
+async function loadAdmin(){
+  if(!USER || !CONFIG.API) return;
+  try{
+    const j = await adminPost({action:'admin_list'});
+    if(j && j.ok){ IS_ADMIN = true; ADMIN = j; } else { IS_ADMIN = false; ADMIN = null; }
+  }catch(e){ IS_ADMIN = false; ADMIN = null; }
+  render();
+}
+async function adminDo(payload, okMsg){
+  ADMMSG = {t: T[state.lang].admWorking, cls:''}; render();
+  try{
+    const j = await adminPost(payload);
+    ADMMSG = j && j.ok ? {t: okMsg, cls:'good'} : {t: (j && (j.message || j.error)) || '실패', cls:'bad'};
+  }catch(e){ ADMMSG = {t:String(e), cls:'bad'}; }
+  await loadAdmin();
+  load(true);
+}
+function renderAdmin(){
+  const t = T[state.lang];
+  if(!ADMIN) return `<div class="empty">${t.loading}</div>`;
+  const rows = ADMIN.rows || [], slots = (ADMIN.slots || []).filter(r => r.d >= TODAY).sort((a,b)=> a.d<b.d?-1:a.d>b.d?1:0);
+  let h = ADMMSG ? `<div class="admmsg ${ADMMSG.cls}">${esc(ADMMSG.t)}</div>` : '';
+
+  h += `<section class="adm"><h2>${t.admBookings}<span class="cnt">${rows.length}</span></h2>`;
+  h += rows.length ? rows.map((r,i)=>{
+    const dt = parse(r.d), tt = r.t ? `${r.t[0]}` : t.slot[r.s];
+    const st = `<span class="stpill st-${r.st}">${t.st[r.st]}</span>`;
+    return `<div class="arow">
+      <div class="when"><b>${dt.getMonth()+1}/${dt.getDate()}</b><small>${tt}</small></div>
+      <div class="who">${esc(r.name)||'(이름없음)'} ${st}</div>
+      <div class="sub"><span>${esc(r.cls)||'-'}</span><span>${esc(r.tel)}</span><span>${esc(r.email)}</span>${r.n>1?`<span>${t.people(r.n)}</span>`:''}</div>
+      <div class="act">
+        <button class="abtn ok" data-adm="ok" data-i="${i}"${r.st==='ok'?' disabled':''}>${t.admOk}</button>
+        <button class="abtn no" data-adm="cancel" data-i="${i}"${r.st==='cancel'?' disabled':''}>${t.admNo}</button>
+      </div></div>`;
+  }).join('') : `<div class="empty">${t.admNone}</div>`;
+  h += `</section>`;
+
+  const opts = CLASS_KEYS[state.lang].concat(CLASS_KEYS[state.lang==='ko'?'en':'ko'])
+    .map(c=>`<option value="${FORM_CLASS_LABEL[c]}">${t.cls[c]}</option>`).join('');
+  h += `<section class="adm"><h2>${t.admAdd}</h2><div class="admform">
+    <div><label>${t.admDate}</label><input type="date" id="ad-d" value="${TODAY}"></div>
+    <div><label>${t.admCls}</label><select id="ad-c">${opts}</select></div>
+    <div class="two">
+      <div><label>${t.admFrom}</label><input type="time" id="ad-t0" value="10:00" step="1800"></div>
+      <div><label>${t.admTo}</label><input type="time" id="ad-t1" value="12:00" step="1800"></div>
+    </div>
+    <div><label>${t.admCap}</label><input type="number" id="ad-cap" value="4" min="1" max="8"></div>
+    <button class="book" data-adm="add">${t.admSave}</button>
+  </div></section>`;
+
+  h += `<section class="adm"><h2>${t.admSlots}<span class="cnt">${slots.length}</span></h2>`;
+  h += slots.length ? slots.map(r=>{
+    const dt = parse(r.d), bc = slotClass(r);
+    return `<div class="arow">
+      <div class="when"><b>${dt.getMonth()+1}/${dt.getDate()}</b><small>${r.t[0]}</small></div>
+      <div class="who">${bc ? t.cls[bc] : t.place[r.p]}</div>
+      <div class="sub"><span>${t.place[r.p]}</span><span>${r.t[0]}–${r.t[1]}</span><span>${r.bk}/${r.cap}</span></div>
+      <div class="act"><button class="abtn del" data-adm="del" data-id="${r.id}"${r.bk?' disabled':''}>${t.admDel}</button></div>
+    </div>`;
+  }).join('') : `<div class="empty">${t.admNoSlot}</div>`;
+  h += `</section>`;
+  return h;
+}
+
 function renderMy(){
   const t = T[state.lang];
   const user = MODE==='sample' ? SAMPLE_USER : USER;
@@ -820,6 +932,7 @@ function renderMy(){
   const av = user.picture ? `<img src="${esc(user.picture)}" alt="" referrerpolicy="no-referrer">` : esc((user.name||'?').slice(0,1));
   let h = `<div class="me"><div class="av">${av}</div><div class="who"><b>${esc(user.name||'')}</b><small>${esc(user.email||'')}</small></div>
     <button class="ghost sm" id="logout">${t.logout}</button></div>`;
+  if(IS_ADMIN) return h + renderAdmin();
   if(MODE!=='sample' && MYSTATE==='loading') return h + loaderHTML(t.loading);
   if(MODE!=='sample' && MYSTATE==='error') return h + `<div class="empty">${t.myErr}</div>`;
   const list = myList();
@@ -1214,9 +1327,9 @@ function render(){
   $('eyebrow').textContent = t.eyebrow;
   if(state.page==='my' && !myOn()) state.page = 'schedule';
   const pg = state.page;
-  $('title').innerHTML = pg==='schedule' ? t.month(m.getFullYear(), m.getMonth()+1) : pg==='my' ? t.myTitle : t.ttl[pg];
+  $('title').innerHTML = pg==='schedule' ? t.month(m.getFullYear(), m.getMonth()+1) : pg==='my' ? (IS_ADMIN ? t.admTitle : t.myTitle) : t.ttl[pg];
   $('tabbar').innerHTML = PAGES.filter(p => p!=='my' || myOn()).map(p =>
-    `<button data-page="${p}"${p===pg?' aria-current="page"':''}><svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[p]}</svg><span>${t.nav[p]}</span></button>`).join('');
+    `<button data-page="${p}"${p===pg?' aria-current="page"':''}><svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[p]}</svg><span>${p==='my'&&IS_ADMIN?t.admNav:t.nav[p]}</span></button>`).join('');
   $('lang-ko').setAttribute('aria-pressed', state.lang==='ko');
   $('lang-en').setAttribute('aria-pressed', state.lang==='en');
   const isMy = pg==='my';
@@ -1324,7 +1437,7 @@ function onCredential(resp){
   loadMy();
 }
 function signOut(){
-  USER = null; MY = null; MYSTATE = 'idle';
+  USER = null; MY = null; MYSTATE = 'idle'; IS_ADMIN = false; ADMIN = null; ADMMSG = null;
   store.del('aloha.user');
   if(gisReady) google.accounts.id.disableAutoSelect();
   render();
@@ -1339,6 +1452,7 @@ async function loadMy(quiet){
     if(j.error==='auth'){ signOut(); return; }
     if(j.error) throw new Error(j.error);
     MY = j.bookings; MYSTATE = 'ok';
+    if(!ADMIN) loadAdmin();
   }catch(e){
     if(quiet) return;
     MYSTATE = 'error';
@@ -1381,6 +1495,20 @@ document.addEventListener('click', e=>{
   else if(b.dataset.day){ state.sel=b.dataset.day; render(); }
   else if(b.dataset.id){ openSheet(DATA[+b.dataset.id]); }
   else if(b.id==='retry'){ load(); }
+  else if(b.dataset.adm){
+    const t = T[state.lang], a = b.dataset.adm;
+    if(a==='add'){
+      const d=$('ad-d').value, c=$('ad-c').value, t0=$('ad-t0').value, t1=$('ad-t1').value, cap=$('ad-cap').value;
+      const s = (parseInt(t0.slice(0,2),10) >= 12) ? 'pm' : 'am';
+      adminDo({action:'admin_addslot', d, cls:c, s, t0, t1, cap}, `${d} ${t0} 추가했어요`);
+    } else if(a==='del'){
+      adminDo({action:'admin_delslot', id:b.dataset.id}, '일정을 지웠어요');
+    } else {
+      const r = ADMIN.rows[+b.dataset.i];
+      adminDo({action:'admin_status', sheet:r.sheet, row:r.row, id:r.id, value:a},
+              `${r.name||''} → ${a==='ok'?t.admOk:t.admNo}`);
+    }
+  }
   else if(b.id==='logout'){ signOut(); }
   else if(b.id==='sh-close'){ closeSheet(); }
 });
