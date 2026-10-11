@@ -337,6 +337,18 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .pricerow span{font-size:14px; color:var(--sn-ink); font-weight:600}
 .pricerow b{font-size:16px; font-weight:900; letter-spacing:-.02em; color:var(--sn-ink); font-variant-numeric:tabular-nums; white-space:nowrap}
 .pricebox .pnote{margin-top:10px; font-size:12.5px; color:var(--sn-ink); opacity:.85; line-height:1.55}
+.matgrid{display:grid; gap:16px; margin-top:22px}
+.matgrid .cls{margin-top:0}
+@media (min-width:720px){ .matgrid{grid-template-columns:1fr 1fr} }
+.mat{padding:0; overflow:hidden}
+.matlink{display:block; color:inherit; text-decoration:none; padding-bottom:16px; height:100%}
+.matlink img{display:block; width:100%; aspect-ratio:16/10; object-fit:cover; background:#06121b}
+.matlink .tag{margin:14px 16px 0}
+.matlink h2,.matlink .lead{margin-left:16px; margin-right:16px}
+.matgo{display:inline-block; margin:12px 16px 0; font-size:14.5px; font-weight:800; color:var(--sn)}
+.matlink:hover .matgo{text-decoration:underline}
+.matlink:focus-visible{outline:2px solid var(--sn); outline-offset:-2px; border-radius:16px}
+.matnote{margin:16px 0 0; font-size:12.5px; line-height:1.6; color:var(--muted)}
 .callout{margin-top:16px; border-left:3px solid var(--cta); background:var(--line-soft); border-radius:0 9px 9px 0;
   padding:11px 13px; font-size:13.5px; line-height:1.65}
 .callout b{font-weight:800}
@@ -587,8 +599,8 @@ const T = {
     error:'일정을 불러오지 못했어요. 잠시 후 다시 시도하거나 카카오톡 채널로 문의해 주세요.',
     retry:'다시 시도',
     myTitle:'내 <em>예약</em>', admTitle:'신청 <em>관리</em>',
-    nav:{schedule:'일정', classes:'수업·가격', tour:'투어', reviews:'후기', about:'강사', my:'내 예약'},
-    ttl:{classes:'수업 <em>& 가격</em>', tour:'해외 <em>투어</em>', reviews:'수강 <em>후기</em>', about:'강사 <em>소개</em>'},
+    nav:{schedule:'일정', classes:'수업·가격', tour:'투어', reviews:'후기', about:'강사', materials:'수업자료', my:'내 예약'},
+    ttl:{classes:'수업 <em>& 가격</em>', tour:'해외 <em>투어</em>', reviews:'수강 <em>후기</em>', about:'강사 <em>소개</em>', materials:'수업 <em>자료</em>'},
     promoTag:'오픈 특가',
     promoBar:'PADI 프리다이버 <b>1+1</b> · 선착순 10명',
     promoGo:'자세히 ›',
@@ -655,8 +667,8 @@ const T = {
     error:'Could not load the schedule. Please try again, or message us on KakaoTalk.',
     retry:'Try again',
     myTitle:'My <em>bookings</em>', admTitle:'<em>Admin</em>',
-    nav:{schedule:'Schedule', classes:'Classes', tour:'Tours', reviews:'Reviews', about:'Instructor', my:'Bookings'},
-    ttl:{classes:'Classes <em>& prices</em>', tour:'<em>Tours</em>', reviews:'Student <em>reviews</em>', about:'Your <em>instructor</em>'},
+    nav:{schedule:'Schedule', classes:'Classes', tour:'Tours', reviews:'Reviews', about:'Instructor', materials:'Materials', my:'Bookings'},
+    ttl:{classes:'Classes <em>& prices</em>', tour:'<em>Tours</em>', reviews:'Student <em>reviews</em>', about:'Your <em>instructor</em>', materials:'Class <em>materials</em>'},
     promoTag:'Opening offer',
     promoBar:'PADI Freediver <b>2 for 1</b> · first 10 sign-ups',
     promoGo:'See details ›',
@@ -951,13 +963,14 @@ function renderMy(){
   return h + `<div class="myhelp">${t.myHelp}</div>`;
 }
 
-const PAGES = ['schedule','classes','tour','reviews','about','my'];
+const PAGES = ['schedule','classes','tour','reviews','about','materials','my'];
 const ICONS = {
   schedule:'<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   classes:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/>',
   tour:'<path d="M3 15c2.2 0 2.2 2 4.4 2s2.2-2 4.4-2 2.2 2 4.4 2 2.2-2 4.4-2"/><path d="M20 9c-1.6-2.6-4.6-4-8-4-4 0-7 2-9 5 2.4 1 4.6 1.4 7 1.4"/><path d="M20 9l1.6-2.4L22 11z"/>',
   reviews:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3l-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/>',
   about:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>',
+  materials:'<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/><path d="M8 7.5h8M8 11h5"/>',
   my:'<path d="M6 3h12v18l-6-4-6 4z"/>',
 };
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1276,6 +1289,27 @@ function renderTour(){
   </div>`;
 }
 
+/* 수업자료: 3D 해부도 페이지(같은 저장소의 eq3d.html·breath3d.html)로 가는 카드 */
+function renderMaterials(){
+  const ko = state.lang==='ko';
+  const items = [
+    {href:'eq3d.html', img:'mat-eq.jpg', tag: ko?'3D 해부도':'3D anatomy',
+     h: ko?'이퀄라이징 3D 해부도':'Equalization in 3D',
+     p: ko?'부비강·유스타키오관·중이·연구개·성문을 실제 인체 3D 데이터로 돌려 보며, Valsalva·Frenzel·Mouthfill·Hands-free(BTV)에서 공기가 어떻게 흐르는지 단계별로 봅니다.'
+          :'Rotate real 3D anatomy of the sinuses, Eustachian tube, middle ear, soft palate and glottis, and follow the airflow of Valsalva, Frenzel, mouthfill and hands-free (BTV) step by step.'},
+    {href:'breath3d.html', img:'mat-breath.jpg', tag: ko?'3D 해부도':'3D anatomy',
+     h: ko?'호흡 3D 해부도':'Breathing in 3D',
+     p: ko?'숨 쉴 때 폐·횡격막·갈비뼈·호흡 근육이 어떻게 움직이는지 AIDA 매뉴얼 내용으로 보여 줍니다. 최종 호흡, 회복 호흡, 수심에 따른 폐 압축, 횡격막 스트레칭을 담았습니다.'
+          :'See how the lungs, diaphragm, ribs and breathing muscles move, following the AIDA manuals: final breath, recovery breathing, lung compression with depth and diaphragm stretching.'}
+  ];
+  let h = `<p class="lede">${ko?'수업 전에 미리 보고 수업 뒤에 복습하는 자료입니다. 휴대폰에서도 손가락으로 돌려 볼 수 있어요.':'Material to preview before class and review afterwards. You can rotate the models on your phone too.'}</p>`;
+  h += `<div class="matgrid">` + items.map(it=>`<section class="cls mat"><a class="matlink" href="${it.href}">
+    <img src="${it.img}" alt="" loading="lazy"><span class="tag">${it.tag}</span><h2>${it.h}</h2><p class="lead">${it.p}</p>
+    <span class="matgo">${ko?'열기':'Open'} →</span></a></section>`).join('') + `</div>`;
+  h += `<p class="matnote">${ko?'교육용 자료이며 의학적 진단에 쓰지 마세요. 3D 데이터 출처와 근거 문헌은 각 자료 아래쪽에 있습니다.':'For education only, not for medical diagnosis. 3D data sources and references are listed at the bottom of each page.'}</p>`;
+  return h;
+}
+
 function renderAbout(){
   const t = T[state.lang], a = DOC[state.lang].about;
   const files = (CONFIG.IMAGES && CONFIG.IMAGES.about) || [];
@@ -1355,6 +1389,7 @@ function render(){
   if(pg==='classes'){ $('main').innerHTML = renderClasses(); return; }
   if(pg==='about'){ $('main').innerHTML = renderAbout(); return; }
   if(pg==='tour'){ $('main').innerHTML = renderTour(); return; }
+  if(pg==='materials'){ $('main').innerHTML = renderMaterials(); return; }
   if(MODE==='loading' && !isMy){ $('months').innerHTML=''; $('main').innerHTML = loaderHTML(t.loading); return; }
   if(MODE==='error' && !isMy){ $('months').innerHTML=''; $('main').innerHTML = `<div class="empty">${t.error}<br><button class="retry" id="retry">${t.retry}</button></div>`; return; }
 
