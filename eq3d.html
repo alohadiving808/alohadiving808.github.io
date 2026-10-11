@@ -530,10 +530,7 @@ const ALA = {};
   ALA[s] = C;
   const tip = C.clone().addScaledVector(n, R*0.92);                      // pad surface just touches the ala
   const axis = new V3(s*0.2, -0.36, 0.91).normalize();                   // the hand is in front of the face: finger runs forward and a little down
-  const f = new THREE.Mesh(fingerGeo(R, 3.6), mat(0xe9b99c, {op:0.8, em:0.18, solid:true}));
-  f.position.copy(tip); f.quaternion.setFromUnitVectors(new V3(0,1,0), axis);
-  f.userData.key = "pinch"; f.userData.grp = "nose"; pickables.push(f); (byKey.pinch = byKey.pinch || []).push(f);
-  pinch.add(f);
+  // fingers removed (10/12): the nose pinch is shown only in the text and chips
 });
 // TVP "pull" arrow on the tube's lateral wall
 const pullArrows = [];
@@ -593,7 +590,6 @@ label("nasal","비강",[0.7,-1.2,9.9],"nose");
 label("turbinate","하비갑개",[1.1,-2.1,7.2],"nose");
 label("nostril","콧구멍",[0.75,-2.55,10.9],"nose");
 label("choana","후비공",[0.75,-1.4,4.6],"nose");
-label("pinch","손가락으로 코 막기",[ALA[1].x+0.8, ALA[1].y-1.0, ALA[1].z+2.6],"nose");
 label("nasopharynx","비인두",[-1.3,-1.2,2.6],"nose");
 label("torus","관 입구",[1.75,-2.5,3.7],"ear");
 label("et","유스타키오관",[2.75,-1.45,2.15],"ear");
@@ -620,11 +616,11 @@ const MODES = {
   airway:{t:"공기 길", sub:"airway", hud:"코로 들어온 공기의 길", pal:0, glot:1, pinch:0, piston:0, fill:0, flow:"airway", open:"none",
     rel:["nose","throat","outline","skull"], labels:["nostril","nasal","turbinate","septum","choana","nasopharynx","torus","pharynx","epiglottis","glottis","trachea"], src:"숨 들이쉬기"},
   valsalva:{t:"Valsalva", sub:"폐로 밀기", hud:"Valsalva", pal:0, glot:1, pinch:1, piston:0, fill:0, flow:"valsalva", open:"pressure",
-    rel:["ear","nose","throat","mouth"], labels:["pinch","nasopharynx","et","torus","middleear","tm","softpalate","pharynx","glottis","trachea","mastoid"], src:"폐 (흉압)"},
+    rel:["ear","nose","throat","mouth"], labels:["nasopharynx","et","torus","middleear","tm","softpalate","pharynx","glottis","trachea","mastoid"], src:"폐 (흉압)"},
   frenzel:{t:"Frenzel", sub:"혀 피스톤", hud:"Frenzel", pal:0, glot:0, pinch:1, piston:1, fill:0, flow:"frenzel", open:"pressure",
-    rel:["ear","nose","mouth","throat"], labels:["pinch","nasopharynx","et","torus","middleear","tm","mastoid","softpalate","tongue","oral","glottis"], src:"혀 (피스톤)"},
+    rel:["ear","nose","mouth","throat"], labels:["nasopharynx","et","torus","middleear","tm","mastoid","softpalate","tongue","oral","glottis"], src:"혀 (피스톤)"},
   mouthfill:{t:"Mouthfill", sub:"입에 저장", hud:"Mouthfill", pal:0, glot:0, pinch:1, piston:0, fill:1, flow:"mouthfill", open:"pressure",
-    rel:["ear","nose","mouth","throat"], labels:["pinch","nasopharynx","et","middleear","tm","mastoid","softpalate","tongue","oral","glottis"], src:"입·볼에 저장한 공기"},
+    rel:["ear","nose","mouth","throat"], labels:["nasopharynx","et","middleear","tm","mastoid","softpalate","tongue","oral","glottis"], src:"입·볼에 저장한 공기"},
   handsfree:{t:"Hands-free", sub:"BTV · 근육", hud:"Hands-free (BTV)", pal:0, glot:1, pinch:0, piston:0, fill:0, flow:"handsfree", open:"muscle",
     rel:["ear","nose","muscle","mouth"], labels:["nasopharynx","et","torus","middleear","tm","mastoid","tvp","lvp","softpalate"], src:"없음 (근육이 관을 엶)"},
   sinus:{t:"부비강", sub:"sinus", hud:"부비강 평형", pal:0, glot:1, pinch:0, piston:0, fill:0, flow:"sinus", open:"none",
@@ -963,7 +959,6 @@ I("nasal","비강 (공기 통로)","nasal cavity",`콧구멍에서 후비공을 
 I("turbinate","하비갑개","inferior nasal concha",`비강 바깥벽의 점막 주름 중 가장 큰 것. 유스타키오관 입구는 하비갑개 뒤끝에서 약 1–1.25 cm 뒤에 있다. 점막이 충혈되면 비도와 부비강 구멍이 함께 좁아진다${R(9)}.`);
 I("nostril","콧구멍","nares (nostrils)",`공기가 들어오는 입구. Valsalva·Frenzel·Mouthfill에서 손가락이나 마스크로 막는 곳이다. 열려 있으면 밀어 올린 공기가 코로 빠져나간다${R(6)}.`);
 I("choana","후비공","choanae",`비강의 뒤쪽 출구. 좌우 비강의 공기가 여기를 지나 비인두로 모인다${R(9)}.`);
-I("pinch","손가락으로 코 막기","nose pinch",`엄지와 검지로 양쪽 콧방울을 눌러 콧구멍을 막는다. Valsalva·Frenzel·Mouthfill은 비인두 압력을 올려야 하므로 코가 열려 있으면 공기가 새어 나간다${R(6)}. 마스크의 코 주머니를 잡아 막는 것도 같은 역할이다.`);
 I("septum","비중격","nasal septal cartilage",`좌우 비강을 가르는 벽.`);
 I("nasopharynx","비인두","nasopharynx",`코 뒤, 목구멍 맨 위의 공간. 좌우 옆벽에 유스타키오관 입구(torus tubarius)가 있고, 그 뒤에 인두오목(Rosenmüller 와)이 있다${R(9)}. 이퀄할 공기는 모두 이곳을 거쳐 관으로 들어간다.`);
 I("torus","유스타키오관 입구","torus tubarius",`관 연골의 내측판이 비인두 옆벽에 만든 쉼표 모양의 융기. 그 아래로 이관인두주름이 내려간다${R(9)}.`,"도식");
