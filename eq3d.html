@@ -429,7 +429,7 @@ const HINGE = new V3(0, -3.15, 5.9), ANT_COMM = new V3(0, -10.46, 2.97), TONGUE0
 velum.position.copy(HINGE); groups.mouth.add(velum); groups.mouth.add(tongue);
 const folds = {l:new THREE.Group(), r:new THREE.Group()};
 ["l","r"].forEach(s => { folds[s].position.copy(ANT_COMM); groups.throat.add(folds[s]); });
-const tmMeshes = [], tvpMeshes = [], lvpMeshes = [];
+const tmMeshes = [], tvpMeshes = [], lvpMeshes = [], airRims = [];
 let skinGeo = null;
 for (const part of ANAT.parts){
   const g = geomOf(part), m = new THREE.Mesh(g, STYLE[part.k]());
@@ -441,6 +441,10 @@ for (const part of ANAT.parts){
   if (part.k === "tongue"){ opt.parent = tongue; }
   if (part.k === "glottis"){ g.translate(-ANT_COMM.x, -ANT_COMM.y, -ANT_COMM.z); opt.parent = folds[part.s]; }
   reg(m, part.k, part.g, opt);
+  if (part.k === "nasal" || part.k === "nasopharynx" || part.k === "pharynx"){
+    const rim = new THREE.Mesh(g, rimMat(COL.air, 1.6, 0.55)); rim.userData.grp = part.g; rim.renderOrder = 2;
+    groups[part.g].add(rim); airRims.push(rim);
+  }
   if (part.k === "tm"){
     g.computeBoundingSphere(); const p = g.attributes.position, n = p.count, c = new V3();
     for (let i=0;i<n;i++){ c.x += p.getX(i); c.y += p.getY(i); c.z += p.getZ(i); } c.multiplyScalar(1/n);
@@ -506,9 +510,30 @@ const SIN = s => ({
 const pinch = new THREE.Group(); scene.add(pinch);
 let NOSE = new V3(0, -1.5, 11.5);
 if (skinGeo){ const p = skinGeo.attributes.position; let best = -1e9; for (let i=0;i<p.count;i++){ if (Math.abs(p.getX(i)) < 1 && p.getY(i) > -4 && p.getZ(i) > best){ best = p.getZ(i); NOSE.set(p.getX(i), p.getY(i), p.getZ(i)); } } }
+// fingertips: find each ala (outermost skin point of the nose just above the nostrils), touch it from outside
+function alaContact(s){
+  const yc = NOSE.y - 0.3, z0 = NOSE.z - 1.8, z1 = NOSE.z - 1.0; let best = null, bx = -1;
+  if (skinGeo){ const p = skinGeo.attributes.position;
+    for (let i=0;i<p.count;i++){ const x=p.getX(i), y=p.getY(i), z=p.getZ(i);
+      if (Math.abs(y-yc) < 0.3 && z > z0 && z < z1 && x*s > 0 && Math.abs(x) < 2.3 && Math.abs(x) > bx){ bx = Math.abs(x); best = new V3(x,y,z); } } }
+  return best || new V3(s*1.65, yc, NOSE.z - 1.4);
+}
+function fingerGeo(R, L){      // capsule: fingertip sphere centred at the origin, finger running along +y
+  const pts = [];
+  for (let i=0;i<=10;i++){ const a = -Math.PI/2 + i/10*Math.PI/2; pts.push(new THREE.Vector2(Math.cos(a)*R*0.999 + 0.001, Math.sin(a)*R)); }
+  pts.push(new THREE.Vector2(R*1.04, L*0.6), new THREE.Vector2(R*1.08, L), new THREE.Vector2(0.001, L + 0.05));
+  return new THREE.LatheGeometry(pts, 28);
+}
+const ALA = {};
 [1,-1].forEach(s => {
-  const pad = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), mat(0xf4d3c2, {op:0.75, em:0.2}));
-  pad.scale.set(0.42, 1.0, 0.55); pad.position.set(s*1.25, NOSE.y + 0.5, NOSE.z - 1.1); pad.rotation.z = s*0.25; pinch.add(pad);
+  const C = alaContact(s), n = new V3(s, 0, 0.18).normalize(), R = 0.6;
+  ALA[s] = C;
+  const tip = C.clone().addScaledVector(n, R*0.92);                      // pad surface just touches the ala
+  const axis = new V3(s*0.2, -0.36, 0.91).normalize();                   // the hand is in front of the face: finger runs forward and a little down
+  const f = new THREE.Mesh(fingerGeo(R, 3.6), mat(0xe9b99c, {op:0.8, em:0.18, solid:true}));
+  f.position.copy(tip); f.quaternion.setFromUnitVectors(new V3(0,1,0), axis);
+  f.userData.key = "pinch"; f.userData.grp = "nose"; pickables.push(f); (byKey.pinch = byKey.pinch || []).push(f);
+  pinch.add(f);
 });
 // TVP "pull" arrow on the tube's lateral wall
 const pullArrows = [];
@@ -540,6 +565,10 @@ function mkFlow(points, o){
 const ME = s => [s*4.4, -0.15, 0.12];
 const etPath = s => mirror(ET_PTS, s);
 const NP = [0, -1.9, 2.5];
+// nostril → nasal cavity (middle meatus) → choana → nasopharynx → pharynx → glottis → trachea
+const AIRWAY = s => [[s*0.55,-2.45,10.9],[s*0.62,-1.7,9.6],[s*0.62,-1.0,7.8],[s*0.58,-1.1,6.0],[s*0.45,-1.5,4.6],[s*0.15,-1.7,3.3],[0,-2.4,2.4],
+  [0,-4.0,1.9],[0,-6.6,1.9],[0,-9.0,2.4],[0,-10.46,2.3],[0,-12.4,1.7],[0,-15.5,0.9],[0,-18.5,0.0]];
+const AIR_REACH = [0.12, 0.38, 0.52, 1.0];      // how far the air front has travelled at each step
 const FLOWDEF = {
   valsalva: s => [[0,-19,-0.6],[0,-15,0.5],[0,-12,1.6],[0,-10.45,2.3],[0,-8.5,2.0],[0,-6.5,1.9],[0,-4.6,1.8],[0,-3.4,1.75],NP, ...etPath(s), ME(s)],
   frenzel:  s => [[0,-3.7,7.6],[0,-3.8,6.2],[0,-4.4,4.6],[0,-5.3,3.0],[0,-5.0,1.9],[0,-3.6,1.7],NP, ...etPath(s), ME(s)],
@@ -562,6 +591,9 @@ label("sphenoid","접형동",[0.9,1.9,3.0],"sinus");
 label("ostium","부비강 구멍",[1.3,-0.5,7.3],"sinus");
 label("nasal","비강",[0.7,-1.2,9.9],"nose");
 label("turbinate","하비갑개",[1.1,-2.1,7.2],"nose");
+label("nostril","콧구멍",[0.75,-2.55,10.9],"nose");
+label("choana","후비공",[0.75,-1.4,4.6],"nose");
+label("pinch","손가락으로 코 막기",[ALA[1].x+0.8, ALA[1].y-1.0, ALA[1].z+2.6],"nose");
 label("nasopharynx","비인두",[-1.3,-1.2,2.6],"nose");
 label("torus","관 입구",[1.75,-2.5,3.7],"ear");
 label("et","유스타키오관",[2.75,-1.45,2.15],"ear");
@@ -585,12 +617,14 @@ label("trachea","기관 → 폐",[1.0,-15.5,0.9],"throat");
 /* ---------- modes ---------- */
 const MODES = {
   overview:{t:"전체", sub:"overview", hud:"전체 구조", pal:0, glot:1, pinch:0, piston:0, fill:0, flow:null, open:"none", rel:null, labels:null, src:"—"},
+  airway:{t:"공기 길", sub:"airway", hud:"코로 들어온 공기의 길", pal:0, glot:1, pinch:0, piston:0, fill:0, flow:"airway", open:"none",
+    rel:["nose","throat","outline","skull"], labels:["nostril","nasal","turbinate","septum","choana","nasopharynx","torus","pharynx","epiglottis","glottis","trachea"], src:"숨 들이쉬기"},
   valsalva:{t:"Valsalva", sub:"폐로 밀기", hud:"Valsalva", pal:0, glot:1, pinch:1, piston:0, fill:0, flow:"valsalva", open:"pressure",
-    rel:["ear","nose","throat","mouth"], labels:["nasopharynx","et","torus","middleear","tm","softpalate","pharynx","glottis","trachea","mastoid"], src:"폐 (흉압)"},
+    rel:["ear","nose","throat","mouth"], labels:["pinch","nasopharynx","et","torus","middleear","tm","softpalate","pharynx","glottis","trachea","mastoid"], src:"폐 (흉압)"},
   frenzel:{t:"Frenzel", sub:"혀 피스톤", hud:"Frenzel", pal:0, glot:0, pinch:1, piston:1, fill:0, flow:"frenzel", open:"pressure",
-    rel:["ear","nose","mouth","throat"], labels:["nasopharynx","et","torus","middleear","tm","mastoid","softpalate","tongue","oral","glottis"], src:"혀 (피스톤)"},
+    rel:["ear","nose","mouth","throat"], labels:["pinch","nasopharynx","et","torus","middleear","tm","mastoid","softpalate","tongue","oral","glottis"], src:"혀 (피스톤)"},
   mouthfill:{t:"Mouthfill", sub:"입에 저장", hud:"Mouthfill", pal:0, glot:0, pinch:1, piston:0, fill:1, flow:"mouthfill", open:"pressure",
-    rel:["ear","nose","mouth","throat"], labels:["nasopharynx","et","middleear","tm","mastoid","softpalate","tongue","oral","glottis"], src:"입·볼에 저장한 공기"},
+    rel:["ear","nose","mouth","throat"], labels:["pinch","nasopharynx","et","middleear","tm","mastoid","softpalate","tongue","oral","glottis"], src:"입·볼에 저장한 공기"},
   handsfree:{t:"Hands-free", sub:"BTV · 근육", hud:"Hands-free (BTV)", pal:0, glot:1, pinch:0, piston:0, fill:0, flow:"handsfree", open:"muscle",
     rel:["ear","nose","muscle","mouth"], labels:["nasopharynx","et","torus","middleear","tm","mastoid","tvp","lvp","softpalate"], src:"없음 (근육이 관을 엶)"},
   sinus:{t:"부비강", sub:"sinus", hud:"부비강 평형", pal:0, glot:1, pinch:0, piston:0, fill:0, flow:"sinus", open:"none",
@@ -613,6 +647,11 @@ const STEPS = {
   handsfree:{b:[0,0.12,0.32,0.62], c:[0.06,0.24,0.48,0.88], t:[S1,
     "<b>근육 수축</b>: 공기는 밀지 않는다. 구개범장근(TVP)이 수축해 관의 외측벽을 아래·바깥으로 당긴다.",
     "<b>관 열림</b>: 벌어진 관으로 비인두 공기가 압력 차를 따라 중이로 들어간다. 연구개는 LVP 때문에 조금만 올라간다.", S4]},
+  airway:{b:[0,0.25,0.5,0.75], c:[0.2,0.45,0.7,0.95], t:[
+    "<b>콧구멍</b>: 공기가 좌우 콧구멍으로 들어온다. 이퀄할 때 손가락으로 막는 곳이다.",
+    "<b>비강</b>: 비중격이 가운데를 나누고, 옆벽의 비갑개 사이 좁은 골(비도)을 따라 공기가 흐른다. 부비강은 이 공간 안이 아니라 둘레 뼈 속에 있고, 비도에 난 작은 구멍으로만 이어진다.",
+    "<b>후비공 → 비인두</b>: 비강 뒤 끝(후비공)을 지나 비인두로 모인다. 좌우 옆벽에 유스타키오관 입구가 있다.",
+    "<b>인두 → 성문 → 기관</b>: 아래로 내려가 성문을 지나 폐로 간다. 입으로 들어온 공기도 인두에서 합류한다."]},
   sinus:{b:[0,0.25,0.75], c:[0.12,0.5,0.88], t:[
     "<b>하강</b>: 부비강 공기가 압축된다.",
     "<b>유입</b>: 비강 공기가 부비강 구멍(ostium)을 지나 부비강으로 들어간다. 따로 동작은 필요 없다.",
@@ -658,6 +697,7 @@ function applyLook(){
     me.material.emissiveIntensity = k === selected ? 0.95 : md.baseEm * (rel ? 1 : 0.3);
     me.material.opacity = k === selected ? Math.min(1, md.baseOp + 0.3) : md.baseOp * (rel ? 1 : 0.14);
   }));
+  airRims.forEach(r => { const rel = !M.rel || M.rel.includes(r.userData.grp); r.material.uniforms.s.value = rel ? (M.flow === "airway" ? 0.9 : 0.55) : 0.08; });
 }
 function setMode(m){
   mode = m; const M = MODES[m];
@@ -666,7 +706,8 @@ function setMode(m){
   document.getElementById("hudSub").textContent = M.sub;
   document.getElementById("desc").innerHTML = DESC[m];
   flows = [];
-  if (M.flow === "sinus") [1,-1].forEach(s => { const P = SIN(s); Object.keys(P).forEach(k => flows.push(mkFlow(P[k], {speed:2.2, density:5}))); });
+  if (M.flow === "airway") [1,-1].forEach(s => flows.push(mkFlow(AIRWAY(s), {speed:4.2, density:4.2})));
+  else if (M.flow === "sinus") [1,-1].forEach(s => { const P = SIN(s); Object.keys(P).forEach(k => flows.push(mkFlow(P[k], {speed:2.2, density:5}))); });
   else if (M.flow) [1,-1].forEach(s => flows.push(mkFlow(FLOWDEF[M.flow](s), {etOpening:[s*1.45,-2.1,3.4], speed:M.flow==="handsfree"?2.2:6.5})));
   simT = 0; loopStep = -1; renderSteps(); setPlaying(playing); peek.hidden = true;
   applyLook(); renderChips();
@@ -800,7 +841,8 @@ function frame(now){
   const c = (simT % CYCLE)/CYCLE;
   const si = stepIdx(c);
   if (si !== lastStep){ lastStep = si; stepList.querySelectorAll("li").forEach((li,i) => li.classList.toggle("on", i === si)); }
-  const flowing = !!M.flow && M.flow !== "sinus";
+  const isAir = M.flow === "airway";
+  const flowing = !!M.flow && M.flow !== "sinus" && !isAir;
   const push = flowing ? sm(0.1, 0.28, c)*(1 - sm(0.74, 0.9, c)) : 0;
   const etOpen = flowing ? sm(0.3, 0.42, c)*(1 - sm(0.8, 0.93, c)) : 0;
   const retract = flowing ? (c < 0.38 ? sm(0, 0.1, c) : c < 0.6 ? 1 - (c-0.38)/0.22 : 0) : 0;
@@ -816,7 +858,7 @@ function frame(now){
   velum.rotation.x = THREE.MathUtils.degToRad(-30 + 30*lift);
   const ga = 0.2 - 0.45*state.glot; folds.l.rotation.y = ga; folds.r.rotation.y = -ga;
   pinch.visible = state.pinch > 0.05 && groups.nose.visible;
-  pinch.children.forEach((p, i) => { p.material.opacity = 0.75*state.pinch; p.position.x = (i?-1:1)*(1.25 + 0.5*(1-state.pinch)); });
+  pinch.children.forEach(p => { p.material.opacity = 0.8*state.pinch; });
   const pist = M.piston ? push : 0;
   tongue.position.set(0, 0.45*pist - 0.6*state.fill, -0.35*pist);
   const fillNow = state.fill*(M.fill ? 1 - 0.6*sm(0.25, 0.8, c) : 1);
@@ -841,11 +883,12 @@ function frame(now){
   if (chipET && etS !== lastET){ chipET.className = "chip " + (etOpen > 0.3 ? "open" : "shut"); chipET.querySelector("span").textContent = etS; lastET = etS; }
   drawXs(etOpen, muscleMode ? "muscle" : "pressure", tvpAct);
 
-  let n = 0; const inten = M.flow === "sinus" ? 0.9*sm(0.2, 0.3, c)*(1 - sm(0.72, 0.8, c)) : push;
+  let n = 0; const inten = M.flow === "sinus" ? 0.9*sm(0.2, 0.3, c)*(1 - sm(0.72, 0.8, c)) : isAir ? 0.95 : push;
+  const reach = isAir ? AIR_REACH[Math.max(0, stepIdx(c))] : 1;
   for (const f of flows){
     for (let i=0;i<f.n && n<MAXP;i++, n++){
       const s = (time*f.speed/f.len + i/f.n) % 1; f.curve.getPointAt(s, tmp);
-      let a = inten*Math.min(1, s*10, (1-s)*10); if (f.et != null && s > f.et) a *= etOpen;
+      let a = inten*Math.min(1, s*10, (1-s)*10); if (f.et != null && s > f.et) a *= etOpen; if (s > reach) a = 0;
       pPos[n*3]=tmp.x; pPos[n*3+1]=tmp.y; pPos[n*3+2]=tmp.z; pCol[n*3]=flowCol.r*a; pCol[n*3+1]=flowCol.g*a; pCol[n*3+2]=flowCol.b*a;
     }
   }
@@ -916,8 +959,11 @@ I("ethmoid","사골동","ethmoid air cells",`두 눈 사이의 작은 벌집 모
 I("maxillary","상악동","maxillary sinus",`광대뼈 아래의 가장 큰 부비강(실제 CT에서 분할한 형상). 구멍(ostium)이 안쪽 벽 <b>위쪽</b>에 있어 중력을 거슬러 배출되므로 섬모 운동에 의존한다${R(9)}. 다이버의 X선 소견에서 가장 자주 침범되는 부비강이다${R(8)}.`);
 I("sphenoid","접형동","sphenoid sinus",`비강 뒤, 머리뼈 중앙 깊은 곳. 접형사골함요(sphenoethmoidal recess)로 열린다${R(9)}.`);
 I("ostium","부비강 구멍·통로","ostium",`부비강과 비강을 잇는 좁은 통로. 하강할 때 비강 공기가 이곳을 지나 부비강 압력이 수동으로 맞춰진다. 점막이 부어 막히면 압력을 맞출 수 없어 부비강 압력손상(sinus squeeze)이 생긴다${R(3,8)}.`,"도식");
-I("nasal","비강","nasal cavity mucosa",`콧구멍에서 비인두까지의 공기 통로. 모든 부비강 구멍이 이곳으로 열린다${R(9)}. 이퀄할 때는 코를 막아 이 통로의 앞쪽을 닫는다.`);
+I("nasal","비강 (공기 통로)","nasal cavity",`콧구멍에서 후비공을 지나 비인두까지 이어지는 <b>공기 통로</b>. 비중격이 좌우로 나누고, 옆벽의 비갑개 세 단 사이 좁은 골(상·중·하비도)로 공기가 흐른다. <b>부비강은 비강 안에 있지 않다.</b> 둘레 뼈 속(이마·광대·두 눈 사이·비강 뒤)에 따로 있는 공기방이고, 비도에 난 작은 구멍(ostium)으로만 비강과 이어진다${R(9)}. 이퀄할 때는 코를 막아 이 통로의 앞쪽을 닫는다.`);
 I("turbinate","하비갑개","inferior nasal concha",`비강 바깥벽의 점막 주름 중 가장 큰 것. 유스타키오관 입구는 하비갑개 뒤끝에서 약 1–1.25 cm 뒤에 있다. 점막이 충혈되면 비도와 부비강 구멍이 함께 좁아진다${R(9)}.`);
+I("nostril","콧구멍","nares (nostrils)",`공기가 들어오는 입구. Valsalva·Frenzel·Mouthfill에서 손가락이나 마스크로 막는 곳이다. 열려 있으면 밀어 올린 공기가 코로 빠져나간다${R(6)}.`);
+I("choana","후비공","choanae",`비강의 뒤쪽 출구. 좌우 비강의 공기가 여기를 지나 비인두로 모인다${R(9)}.`);
+I("pinch","손가락으로 코 막기","nose pinch",`엄지와 검지로 양쪽 콧방울을 눌러 콧구멍을 막는다. Valsalva·Frenzel·Mouthfill은 비인두 압력을 올려야 하므로 코가 열려 있으면 공기가 새어 나간다${R(6)}. 마스크의 코 주머니를 잡아 막는 것도 같은 역할이다.`);
 I("septum","비중격","nasal septal cartilage",`좌우 비강을 가르는 벽.`);
 I("nasopharynx","비인두","nasopharynx",`코 뒤, 목구멍 맨 위의 공간. 좌우 옆벽에 유스타키오관 입구(torus tubarius)가 있고, 그 뒤에 인두오목(Rosenmüller 와)이 있다${R(9)}. 이퀄할 공기는 모두 이곳을 거쳐 관으로 들어간다.`);
 I("torus","유스타키오관 입구","torus tubarius",`관 연골의 내측판이 비인두 옆벽에 만든 쉼표 모양의 융기. 그 아래로 이관인두주름이 내려간다${R(9)}.`,"도식");
@@ -950,7 +996,8 @@ DESC.mouthfill = `<p><b>폐 공기를 입에 옮겨 담아 두고 쓰는 방법.
 <p class="note">프리다이빙 훈련 현장에서 쓰는 기법이다. 동료심사 문헌에서 이 메커니즘을 직접 측정한 연구는 찾지 못했다. 깊은 수심에서 폐가 압축된다는 생리학은 근거가 있다${R(10)}.</p>`;
 DESC.handsfree = `<p><b>공기를 밀지 않고 근육으로 관을 여는 방법</b>(BTV, béance tubaire volontaire)${R(19)}.</p>${steps(["코를 막지 않고 공기도 밀지 않는다.","삼키거나 하품을 시작할 때 쓰는 근육, 구개범장근(TVP)을 의도적으로 수축한다.","TVP가 관의 외측판·막성 외측벽을 아래·바깥으로 당겨 닫혀 있던 연골부 틈이 벌어진다(아래 단면도)."+R(12,17),"관이 열린 동안 압력 차에 따라 비인두 공기가 중이로 들어간다."])}
 <p class="note"><b>연구개 움직임이 관을 여는 것은 아니다.</b> 연구개를 올리는 것은 함께 수축하는 구개범거근(LVP)이다. LVP는 관 입구 쪽 연골을 회전시키는 보조 역할이고, 관을 실제로 열지는 못한다${R(13,14,15)}. 그래서 모델에서도 연구개는 조금만 움직인다. 문헌은 BTV를 'TVP의 의식적 조절'로 정의할 뿐이다${R(6)}. 다이버에서 내시경이나 근전도로 직접 측정한 연구는 없어, 근육 역할은 삼키기 생리에서 추론한 것이다.</p>`;
-DESC.sinus = `<p><b>부비강은 따로 동작하지 않아도 저절로 맞춰진다.</b></p>${steps(["부비강 네 쌍은 각자 작은 구멍(ostium)으로 비강에 열려 있다.","하강하면 부비강 공기가 압축되고, 비강의 공기가 구멍으로 들어가 압력이 맞춰진다.","구멍이 막혀 있으면 맞출 방법이 없다."])}
+DESC.airway = `<p><b>코로 들어온 공기가 지나가는 길</b>을 보여 준다. 공기 공간(하늘색 윤곽)만 강조하고 부비강은 흐리게 했다.</p><p>공기 길: 콧구멍 → 비강(비중격으로 좌우, 비갑개 사이 비도) → 후비공 → 비인두 → 인두 → 성문 → 기관${R(9)}. 유스타키오관 입구는 비인두 옆벽에 있어서, 이퀄할 공기는 모두 비인두를 거친다.</p><p class="note"><b>부비강은 비강 안에 있지 않다.</b> 비강을 둘러싼 뼈 속의 별도 공기방이고, 비도에 난 작은 구멍(ostium)으로만 이어진다${R(9)}.</p>`;
+DESC.sinus = `<p><b>부비강은 따로 동작하지 않아도 저절로 맞춰진다.</b> 부비강은 비강 안이 아니라 둘레 뼈 속에 있는 별도 공기방이다(전두동=이마, 상악동=광대뼈 아래, 사골동=두 눈 사이, 접형동=비강 뒤).</p>${steps(["부비강 네 쌍은 각자 작은 구멍(ostium)으로 비강에 열려 있다.","하강하면 부비강 공기가 압축되고, 비강의 공기가 구멍으로 들어가 압력이 맞춰진다.","구멍이 막혀 있으면 맞출 방법이 없다."])}
 <p class="note">감기·비염으로 점막이 부은 상태에서 하강하면 부비강 압력손상이 생긴다. 가장 흔한 증상은 이마 통증이고, X선에서 가장 자주 침범되는 곳은 상악동이다${R(8)}. 상악동 구멍은 위쪽에 있어 배출에 불리하다${R(9)}.</p>`;
 
 }
