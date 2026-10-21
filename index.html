@@ -375,23 +375,9 @@ video.media{background:#0b3a4a}
 .bio p{margin:0 0 12px; font-size:15.5px; line-height:1.8; text-wrap:pretty}
 .bio p.sig{font-size:19px; font-weight:900; letter-spacing:-.03em; margin-bottom:16px}
 
-/* ---------- tour (coming soon) ---------- */
-.tourbox{margin-top:22px; border:1px solid var(--line); border-radius:18px; overflow:hidden; background:var(--surface)}
-.tourhero{position:relative; aspect-ratio:16/9; background:#0B2A44}
-.tourhero > img{display:block; width:100%; height:100%; object-fit:cover}
-.tourhero .scrim{position:absolute; inset:0; pointer-events:none; z-index:1;
-  background:linear-gradient(180deg,rgba(4,18,34,0) 30%,rgba(4,18,34,.12) 48%,rgba(4,18,34,.42) 66%,rgba(4,18,34,.78) 84%,rgba(4,18,34,.95) 100%)}
-.tourhero .cap{position:absolute; z-index:2; left:0; right:0; bottom:0; padding:16px 16px 18px; text-align:center}
-.tourhero .cap h2{margin:10px 0 0; color:#fff; font-size:clamp(19px,4.6vw,27px); font-weight:900;
-  letter-spacing:-.035em; line-height:1.2; text-wrap:balance; text-shadow:0 1px 3px rgba(0,0,0,.6),0 3px 18px rgba(0,0,0,.5)}
-.gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:4px; background:var(--line)}
-.gallery img{display:block; width:100%; aspect-ratio:4/3; object-fit:cover}
+/* ---------- 혹등고래 투어 (팝업 배지·신청 현황) ---------- */
 .soon{display:inline-block; font-size:11px; font-weight:900; letter-spacing:.16em; text-transform:uppercase;
   background:var(--cta); color:var(--cta-ink); padding:5px 12px; border-radius:999px}
-.tourtxt{padding:20px 18px 24px; text-align:center}
-.tourtxt p{margin:0 auto; max-width:34em; font-size:14.5px; line-height:1.75; color:var(--muted); text-wrap:pretty}
-
-.tourtxt .tinfo{margin:0 auto 14px; max-width:34em; font-size:15px; line-height:1.75; color:var(--ink)}
 .wcount{margin:16px auto 0; max-width:300px}
 .wcount .lbl{font-size:14px; font-weight:800; color:var(--ink)}
 .wcount .lbl b{color:var(--cta)}
@@ -637,13 +623,10 @@ const T = {
     promoGo:'자세히 ›',
     tourSoon:'모집 중',
     tourTitle:'2027 오키나와 혹등고래 스윔',
-    tourInfo:'2027년 2월 25일(목) – 28일(일) · 3박 4일<br>혹등고래 스윔 2일 · 4성급 호텔 2인 1실 · 12명 한정<br><b>139만 원</b> / 1인 (항공권 별도)',
     tourGo:'상세페이지 보기',
     wCount:(a,c)=>`현재 신청 <b>${a}명</b> / 정원 ${c}명`,
     popMeta:'2027. 2. 25(목) – 28(일) · 3박 4일<br>혹등고래 스윔 2일 · 139만 원',
     popHide:'오늘 하루 보지 않기', popClose:'닫기',
-    tourAlt:['수면에서 함께 헤엄치는 어미와 새끼 혹등고래','물속의 혹등고래 어미와 새끼','수면 가까이 헤엄치는 혹등고래'],
-    tourBody:'매년 1월부터 3월까지, 혹등고래가 새끼를 낳고 기르러 오키나와 바다로 옵니다. 배를 타고 고래를 찾아 수면에서 조용히 함께 헤엄쳐요.',
     cGo:'일정 보고 신청하기',
     weekday:'주중', weekend:'주말',
     gTitle:'Google 후기', gCount:n=>`후기 ${n}개`, gAll:'Google에서 전체 후기 보기', gWrite:'후기 남기기',
@@ -710,13 +693,10 @@ const T = {
     promoGo:'See details ›',
     tourSoon:'Now booking',
     tourTitle:'Okinawa Humpback Whale Swim 2027',
-    tourInfo:'Feb 25 – 28, 2027 · 4 days, 3 nights<br>2 days of whale swims · 4-star hotel, twin share · 12 people max<br><b>₩1,390,000</b> per person (flights not included)',
     tourGo:'See details (Korean)',
     wCount:(a,c)=>`<b>${a}</b> of ${c} spots taken`,
     popMeta:'Feb 25 – 28, 2027 · 4 days, 3 nights<br>2 days of whale swims · ₩1,390,000',
     popHide:'Don\'t show again today', popClose:'Close',
-    tourAlt:['A humpback mother and calf at the surface','A humpback mother and calf underwater','A humpback whale near the surface'],
-    tourBody:'Every January to March, humpback whales come to Okinawa to give birth and raise their calves. We are putting together a trip to find them by boat and swim quietly alongside at the surface.',
     cGo:'See dates & book',
     weekday:'Weekday', weekend:'Weekend',
     gTitle:'Google reviews', gCount:n=>`${n} review${n===1?'':'s'}`, gAll:'See all reviews on Google', gWrite:'Write a review',
@@ -1313,26 +1293,6 @@ function renderClasses(){
   return h;
 }
 
-/* 투어 — 사진은 전부 NOAA 국립해양보호구역(하와이) 촬영, 퍼블릭 도메인 */
-function renderTour(){
-  const t = T[state.lang];
-  const g = (f,i) => `<img src="${f}" alt="${esc(t.tourAlt[i])}" loading="lazy">`;
-  return `<div class="tourbox">
-    <div class="tourhero">
-      <img src="whale-hero.webp" alt="${esc(t.tourTitle)}">
-      <div class="scrim"></div>
-      <div class="cap"><span class="soon">${t.tourSoon}</span><h2>${t.tourTitle}</h2></div>
-    </div>
-    <div class="gallery">${g('whale-1.webp',0)}${g('whale-2.webp',1)}${g('whale-3.webp',2)}</div>
-    <div class="tourtxt">
-      <p class="tinfo">${t.tourInfo}</p>
-      <p>${t.tourBody}</p>
-      ${whaleCountHTML(t)}
-      <a class="wgo" href="${CONFIG.WHALE_URL}">${t.tourGo}</a>
-    </div>
-  </div>`;
-}
-
 /* 혹등고래 투어 신청 현황 (whale-status.js) */
 function whaleCountHTML(t){
   const w = window.WHALE_STATUS;
@@ -1429,6 +1389,7 @@ const DIVER = `<div class="loader" role="status"><svg viewBox="0 0 260 96" aria-
 const loaderHTML = msg => DIVER.replace('<div class="ltxt"></div>', `<div class="ltxt">${esc(msg)}</div>`);
 
 function setPage(p, push){
+  if(p==='tour'){ location.href = CONFIG.WHALE_URL; return; }   // 투어 메뉴 = 혹등고래 상세페이지(/whale/)
   if(!PAGES.includes(p) || (p==='my' && !myOn())) p = 'schedule';
   state.page = p;
   if(push !== false){ try{ history.replaceState(null, '', p==='schedule' ? location.pathname + location.search : '#'+p); }catch(e){} }
@@ -1469,7 +1430,6 @@ function render(){
 
   if(pg==='classes'){ $('main').innerHTML = renderClasses(); return; }
   if(pg==='about'){ $('main').innerHTML = renderAbout(); return; }
-  if(pg==='tour'){ $('main').innerHTML = renderTour(); return; }
   if(pg==='materials'){ $('main').innerHTML = renderMaterials(); return; }
   if(MODE==='loading' && !isMy){ $('months').innerHTML=''; $('main').innerHTML = loaderHTML(t.loading); return; }
   if(MODE==='error' && !isMy){ $('months').innerHTML=''; $('main').innerHTML = `<div class="empty">${t.error}<br><button class="retry" id="retry">${t.retry}</button></div>`; return; }
@@ -1660,6 +1620,7 @@ if(CONFIG.CLIENT_ID){
   document.head.appendChild(g);
 }
 window.addEventListener('hashchange', () => setPage(location.hash.slice(1) || 'schedule', false));
+if(location.hash==='#tour') location.replace(CONFIG.WHALE_URL);   // 옛 #tour 링크도 상세페이지로
 state.page = PAGES.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'schedule';
 load().then(() => { if(USER) loadMy(true); });
 setTimeout(showWhalePop, 600);
