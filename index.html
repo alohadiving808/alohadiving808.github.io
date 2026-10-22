@@ -547,6 +547,15 @@ const CONFIG = {
     {f:'rv02', d:'8.9',   q:''},
     {f:'rv01', d:'8.9',   q:''},
   ],
+  // 구글 후기 — Places API 키가 없을 때 보여줄 값(2026-10-22 구글 지도에서 옮김). 시트 API 가 구글 후기를 주면 그쪽이 우선
+  GOOGLE_REVIEWS: {rating:5.0, count:3,
+    url:'https://www.google.com/maps/place/?q=place_id:ChIJFRBFg1Nx6U8RzOkcMsnzWRA',
+    write:'https://search.google.com/local/writereview?placeid=ChIJFRBFg1Nx6U8RzOkcMsnzWRA',
+    reviews:[
+      {author:'jihoon lee', rating:5, when:'2026.10', text:'초보자도 잘 이해할 수 있도록 세밀하게 가르쳐 주시고 시간 꽉꽉 채워서 지도해주셔서 좋았습니다. gooooooooooooooood'},
+      {author:'이준영', rating:5, when:'2026.10', text:'친절하고 체계적인 강사님 덕분에 빠르게 적응했습니다.\n감사합니다 ㅎ ㅎ ㅎ'},
+      {author:'asd qwer', rating:5, when:'2026.9', text:''},
+    ]},
   WHALE_URL: 'whale/',
   WHALE_POPUP: true,
 };
@@ -1029,9 +1038,8 @@ const starsHTML = n => { n = Math.round(n||0); return `<span class="stars" aria-
 
 function renderReviews(){
   const t = T[state.lang], c = content();
-  let h = clipsHTML(t);
-  if(!c) return h || `<div class="empty">${t.notReady}</div>`;
-  const g = c.google;
+  const g = (c && c.google) || CONFIG.GOOGLE_REVIEWS;
+  let h = '';
   if(g && (g.count || (g.reviews||[]).length)){
     const all = safeUrl(g.url), write = safeUrl(g.write);
     h += `<section class="sec"><div class="card gsum">
@@ -1051,7 +1059,8 @@ function renderReviews(){
     }
     h += `</section>`;
   }
-  if((c.reviews||[]).length){
+  h += clipsHTML(t);
+  if(c && (c.reviews||[]).length){
     h += `<section class="sec"><h2>${t.rvOthers}</h2><div class="cards">` + c.reviews.map(r => `<article class="card rv"><div class="who">
       <div class="av">${esc((r.name||'?').slice(0,1))}</div>
       <div><div class="nm">${esc(r.name)}</div><div class="sub">${starsHTML(r.stars)}${r.date?` · ${esc(r.date)}`:''}</div></div>
