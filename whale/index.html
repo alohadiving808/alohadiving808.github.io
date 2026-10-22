@@ -100,42 +100,19 @@
   .box.ok h3{color:#138a52}
   .box.no h3{color:#b23b2c}
 
-  .crew{display:grid;grid-template-columns:1fr;gap:18px;margin-top:22px}
-  .inst{display:grid;grid-template-columns:42% 1fr;background:#fbfaf7;border:1px solid var(--line);border-radius:16px;overflow:hidden}
-  .inst .pic{position:relative;background:#dfe8ef;min-height:100%}
-  .inst .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 15%}
-  .inst .txt{padding:28px 26px}
-  .inst .role{font-size:15px;color:var(--sub)}
-  .inst .nm{font-size:30px;font-weight:900;color:var(--ink);line-height:1.2;margin:2px 0 14px}
-  .inst .nm::after{content:"";display:block;width:36px;height:2px;background:var(--ink);margin-top:14px}
-  .inst h4{font-size:15px;font-weight:900;color:var(--ink);margin:14px 0 4px}
+  .crew{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+  .inst{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .inst .pic{position:relative;aspect-ratio:4/5;background:#dfe8ef;overflow:hidden}
+  .inst .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+  .inst .nmbox{position:absolute;left:0;right:0;bottom:0;padding:40px 16px 14px;background:linear-gradient(0deg,rgba(3,30,55,.85),rgba(3,30,55,0));color:#fff}
+  .inst .role{display:block;font-size:13px;font-weight:700;opacity:.9}
+  .inst .nm{display:block;font-size:26px;font-weight:900;line-height:1.2}
+  .inst .txt{padding:14px 16px 16px}
   .inst ul{list-style:none}
-  .inst li{font-size:14.5px;color:var(--sub);line-height:1.65}
-  .inst p{font-size:14.5px}
-  .inst .ig{margin-top:14px;font-size:14px;color:var(--sea);font-weight:700}
-  /* stay: 조식 */
-  .bf{display:flex;align-items:center;gap:16px;margin-top:20px;background:linear-gradient(135deg,#fff4dc,#ffe7b8);border:1px solid #f5d28a;border-radius:14px;padding:18px 20px}
-  .bf .ic{flex:0 0 54px;height:54px;border-radius:50%;background:#ffb000;display:flex;align-items:center;justify-content:center;font-size:28px}
-  .bf b{display:block;font-size:19px;color:#7a4a00}
-  .bf span{font-size:15px;color:#8a6420}
-  .badge{display:inline-block;background:#ffb000;color:#06325a;font-size:14px;font-weight:900;border-radius:999px;padding:3px 12px;vertical-align:middle;margin-left:6px}
-
-  /* schedule: 세로 타임라인 */
-  .days{margin-top:22px;display:flex;flex-direction:column;gap:16px}
-  .day{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px 8px}
-  .day.w{border-color:#9cc9ec;background:#f5fbff}
-  .day .dh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
-  .day .dn{font-size:13px;font-weight:900;letter-spacing:2px;color:#fff;background:var(--sea);border-radius:6px;padding:2px 9px}
-  .day.w .dn{background:var(--deep)}
-  .day .dd{font-size:15px;font-weight:800;color:var(--sub)}
-  .day .dt{font-size:20px;font-weight:900;color:var(--ink);margin-left:auto}
-  .tl{list-style:none;position:relative;margin-left:6px}
-  .tl::before{content:"";position:absolute;left:5px;top:6px;bottom:18px;width:2px;background:#cfe0ee}
-  .tl li{position:relative;padding:0 0 16px 28px;font-size:16px;color:var(--ink);line-height:1.55}
-  .tl li::before{content:"";position:absolute;left:0;top:5px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--sea)}
-  .tl li.hl::before{background:var(--accent);border-color:var(--accent)}
-  .tl .tm{display:block;font-size:13px;font-weight:900;color:var(--sea);letter-spacing:.5px}
-  .tl small{display:block;font-size:14px;color:var(--sub)}
+  .inst li{font-size:13.5px;color:var(--sub);line-height:1.6}
+  .inst li::before{content:"· ";color:var(--sea);font-weight:900}
+  .inst p{font-size:14px;margin-top:10px;color:var(--ink)}
+  .inst .ig{margin-top:10px;font-size:13.5px;color:var(--sea);font-weight:800}
   .opt{font-size:12px;font-weight:800;color:#8a6420;background:#fff1cf;border-radius:4px;padding:1px 6px;margin-left:4px;white-space:nowrap}
 
   /* food */
@@ -185,11 +162,15 @@
     .route .city{font-size:19px}
     th{width:76px;padding:14px 6px}
     .price .won{font-size:36px}
-    .inst{grid-template-columns:1fr}
+    .crew{gap:10px}
+    .inst .nm{font-size:21px}
+    .inst .role{font-size:11.5px}
+    .inst .txt{padding:12px}
+    .inst li{font-size:12.5px}
+    .inst p{font-size:13px}
     .fgrid{grid-template-columns:1fr 1fr}
     .shopin{grid-template-columns:1fr}
     .day .dt{font-size:17px}
-    .inst .pic{aspect-ratio:4/5}
   }
 </style>
 </head>
@@ -354,28 +335,19 @@
     <div class="film"><div class="ic">🎞️</div><div><b>+ 필름카메라 2대로, 지상에서의 추억까지</b><span>고래만 찍고 끝나지 않아요. 미놀타 X-300 등 필름카메라 2대로 국제거리 저녁, 호텔, 공항 가는 길까지 — 물 밖의 순간도 필름 감성으로 따뜻하게 기록해 드립니다.</span></div></div>
     <div class="crew">
       <div class="inst">
-        <div class="pic"><img src="img/inst_shin.jpg" alt="신광우 강사"></div>
+        <div class="pic"><img src="img/inst_shin.jpg" alt="신광우 강사"><div class="nmbox"><span class="role">알로하다이빙 대표 강사</span><span class="nm">신광우</span></div></div>
         <div class="txt">
-          <div class="role">알로하다이빙 대표 강사</div>
-          <div class="nm">신광우</div>
-          <h4>Certifications</h4>
-          <ul><li>PADI Freediver Instructor</li><li>EFR (Emergency First Response) Instructor</li><li>Professional Safety Freediver for AIDA Depth &amp; Pool Competition</li><li>서울대학교 물리학 박사</li></ul>
-          <h4>About</h4>
-          <p>운동을 하면서 "힘을 쓰는 법"을 배웠고, 프리다이빙에서 "힘을 빼는 법"을 배웠습니다. 물속에서는 몸에 힘을 뺄수록 더 오래, 더 멀리 갑니다.</p>
+          <ul><li>PADI Freediver Instructor</li><li>EFR Instructor</li><li>AIDA 대회 Safety Freediver</li><li>서울대학교 물리학 박사</li></ul>
           <p>빛을 가지고 다양한 실험한 경험을 살려, 고래와 사람이 가장 선명하게 담기는 순간을 찍어 드립니다.</p>
-          <div class="ig">Instagram @alohadiving808</div>
+          <div class="ig">@alohadiving808</div>
         </div>
       </div>
       <div class="inst">
-        <div class="pic"><img src="img/inst_yeol.jpg" alt="열쌤"></div>
+        <div class="pic"><img src="img/inst_yeol.jpg" alt="열쌤"><div class="nmbox"><span class="role">수중촬영 강사 · 원스다이브</span><span class="nm">열쌤</span></div></div>
         <div class="txt">
-          <div class="role">수중촬영 강사</div>
-          <div class="nm">열쌤</div>
-          <h4>Certifications</h4>
-          <ul><li>AIDA Instructor</li><li>AIDA Safety diver</li><li>인명구조사</li><li>수상구조사</li><li>무인비행장치 3종 자격 보유</li></ul>
-          <h4>Experience</h4>
-          <ul><li>일본, 필리핀, 인도네시아, 말레이시아 등 해외 투어 인솔 및 수중촬영 다수</li><li>현) 원스다이브 수중촬영 강사</li></ul>
-          <div class="ig">Instagram @yeol_onesdive</div>
+          <ul><li>AIDA Instructor</li><li>AIDA Safety diver</li><li>인명구조사 · 수상구조사</li><li>무인비행장치 3종</li></ul>
+          <p>일본 · 필리핀 · 인도네시아 · 말레이시아 등 해외 투어 인솔과 수중촬영 경험이 많습니다.</p>
+          <div class="ig">@yeol_onesdive</div>
         </div>
       </div>
     </div>
@@ -538,8 +510,9 @@
     <h2>올겨울,<br>고래와 같은 바다에 들어가 볼까요? 🐋</h2>
     <p>혼자 오셔도, 투어가 처음이셔도 괜찮아요.<br>강사 두 명이 처음부터 끝까지 함께합니다.</p>
     <div class="count">🐋 현재 신청 <b><span id="w-applied">3</span>명</b> / 정원 <span id="w-cap">12</span>명</div>
-    <p style="margin-top:14px">카카오톡 채널로 <b style="color:#fff">선착순 신청</b> → 확인되신 분께 예약금·항공권 안내</p>
-    <a class="btn" href="http://pf.kakao.com/_TKhxiX/chat" target="_blank" rel="noopener">카카오톡으로 신청하기</a>
+    <p style="margin-top:14px">인스타그램 DM으로 <b style="color:#fff">선착순 신청</b> → 확인되신 분께 예약금·항공권 안내</p>
+    <a class="btn" href="https://ig.me/m/alohadiving808" target="_blank" rel="noopener">인스타 DM으로 신청하기</a>
+    <p style="margin-top:10px;font-size:14px">@alohadiving808</p>
     <a class="home" href="https://alohadiving.co.kr/">알로하다이빙 홈페이지 →</a>
   </section>
   <div class="full" style="margin:0"><img src="img/drone_family.jpg" alt="어미와 새끼 혹등고래 (드론)"></div>
