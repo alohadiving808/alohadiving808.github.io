@@ -113,6 +113,51 @@
   .inst li{font-size:14.5px;color:var(--sub);line-height:1.65}
   .inst p{font-size:14.5px}
   .inst .ig{margin-top:14px;font-size:14px;color:var(--sea);font-weight:700}
+  /* stay: 조식 */
+  .bf{display:flex;align-items:center;gap:16px;margin-top:20px;background:linear-gradient(135deg,#fff4dc,#ffe7b8);border:1px solid #f5d28a;border-radius:14px;padding:18px 20px}
+  .bf .ic{flex:0 0 54px;height:54px;border-radius:50%;background:#ffb000;display:flex;align-items:center;justify-content:center;font-size:28px}
+  .bf b{display:block;font-size:19px;color:#7a4a00}
+  .bf span{font-size:15px;color:#8a6420}
+  .badge{display:inline-block;background:#ffb000;color:#06325a;font-size:14px;font-weight:900;border-radius:999px;padding:3px 12px;vertical-align:middle;margin-left:6px}
+
+  /* schedule: 세로 타임라인 */
+  .days{margin-top:22px;display:flex;flex-direction:column;gap:16px}
+  .day{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px 8px}
+  .day.w{border-color:#9cc9ec;background:#f5fbff}
+  .day .dh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+  .day .dn{font-size:13px;font-weight:900;letter-spacing:2px;color:#fff;background:var(--sea);border-radius:6px;padding:2px 9px}
+  .day.w .dn{background:var(--deep)}
+  .day .dd{font-size:15px;font-weight:800;color:var(--sub)}
+  .day .dt{font-size:20px;font-weight:900;color:var(--ink);margin-left:auto}
+  .tl{list-style:none;position:relative;margin-left:6px}
+  .tl::before{content:"";position:absolute;left:5px;top:6px;bottom:18px;width:2px;background:#cfe0ee}
+  .tl li{position:relative;padding:0 0 16px 28px;font-size:16px;color:var(--ink);line-height:1.55}
+  .tl li::before{content:"";position:absolute;left:0;top:5px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--sea)}
+  .tl li.hl::before{background:var(--accent);border-color:var(--accent)}
+  .tl .tm{display:block;font-size:13px;font-weight:900;color:var(--sea);letter-spacing:.5px}
+  .tl small{display:block;font-size:14px;color:var(--sub)}
+  .tl .opt{font-size:12px;font-weight:800;color:#8a6420;background:#fff1cf;border-radius:4px;padding:1px 6px;margin-left:4px;white-space:nowrap}
+
+  /* food */
+  .food{background:#fffaf2}
+  .food .eyebrow{color:#d9730d}
+  .fhero{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+  .tile video{height:100%;object-fit:cover}
+  .tile{position:relative;border-radius:14px;overflow:hidden;background:#eee}
+  .tile img{height:100%;object-fit:cover}
+  .tile .lb{position:absolute;left:10px;bottom:10px;right:10px;font-size:14px;font-weight:800;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+  .tile .lb small{display:block;font-size:12px;font-weight:600;opacity:.9}
+  .tile::after{content:"";position:absolute;inset:auto 0 0 0;height:45%;background:linear-gradient(0deg,rgba(0,0,0,.55),rgba(0,0,0,0));pointer-events:none}
+  .tile .lb{z-index:1}
+  .r45{aspect-ratio:4/5}.r43{aspect-ratio:4/3}.r34{aspect-ratio:3/4}.r11{aspect-ratio:1/1}
+  .fgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px}
+  .shop{margin-top:30px;background:#06325a;border-radius:16px;padding:22px;color:#fff}
+  .shop h3{color:#fff;font-size:20px}
+  .shop p{color:#c9d8e6;font-size:15px}
+  .shop .fgrid{margin-top:14px}
+  .tips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+  .tips div{background:#fff;border:1px solid #f1dfc2;border-radius:12px;padding:14px 16px;font-size:15px;color:var(--sub)}
+  .tips b{display:block;font-size:16px}
   .notice li{font-size:15px;color:var(--sub);margin:8px 0 8px 18px}
   .cta{background:var(--deep);color:#fff;text-align:center}
   .cta h2{color:#fff}
@@ -138,6 +183,9 @@
     th{width:76px;padding:14px 6px}
     .price .won{font-size:36px}
     .inst{grid-template-columns:1fr}
+    .fgrid{grid-template-columns:1fr 1fr}
+    .tips{grid-template-columns:1fr}
+    .day .dt{font-size:17px}
     .inst .pic{aspect-ratio:4/5}
   }
 </style>
@@ -157,7 +205,7 @@
     </div>
     <div class="over">
       <div class="meta">2027년 2월 25일(목) – 28일(일) · 3박 4일</div>
-      <div class="chips"><span>🐋 고래 스윔 2일</span><span>🏨 4성급 2인 1실</span><span>🤿 첫날 비치 다이빙</span><span>👥 12명 한정 · 강사 2명</span><span>📸 미러리스 2대 + 4K 드론</span></div>
+      <div class="chips"><span>🐋 고래 스윔 2일</span><span>🏨 4성급 2인 1실 · 🍳 조식 포함</span><span>🤿 첫날 비치 다이빙</span><span>👥 12명 한정 · 강사 2명</span><span>📸 미러리스 2대 + 4K 드론</span></div>
     </div>
   </section>
   <div class="cap">드론 촬영 · 어미와 새끼, 그리고 에스코트 고래</div>
@@ -284,11 +332,12 @@
   <!-- HOTEL -->
   <section>
     <span class="eyebrow">STAY</span>
-    <h2>3박 모두 4성급 호텔,<br>2인 1실</h2>
+    <h2>3박 모두 4성급 호텔,<br>2인 1실 <span class="badge">🍳 조식 포함</span></h2>
     <p>나하 시내 4성급 호텔 <b>오키나와 나하나 호텔 &amp; 스파</b>. 트윈룸 2인 1실을 쓰고, 호텔 지하 스파(히노키탕 · 사우나)에서 보트 위에서 식은 몸을 녹일 수 있습니다.</p>
+    <div class="bf"><div class="ic">🍳</div><div><b>매일 아침 호텔 조식 포함</b><span>든든하게 먹고 고래 만나러 출발! 3일 모두 조식이 포함돼 있어요.</span></div></div>
     <div class="two">
       <img src="img/hotel_room.jpg" alt="트윈룸">
-      <img src="img/hotel_spa.jpg" alt="대욕장">
+      <img src="img/hotel_spa.jpg" alt="스파">
     </div>
     <div class="cap" style="padding-right:0">객실(트윈) · 스파 — 호텔 제공 이미지</div>
   </section>
@@ -352,21 +401,79 @@
     <span class="eyebrow">SCHEDULE</span>
     <h2>3박 4일 일정</h2>
     <p>2027년 2월 25일(목) – 28일(일)</p>
-    <table>
-      <tr><th>1일차<br>목</th><td>나하 공항 도착 → 호텔 이동 (약 15분) · 점심<br><b>🤿 비치 다이빙</b> — <b>🐢 바다거북을 자주 만나는 오도 해안</b> 또는 <b>푸른 동굴</b>에서 몸 풀기 (당일 바다 상황 보고 선택)<br>호텔 체크인 · 고래 스윔 안전 브리핑 (입수 방법 · 매너 · 멀미 대비)<br>국제거리에서 다 같이 저녁 (선택사항)</td></tr>
-      <tr class="whale"><th>2일차<br>금</th><td><b>🐋 혹등고래 스윔 1일차</b><br>아메리칸빌리지에서 저녁 식사 (선택사항) · 첫날 사진 리뷰</td></tr>
-      <tr class="whale"><th>3일차<br>토</th><td><b>🐋 혹등고래 스윔 2일차</b></td></tr>
-      <tr><th>4일차<br>일</th><td>아침 식사 · 체크아웃<br>공항 이동 → 한국 도착 ✈️</td></tr>
-    </table>
+    <div class="days">
+      <div class="day">
+        <div class="dh"><span class="dn">DAY 1</span><span class="dd">2/25 목</span><span class="dt">도착 · 비치 다이빙</span></div>
+        <ul class="tl">
+          <li><span class="tm">10:10</span>인천 출국 ✈️</li>
+          <li>나하 공항 도착 → 호텔 이동 <small>공항에서 호텔까지 약 15분</small></li>
+          <li><span class="tm">14:00경</span>호텔 체크인</li>
+          <li class="hl"><b>🤿 비치 다이빙</b><small>🐢 바다거북을 자주 만나는 오도 해안 또는 푸른 동굴 (당일 바다 상황 보고 선택)</small></li>
+          <li>고래 스윔 안전 브리핑<small>입수 방법 · 매너 · 멀미 대비</small></li>
+          <li>국제거리에서 다 같이 저녁 <span class="opt">선택사항</span></li>
+        </ul>
+      </div>
+      <div class="day w">
+        <div class="dh"><span class="dn">DAY 2</span><span class="dd">2/26 금</span><span class="dt">🐋 혹등고래 스윔 1일차</span></div>
+        <ul class="tl">
+          <li>호텔 조식 🍳</li>
+          <li class="hl"><b>🐋 혹등고래 스윔 1일차</b><small>나하 항구 출항 · 수면에서 고래 만나기</small></li>
+          <li>아메리칸빌리지에서 저녁 식사 <span class="opt">선택사항</span><small>첫날 사진 리뷰</small></li>
+        </ul>
+      </div>
+      <div class="day w">
+        <div class="dh"><span class="dn">DAY 3</span><span class="dd">2/27 토</span><span class="dt">🐋 혹등고래 스윔 2일차</span></div>
+        <ul class="tl">
+          <li>호텔 조식 🍳</li>
+          <li class="hl"><b>🐋 혹등고래 스윔 2일차</b></li>
+          <li>🛍️ 돈키호테 쇼핑<small>위스키 · 과자 · 기념품 쇼핑</small></li>
+        </ul>
+      </div>
+      <div class="day">
+        <div class="dh"><span class="dn">DAY 4</span><span class="dd">2/28 일</span><span class="dt">귀국</span></div>
+        <ul class="tl">
+          <li>호텔 조식 🍳 · 체크아웃</li>
+          <li>나하 공항 이동 <small>호텔에서 약 15분</small></li>
+          <li><span class="tm">12:40</span>나하 출국 → 한국 도착 ✈️</li>
+        </ul>
+      </div>
+    </div>
     <p style="margin-top:14px;font-size:14px">* 안전을 최우선으로, 현지 기상·바다 상황에 따라 순서가 바뀌거나 변경될 수 있습니다.<br>* 세부 안내는 참가자 단톡방에서 드립니다.</p>
   </section>
 
   <!-- OKINAWA -->
-  <section>
-    <span class="eyebrow">AFTER DIVING</span>
-    <h2>고래 말고도<br>즐길 게 많은 오키나와</h2>
-    <p>✔️ 국제거리 · 아메리칸빌리지 산책<br>✔️ 일본 마트 &amp; 편의점 털기 (오리온 맥주는 필수!)<br>✔️ 오키나와 소바 · 스테이크 · 이자카야 로컬 맛집<br>✔️ 엔화 환율이 아직 좋아요</p>
-    <div class="ph"><b>🍜 오키나와 풍경·먹거리 사진 자리</b><span>국제거리 · 아메리칸빌리지 · 오리온 맥주 · 오키나와 소바 2~3장</span></div>
+  <section class="food">
+    <span class="eyebrow">EAT &amp; SHOP</span>
+    <h2>고래 보고 나면,<br>오키나와는 먹는 재미 🍣</h2>
+    <p>바다에서 하루를 보낸 뒤 먹는 초밥 한 접시, 시원한 오리온 맥주 한 잔. 고래 투어의 또 다른 하이라이트예요.</p>
+    <div class="fhero">
+      <div class="tile r45"><video src="img/food_aburi.mp4" poster="img/food_aburi.jpg" autoplay muted loop playsinline></video><span class="lb">🔥 불맛 가득 아부리 초밥<small>눈앞에서 바로 토치로</small></span></div>
+      <div class="tile r45"><img src="img/food_kaisendon.jpg" alt="해산물 덮밥" loading="lazy"><span class="lb">🦐 해산물 덮밥<small>새우 · 연어 · 참치 · 우미부도</small></span></div>
+    </div>
+    <div class="fgrid">
+      <div class="tile r34"><img src="img/food_sushi.jpg" alt="초밥 한 판" loading="lazy"><span class="lb">🍣 초밥 한 판<small>성게 · 참치 · 장어</small></span></div>
+      <div class="tile r34"><img src="img/food_soba.jpg" alt="오키나와 소바" loading="lazy"><span class="lb">🍜 오키나와 소바</span></div>
+      <div class="tile r34"><img src="img/food_unagi.jpg" alt="장어덮밥" loading="lazy"><span class="lb">🍱 장어덮밥</span></div>
+      <div class="tile r34"><img src="img/food_blueseal.jpg" alt="블루씰 아이스크림" loading="lazy"><span class="lb">🍦 블루씰 아이스크림<small>오키나와 명물</small></span></div>
+      <div class="tile r34"><img src="img/food_andagi.jpg" alt="사타안다기와 생맥주" loading="lazy"><span class="lb">🍺 사타안다기 &amp; 생맥주</span></div>
+      <div class="tile r34"><img src="img/food_beniimo.jpg" alt="자색고구마 디저트" loading="lazy"><span class="lb">🍠 자색고구마 디저트</span></div>
+    </div>
+    <div class="tile" style="margin-top:10px;aspect-ratio:2/1"><img src="img/food_market.jpg" alt="수산시장 해산물" loading="lazy"><span class="lb">🦞 수산시장 구경<small>야광패 · 소라 · 랍스터가 한가득</small></span></div>
+
+    <div class="shop">
+      <h3>🛍️ 3일차엔 돈키호테 쇼핑</h3>
+      <p>고래 스윔을 마치고 다 같이 돈키호테로! 위스키 · 과자 · 기념품까지, 엔화 환율이 좋을 때 쓸어 담아요.</p>
+      <div class="fgrid">
+        <div class="tile r34"><img src="img/shop_whisky.jpg" alt="위스키 진열대" loading="lazy"><span class="lb">🥃 위스키</span></div>
+        <div class="tile r34"><img src="img/shop_snack.jpg" alt="과자 진열대" loading="lazy"><span class="lb">🍿 과자</span></div>
+        <div class="tile r34"><img src="img/shop_kavalan.jpg" alt="면세 위스키" loading="lazy" style="object-position:30% 50%"><span class="lb">🎁 선물용 양주</span></div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <div><b>🌃 국제거리</b>첫날 저녁, 오키나와 시내 한복판</div>
+      <div><b>🎡 아메리칸빌리지</b>둘째 날 저녁, 바다 옆 관람차 거리</div>
+    </div>
   </section>
 
   <!-- PRICE -->
