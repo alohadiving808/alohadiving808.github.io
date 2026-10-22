@@ -136,7 +136,7 @@
   .tl li.hl::before{background:var(--accent);border-color:var(--accent)}
   .tl .tm{display:block;font-size:13px;font-weight:900;color:var(--sea);letter-spacing:.5px}
   .tl small{display:block;font-size:14px;color:var(--sub)}
-  .tl .opt{font-size:12px;font-weight:800;color:#8a6420;background:#fff1cf;border-radius:4px;padding:1px 6px;margin-left:4px;white-space:nowrap}
+  .opt{font-size:12px;font-weight:800;color:#8a6420;background:#fff1cf;border-radius:4px;padding:1px 6px;margin-left:4px;white-space:nowrap}
 
   /* food */
   .food{background:#fffaf2}
@@ -154,7 +154,9 @@
   .shop{margin-top:30px;background:#06325a;border-radius:16px;padding:22px;color:#fff}
   .shop h3{color:#fff;font-size:20px}
   .shop p{color:#c9d8e6;font-size:15px}
-  .shop .fgrid{margin-top:14px}
+  .shopin{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:center}
+  .shop .opt{font-size:12px;vertical-align:middle}
+  .fgrid.two2{grid-template-columns:1fr 1fr}
   .tips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
   .tips div{background:#fff;border:1px solid #f1dfc2;border-radius:12px;padding:14px 16px;font-size:15px;color:var(--sub)}
   .tips b{display:block;font-size:16px}
@@ -184,6 +186,7 @@
     .price .won{font-size:36px}
     .inst{grid-template-columns:1fr}
     .fgrid{grid-template-columns:1fr 1fr}
+    .shopin{grid-template-columns:1fr}
     .tips{grid-template-columns:1fr}
     .day .dt{font-size:17px}
     .inst .pic{aspect-ratio:4/5}
@@ -418,7 +421,8 @@
         <ul class="tl">
           <li>호텔 조식 🍳</li>
           <li class="hl"><b>🐋 혹등고래 스윔 1일차</b><small>나하 항구 출항 · 수면에서 고래 만나기</small></li>
-          <li>아메리칸빌리지에서 저녁 식사 <span class="opt">선택사항</span><small>첫날 사진 리뷰</small></li>
+          <li>📸 첫날 사진 리뷰</li>
+          <li>아메리칸빌리지에서 저녁 식사 <span class="opt">선택사항</span></li>
         </ul>
       </div>
       <div class="day w">
@@ -426,13 +430,15 @@
         <ul class="tl">
           <li>호텔 조식 🍳</li>
           <li class="hl"><b>🐋 혹등고래 스윔 2일차</b></li>
-          <li>🛍️ 돈키호테 쇼핑<small>위스키 · 과자 · 기념품 쇼핑</small></li>
+          <li>📸 둘째 날 사진 · 드론 영상 리뷰</li>
+          <li>🛍️ 돈키호테 쇼핑 <span class="opt">선택사항</span></li>
         </ul>
       </div>
       <div class="day">
         <div class="dh"><span class="dn">DAY 4</span><span class="dd">2/28 일</span><span class="dt">귀국</span></div>
         <ul class="tl">
-          <li>호텔 조식 🍳 · 체크아웃</li>
+          <li>호텔 조식 🍳 또는 국제거리 맛집에서 아침 식사</li>
+          <li>체크아웃</li>
           <li>나하 공항 이동 <small>호텔에서 약 15분</small></li>
           <li><span class="tm">12:40</span>나하 출국 → 한국 도착 ✈️</li>
         </ul>
@@ -461,13 +467,15 @@
     <div class="tile" style="margin-top:10px;aspect-ratio:2/1"><img src="img/food_market.jpg" alt="수산시장 해산물" loading="lazy"><span class="lb">🦞 수산시장 구경<small>야광패 · 소라 · 랍스터가 한가득</small></span></div>
 
     <div class="shop">
-      <h3>🛍️ 3일차엔 돈키호테 쇼핑</h3>
-      <p>고래 스윔을 마치고 다 같이 돈키호테로! 위스키 · 과자 · 기념품까지, 엔화 환율이 좋을 때 쓸어 담아요.</p>
-      <div class="fgrid">
-        <div class="tile r34"><img src="img/shop_whisky.jpg" alt="위스키 진열대" loading="lazy"><span class="lb">🥃 위스키</span></div>
-        <div class="tile r34"><img src="img/shop_snack.jpg" alt="과자 진열대" loading="lazy"><span class="lb">🍿 과자</span></div>
-        <div class="tile r34"><img src="img/shop_kavalan.jpg" alt="면세 위스키" loading="lazy" style="object-position:30% 50%"><span class="lb">🎁 선물용 양주</span></div>
+      <div class="shopin">
+        <div class="tile r43"><img src="img/shop_whisky.jpg" alt="돈키호테 위스키 진열대" loading="lazy"><span class="lb">🥃 위스키가 한가득</span></div>
+        <div><h3>🛍️ 3일차 저녁, 돈키호테 쇼핑 <span class="opt">선택사항</span></h3>
+        <p>고래 스윔을 마치고 원하시는 분은 다 같이 돈키호테로! 위스키 · 화장품 · 기념품까지, 엔화 환율이 좋을 때 쓸어 담아요.</p></div>
       </div>
+    </div>
+    <div class="fgrid two2">
+      <div class="tile r43"><img src="img/shop_snack.jpg" alt="편의점 과자" loading="lazy"><span class="lb">🏪 편의점 과자 털기<small>일본 한정 맛 골라 먹는 재미</small></span></div>
+      <div class="tile r43"><img src="img/shop_kavalan.jpg" alt="호텔 바의 위스키" loading="lazy"><span class="lb">🥃 호텔 바에서 한 잔<small>하루를 마무리하는 위스키</small></span></div>
     </div>
 
     <div class="tips">
