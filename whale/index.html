@@ -115,6 +115,38 @@
   .inst .ig{margin-top:10px;font-size:13.5px;color:var(--sea);font-weight:800}
   .opt{font-size:12px;font-weight:800;color:#8a6420;background:#fff1cf;border-radius:4px;padding:1px 6px;margin-left:4px;white-space:nowrap}
 
+  /* stay: 조식 */
+  .bf{display:flex;align-items:center;gap:16px;margin-top:20px;background:linear-gradient(135deg,#fff4dc,#ffe7b8);border:1px solid #f5d28a;border-radius:14px;padding:18px 20px}
+  .bf .ic{flex:0 0 54px;height:54px;border-radius:50%;background:#ffb000;display:flex;align-items:center;justify-content:center;font-size:28px}
+  .bf b{display:block;font-size:19px;color:#7a4a00}
+  .bf span{font-size:15px;color:#8a6420}
+  .badge{display:inline-block;background:#ffb000;color:#06325a;font-size:14px;font-weight:900;border-radius:999px;padding:3px 12px;vertical-align:middle;margin-left:6px}
+
+  /* schedule */
+  .days{margin-top:24px;display:flex;flex-direction:column;gap:18px}
+  .day{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(6,50,90,.08);border:1px solid #e3ecf3}
+  .dh{display:flex;align-items:center;gap:16px;padding:18px 22px;background:#eaf4fb}
+  .dh .dn{flex:0 0 auto;text-align:center;line-height:1}
+  .dh .dn b{display:block;font-size:12px;font-weight:900;letter-spacing:2px;color:var(--sea)}
+  .dh .dn span{display:block;font-size:34px;font-weight:900;color:var(--deep);margin-top:2px}
+  .dh .dd{font-size:14px;font-weight:700;color:var(--sub)}
+  .dh .dt{font-size:21px;font-weight:900;color:var(--ink);line-height:1.3}
+  .dh .bar{width:2px;align-self:stretch;background:rgba(6,50,90,.15)}
+  .day.w .dh{background:linear-gradient(120deg,#06325a,#0a6fb8)}
+  .day.w .dh .dn b{color:var(--accent)}
+  .day.w .dh .dn span,.day.w .dh .dt{color:#fff}
+  .day.w .dh .dd{color:#c9d8e6}
+  .day.w .dh .bar{background:rgba(255,255,255,.3)}
+  .rows{padding:8px 22px 14px}
+  .row{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:start;padding:11px 0;border-top:1px dashed #e3ecf3}
+  .row:first-child{border-top:0}
+  .row .t{font-size:13px;font-weight:900;color:var(--sea);padding-top:3px;letter-spacing:.3px}
+  .row .c{font-size:16px;color:var(--ink);line-height:1.5}
+  .row .c small{display:block;font-size:13.5px;color:var(--sub);margin-top:2px}
+  .row.hl .c{background:#fff6df;border-radius:12px;padding:10px 14px;margin:-4px 0;font-weight:800}
+  .row.hl .c small{font-weight:500}
+  .day.w .row.hl .c{background:#e8f3fc}
+
   /* food */
   .food{background:#fffaf2}
   .food .eyebrow{color:#d9730d}
@@ -170,7 +202,12 @@
     .inst p{font-size:13px}
     .fgrid{grid-template-columns:1fr 1fr}
     .shopin{grid-template-columns:1fr}
-    .day .dt{font-size:17px}
+    .dh{padding:16px;gap:12px}
+    .dh .dn span{font-size:28px}
+    .dh .dt{font-size:18px}
+    .rows{padding:6px 16px 12px}
+    .row{grid-template-columns:52px 1fr;gap:10px}
+    .row .c{font-size:15px}
   }
 </style>
 </head>
@@ -379,42 +416,41 @@
     <p>2027년 2월 25일(목) – 28일(일)</p>
     <div class="days">
       <div class="day">
-        <div class="dh"><span class="dn">DAY 1</span><span class="dd">2/25 목</span><span class="dt">도착 · 비치 다이빙</span></div>
-        <ul class="tl">
-          <li><span class="tm">10:10</span>인천 출국 ✈️</li>
-          <li>나하 공항 도착 → 호텔 이동 <small>공항에서 호텔까지 약 15분</small></li>
-          <li><span class="tm">14:00경</span>호텔 체크인</li>
-          <li class="hl"><b>🤿 비치 다이빙</b><small>🐢 바다거북을 자주 만나는 오도 해안 또는 푸른 동굴 (당일 바다 상황 보고 선택)</small></li>
-          <li>고래 스윔 안전 브리핑<small>입수 방법 · 매너 · 멀미 대비</small></li>
-          <li>국제거리에서 다 같이 저녁 <span class="opt">선택사항</span></li>
-        </ul>
+        <div class="dh"><div class="dn"><b>DAY</b><span>1</span></div><div class="bar"></div><div><div class="dd">2/25 목요일</div><div class="dt">도착 · 거북이 만나러 비치 다이빙</div></div></div>
+        <div class="rows">
+          <div class="row"><div class="t">10:10</div><div class="c">✈️ 인천 출국</div></div>
+          <div class="row"><div class="t">도착</div><div class="c">나하 공항 → 호텔 이동<small>공항에서 호텔까지 약 15분</small></div></div>
+          <div class="row"><div class="t">14:00</div><div class="c">호텔 체크인</div></div>
+          <div class="row hl"><div class="t">오후</div><div class="c">🤿 비치 다이빙<small>🐢 바다거북을 자주 만나는 오도 해안 또는 푸른 동굴 (당일 바다 상황 보고 선택)</small></div></div>
+          <div class="row"><div class="t">저녁</div><div class="c">고래 스윔 안전 브리핑<small>입수 방법 · 매너 · 멀미 대비</small></div></div>
+          <div class="row"><div class="t">저녁</div><div class="c">🌃 국제거리에서 다 같이 저녁 <span class="opt">선택사항</span></div></div>
+        </div>
       </div>
       <div class="day w">
-        <div class="dh"><span class="dn">DAY 2</span><span class="dd">2/26 금</span><span class="dt">🐋 혹등고래 스윔 1일차</span></div>
-        <ul class="tl">
-          <li>호텔 조식 🍳</li>
-          <li class="hl"><b>🐋 혹등고래 스윔 1일차</b><small>나하 항구 출항 · 수면에서 고래 만나기</small></li>
-          <li>📸 첫날 사진 리뷰</li>
-          <li>아메리칸빌리지에서 저녁 식사 <span class="opt">선택사항</span></li>
-        </ul>
+        <div class="dh"><div class="dn"><b>DAY</b><span>2</span></div><div class="bar"></div><div><div class="dd">2/26 금요일</div><div class="dt">🐋 혹등고래 스윔 1일차</div></div></div>
+        <div class="rows">
+          <div class="row"><div class="t">아침</div><div class="c">🍳 호텔 조식</div></div>
+          <div class="row hl"><div class="t">낮</div><div class="c">🐋 혹등고래 스윔<small>나하 항구 출항 · 수면에서 고래 만나기</small></div></div>
+          <div class="row"><div class="t">저녁</div><div class="c">📸 첫날 사진 리뷰</div></div>
+          <div class="row"><div class="t">저녁</div><div class="c">🎡 아메리칸빌리지에서 저녁 식사 <span class="opt">선택사항</span></div></div>
+        </div>
       </div>
       <div class="day w">
-        <div class="dh"><span class="dn">DAY 3</span><span class="dd">2/27 토</span><span class="dt">🐋 혹등고래 스윔 2일차</span></div>
-        <ul class="tl">
-          <li>호텔 조식 🍳</li>
-          <li class="hl"><b>🐋 혹등고래 스윔 2일차</b></li>
-          <li>📸 둘째 날 사진 · 드론 영상 리뷰</li>
-          <li>🛍️ 돈키호테 쇼핑 <span class="opt">선택사항</span></li>
-        </ul>
+        <div class="dh"><div class="dn"><b>DAY</b><span>3</span></div><div class="bar"></div><div><div class="dd">2/27 토요일</div><div class="dt">🐋 혹등고래 스윔 2일차</div></div></div>
+        <div class="rows">
+          <div class="row"><div class="t">아침</div><div class="c">🍳 호텔 조식</div></div>
+          <div class="row hl"><div class="t">낮</div><div class="c">🐋 혹등고래 스윔<small>둘째 날, 한 번 더 고래 찾으러!</small></div></div>
+          <div class="row"><div class="t">저녁</div><div class="c">📸 둘째 날 사진 · 드론 영상 리뷰</div></div>
+          <div class="row"><div class="t">저녁</div><div class="c">🛍️ 돈키호테 쇼핑 <span class="opt">선택사항</span></div></div>
+        </div>
       </div>
       <div class="day">
-        <div class="dh"><span class="dn">DAY 4</span><span class="dd">2/28 일</span><span class="dt">귀국</span></div>
-        <ul class="tl">
-          <li>호텔 조식 🍳 또는 국제거리 맛집에서 아침 식사</li>
-          <li>체크아웃</li>
-          <li>나하 공항 이동 <small>호텔에서 약 15분</small></li>
-          <li><span class="tm">12:40</span>나하 출국 → 한국 도착 ✈️</li>
-        </ul>
+        <div class="dh"><div class="dn"><b>DAY</b><span>4</span></div><div class="bar"></div><div><div class="dd">2/28 일요일</div><div class="dt">귀국</div></div></div>
+        <div class="rows">
+          <div class="row"><div class="t">아침</div><div class="c">🍳 호텔 조식 또는 국제거리 맛집에서 아침 식사</div></div>
+          <div class="row"><div class="t">오전</div><div class="c">체크아웃 → 나하 공항 이동<small>호텔에서 약 15분</small></div></div>
+          <div class="row"><div class="t">12:40</div><div class="c">✈️ 나하 출국 → 한국 도착</div></div>
+        </div>
       </div>
     </div>
     <p style="margin-top:14px;font-size:14px">* 안전을 최우선으로, 현지 기상·바다 상황에 따라 순서가 바뀌거나 변경될 수 있습니다.<br>* 세부 안내는 참가자 단톡방에서 드립니다.</p>
