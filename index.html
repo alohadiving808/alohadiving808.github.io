@@ -259,6 +259,15 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .rv .sub{font-size:12px; color:var(--muted)}
 .src{margin-left:auto; font-size:11px; font-weight:800; border-radius:5px; padding:2px 7px; background:var(--line-soft); color:var(--muted); white-space:nowrap}
 .src.g{background:var(--yi-tint); color:var(--yi-ink)}
+.clips{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+@media (min-width:720px){ .clips{grid-template-columns:repeat(4,1fr)} }
+.clip{margin:0; border-radius:14px; overflow:hidden; background:var(--surface); border:1px solid var(--line)}
+.clip .vw{position:relative; aspect-ratio:540/836; background:#0B2A44}
+.clip video{display:block; width:100%; height:100%; object-fit:cover}
+.clip .ig{position:absolute; left:8px; top:8px; font-size:10.5px; font-weight:900; letter-spacing:.04em; color:#fff;
+  background:linear-gradient(45deg,#f9a13b,#e1306c,#833ab4); padding:3px 8px; border-radius:999px}
+.clip figcaption{padding:8px 10px 10px; font-size:12.5px; line-height:1.5; color:var(--ink)}
+.clip figcaption .d{display:block; font-size:11px; color:var(--muted)}
 .rv p{margin:10px 0 0; font-size:14.5px; line-height:1.7; white-space:pre-line; overflow-wrap:anywhere}
 .attrib{font-size:11.5px; color:var(--muted); margin-top:10px}
 
@@ -521,6 +530,23 @@ const CONFIG = {
   KAKAO_ID: '알로하다이빙',
   KAKAO_URL: 'http://pf.kakao.com/_TKhxiX',
   // 오키나와 혹등고래 투어: 상세페이지 주소와 첫 화면 팝업(false 면 안 뜸). 신청 인원은 whale-status.js 에서 고침
+  // 인스타그램 후기 영상(reviews/ 폴더). 새 후기는 rv15.mp4·rv15.jpg 를 올리고 여기 한 줄 추가. q = 화면에 보일 한 줄(없으면 날짜만)
+  REVIEW_CLIPS: [
+    {f:'rv14', d:'10.7',  q:'수영이랑은 또 다른 매력'},
+    {f:'rv13', d:'9.17',  q:'물수저 모임!'},
+    {f:'rv12', d:'9.17',  q:'물수저들 한방에 CWT 15미터 통과ㅋㅋ 자세도 좋음'},
+    {f:'rv11', d:'9.8',   q:''},
+    {f:'rv10', d:'8.29',  q:''},
+    {f:'rv09', d:'8.19',  q:'처음 하는 프리다이빙, 물이랑 친해지고 싶어서 도전!'},
+    {f:'rv08', d:'8.19',  q:'수영을 한번도 해본 적 없는 사람의 인생 첫 잠수'},
+    {f:'rv07', d:'8.18',  q:''},
+    {f:'rv06', d:'8.18',  q:''},
+    {f:'rv05', d:'8.18',  q:''},
+    {f:'rv04', d:'8.10',  q:'프리다이빙 재밌다!!!!'},
+    {f:'rv03', d:'8.10',  q:''},
+    {f:'rv02', d:'8.9',   q:''},
+    {f:'rv01', d:'8.9',   q:''},
+  ],
   WHALE_URL: 'whale/',
   WHALE_POPUP: true,
 };
@@ -631,6 +657,7 @@ const T = {
     weekday:'주중', weekend:'주말',
     gTitle:'Google 후기', gCount:n=>`후기 ${n}개`, gAll:'Google에서 전체 후기 보기', gWrite:'후기 남기기',
     gAttrib:'Google 후기는 Google 지도에서 가져왔어요.', rvOthers:'수강생 후기', rvEmpty:'아직 등록된 후기가 없어요.',
+    rvInsta:'인스타그램 후기', rvInstaSub:'수강생분들이 직접 올려 주신 스토리예요.',
     insta:'인스타그램', kakao:'카카오톡 채널',
     notReady:'준비 중이에요.',
     footMini:'<b>문의</b> — 카카오톡 채널 {KAKAO} · <a href="/privacy.html" target="_blank" rel="noopener">개인정보처리방침</a>',
@@ -701,6 +728,7 @@ const T = {
     weekday:'Weekday', weekend:'Weekend',
     gTitle:'Google reviews', gCount:n=>`${n} review${n===1?'':'s'}`, gAll:'See all reviews on Google', gWrite:'Write a review',
     gAttrib:'Google reviews are shown from Google Maps.', rvOthers:'From our students', rvEmpty:'No reviews yet.',
+    rvInsta:'Instagram reviews', rvInstaSub:'Stories our students posted after class (in Korean).',
     insta:'Instagram', kakao:'KakaoTalk channel',
     notReady:'Coming soon.',
     footMini:'<b>Questions</b> — KakaoTalk channel {KAKAO} · <a href="/privacy.html" target="_blank" rel="noopener">Privacy policy</a>',
@@ -1001,9 +1029,9 @@ const starsHTML = n => { n = Math.round(n||0); return `<span class="stars" aria-
 
 function renderReviews(){
   const t = T[state.lang], c = content();
-  if(!c) return `<div class="empty">${t.notReady}</div>`;
+  let h = clipsHTML(t);
+  if(!c) return h || `<div class="empty">${t.notReady}</div>`;
   const g = c.google;
-  let h = '';
   if(g && (g.count || (g.reviews||[]).length)){
     const all = safeUrl(g.url), write = safeUrl(g.write);
     h += `<section class="sec"><div class="card gsum">
@@ -1031,6 +1059,30 @@ function renderReviews(){
       <p>${esc(r.text)}</p></article>`).join('') + `</div></section>`;
   }
   return h || `<div class="empty">${t.rvEmpty}</div>`;
+}
+
+/* 인스타그램 후기 영상 — 화면에 보일 때만 재생(데이터 절약) */
+function clipsHTML(t){
+  const L = CONFIG.REVIEW_CLIPS || [];
+  if(!L.length) return '';
+  return `<section class="sec"><h2>${t.rvInsta}</h2><p class="lede" style="margin:-4px 0 14px">${t.rvInstaSub}</p><div class="clips">` +
+    L.map(x => `<figure class="clip"><div class="vw">
+      <video data-src="reviews/${x.f}.mp4" poster="reviews/${x.f}.jpg" muted loop playsinline preload="none" aria-label="${esc(x.q||t.rvInsta)}"></video>
+      <span class="ig">Instagram</span></div>
+      <figcaption><span class="d">${esc(x.d)}</span>${x.q?esc(x.q):''}</figcaption></figure>`).join('') + `</div></section>`;
+}
+let clipObs = null;
+function wireClips(){
+  if(clipObs) clipObs.disconnect();
+  const vs = document.querySelectorAll('.clip video');
+  if(!vs.length) return;
+  if(!('IntersectionObserver' in window)){ vs.forEach(v=>{ v.src=v.dataset.src; v.play().catch(()=>{}); }); return; }
+  clipObs = new IntersectionObserver(es => es.forEach(e => {
+    const v = e.target;
+    if(e.isIntersecting){ if(!v.src) v.src = v.dataset.src; v.play().catch(()=>{}); }
+    else v.pause();
+  }), {threshold:0.35});
+  vs.forEach(v => clipObs.observe(v));
 }
 
 
@@ -1440,7 +1492,7 @@ function render(){
     const n = seatsIn(mm), on = +mm===+m;
     return `<button class="mtab" data-month="${key(mm)}" aria-pressed="${on}"><span class="m">${t.mtab(mm.getFullYear(), mm.getMonth()+1)}</span><span class="c${n?'':' zero'}">${t.seats(n)}</span></button>`;
   }).join('');
-  if(pg==='reviews'){ $('main').innerHTML = renderReviews(); return; }
+  if(pg==='reviews'){ $('main').innerHTML = renderReviews(); wireClips(); return; }
   const [cstart,cend] = calRange(m).map(key);
   if(!state.sel || state.sel<cstart || state.sel>cend) state.sel = firstOpenDay();
   $('main').innerHTML = isMy ? renderMy() : renderCal();
