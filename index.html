@@ -210,23 +210,15 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .cell.away{background:var(--aw-bg)}
 .cell.away .n{color:var(--aw-ink)}
 .cell.away .lbl{color:var(--aw-ink)}
-.cell.lab{--aw-bg:#fdf0f3; --aw-ink:#b0466a}
-.cell.seal{--aw-bg:#e6f6fb; --aw-ink:#1d7fa6}
-.px{display:block; width:100%; max-width:84px; margin:2px auto 0; image-rendering:pixelated}
-.px g{visibility:hidden}
-.px .ia{animation:pxa 1s steps(1) infinite} .px .ib{animation:pxb 1s steps(1) infinite}
-.cell.on .px .ia,.cell.on .px .ib{animation:none; visibility:hidden}
-.cell.on .px .fa{animation:pxa .8s steps(1) infinite} .cell.on .px .fb{animation:pxb .8s steps(1) infinite}
-.cell.away:nth-child(2n) .px .ia,.cell.away:nth-child(2n) .px .ib{animation-delay:-.5s}
-.cell.away.on{box-shadow:inset 0 0 0 2px var(--aw-ink)}
-@keyframes pxa{0%{visibility:visible}50%{visibility:hidden}}
-@keyframes pxb{0%{visibility:hidden}50%{visibility:visible}}
-@media (prefers-reduced-motion:reduce){ .px .ia,.px .ib,.cell.on .px .fa,.cell.on .px .fb{animation:none} .px .ia,.cell.on .px .fa{visibility:visible} }
+.cell.jp{--aw-bg:#fdf0f3; --aw-ink:#b0466a}
+.cell.au{--aw-bg:#e6f6fb; --aw-ink:#1d7fa6}
+.pxv{display:block; width:100%; max-width:76px; aspect-ratio:1; height:auto; margin:2px auto 0;
+  image-rendering:pixelated; image-rendering:crisp-edges; border-radius:6px; box-shadow:0 0 0 1.5px var(--aw-ink)}
 .cell .av{font-size:10px; font-weight:800; line-height:1.25; color:var(--av-ink); margin-top:auto; letter-spacing:-.03em}
 .cell .av b{display:block; font-size:9.5px; font-weight:700; color:var(--muted)}
 :root{--av-ink:#2c8a5a}
 @media (prefers-color-scheme:dark){ :root:not([data-theme=light]){--av-ink:#6fd3a0}
-  .cell.lab{--aw-bg:#3a2430; --aw-ink:#f3a6c0} .cell.seal{--aw-bg:#16323d; --aw-ink:#8fd6f0} }
+  .cell.jp{--aw-bg:#3a2430; --aw-ink:#f3a6c0} .cell.au{--aw-bg:#16323d; --aw-ink:#8fd6f0} }
 /* 달력 한 칸 안의 수업 한 줄: ● 시간 수업 잔여/정원 */
 .ev{display:flex; flex-wrap:wrap; align-items:center; gap:1px 4px; font-size:10px; font-weight:700;
   line-height:1.35; letter-spacing:-.03em; color:var(--ink); font-variant-numeric:tabular-nums}
@@ -545,10 +537,10 @@ const CONFIG = {
   IMAGES: { classes: ['class-exp.mp4', 'padi-freediver.webp'], about: ['instructor-1.mp4', 'instructor-2.mp4'] },   // .mp4 는 자동재생(무음·반복) 영상으로, 같은 이름 .jpg 가 있으면 로딩 전 표지로 씀
   // 일정에 보여줄 달 수. 0 = 이번 달만, 1 = 이번 달 + 다음 달
   MONTHS_AHEAD: 1,
-  // 출장 등으로 수업이 없는 기간 — 달력 칸에 픽셀 애니메이션으로 표시. kind: 'lab'(연구) | 'seal'(물개)
+  // 출장 등으로 수업이 없는 기간 — 달력 칸에 픽셀 애니메이션(cal/NN.webp)으로 표시. kind: 'jp'(일본) | 'au'(호주), 장면 순서는 AWAY_CLIPS
   AWAY: [
-    {from:'2026-10-26', to:'2026-11-02', kind:'lab',  ko:'일본 출장', en:'Japan trip'},
-    {from:'2026-11-05', to:'2026-11-14', kind:'seal', ko:'호주 출장', en:'Australia trip'},
+    {from:'2026-10-26', to:'2026-11-02', kind:'jp', ko:'일본 출장', en:'Japan trip'},
+    {from:'2026-11-05', to:'2026-11-14', kind:'au', ko:'호주 출장', en:'Australia trip'},
   ],
   // 수업이 안 잡힌 날에 '가능 시간' 표시 (평일 18시 이후, 주말 종일). false 면 빈칸
   AVAIL: true,
@@ -910,42 +902,20 @@ function calRange(m){
   return [new Date(y,mo,1-back), new Date(y,mo,last.getDate()+fwd)];
 }
 
-/* ---------- 출장 칸 픽셀 그림 (가로 20 × 세로 14 칸) ----------
-   장면마다 a·b(주인공이 있을 때 두 컷)와 ia·ib(빈 칸일 때 소품만 두 컷).
-   주인공은 출장 기간의 칸을 왔다갔다 하며(wireAway) 칸마다 다른 동작을 함 */
-const PX_PAL = {"K":"#2b2d42","S":"#f4c6a0","P":"#4a7fd6","C":"#7fe0ff","F":"#ffd166","k":"#2b2d42","g":"#8d99ae","c":"#7fe0ff","w":"#ffffff","d":"#b07d56","m":"#e9e2d8","h":"#cfd8e3","e":"#6d5d55","E":"#a8968a","n":"#1b1b1b","r":"#ef476f","y":"#ffd166","l":"#7ed3f2","a":"#2a8fc7","o":"#ff9f1c","W":"#f7f9fb","B":"#3a86ff","G":"#7bd389","t":"#c2a878","T":"#9c8463","u":"#e0f7ff","z":"#5c677d","R":"#c97b4a","q":"#9b5de5","M":"#e9e2d8","O":"#ff9f1c"};
-const PX_SC = {"type":{"a":["....................","...KKKK.............","..KKKKKK............","..KKKSSS............","..KKSSKSS...........","...KSSS.....h.......","....SS.......ggggg..","...PPPP......gcccg..","..PPPPPPSS...gcwwg..","..PPPPP......gcccgm.","..PPPPP.....gggggggm","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"b":["....................","...KKKK.............","..KKKKKK............","..KKKSSS............","..KKSSKSS...........","...KSSS......h......","....SS.......ggggg..","...PPPP.SS...gcccg..","..PPPPPP.....gwwcg..","..PPPPP......gcccgm.","..PPPPP.....gggggggm","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"ia":["....................","....................","....................","....................","....................","............h.......",".............ggggg..",".............gcccg..",".............gcwwg..",".............gcccgm.","............gggggggm","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"ib":["....................","....................","....................","....................","....................",".............h......",".............ggggg..",".............gcccg..",".............gwwcg..",".............gcccgm.","............gggggggm","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"]},"scope":{"a":["....................","....................","....KKKK............","...KKKKKK.....k.....","...KKKSSS....kk.....","...KKSSKS...kkgg....","....KSSS...kk..g....",".....SS....k...g....","....PPPPPSSkgggg....","...PPPPPP....gcgg...","...PPPPPP....ggg....","dddddddddddddddddddd","..k...........d...d.","..k...........d...d."],"b":["....................","....................",".....KKKK...........","....KKKKKK....k.....","....KKKSSS...kk.....","....KKSSKS..kkgg....",".....KSSS..kk..g....","......SS...k...g....","....PPPPP..kggggSS..","...PPPPPP....gwgg...","...PPPPPP....ggg....","dddddddddddddddddddd","..k...........d...d.","..k...........d...d."],"ia":["....................","....................","....................","..............k.....",".............kk.....","............kkgg....","...........kk..g....","...........k...g....","...........kgggg....",".............gcgg...",".............ggg....","dddddddddddddddddddd","..k...........d...d.","..k...........d...d."],"ib":["....................","....................","....................","..............k.....",".............kk.....","............kkgg....","...........kk..g....","...........k...g....","...........kgggg....",".............gwgg...",".............ggg....","dddddddddddddddddddd","..k...........d...d.","..k...........d...d."]},"board":{"a":["........WWWWWWWWWWW.","........WBBW.WW.WWW.","..KKKK..WWWWBBBWWWW.",".KKKKKK.WBW.WWWWBBW.",".KKSSSK.WWWWWWWWWWW.",".KSSKSS.WWBBBWW....W","..SSSS..WWWWWWWWWWW.","..PPPPSSSWkkkkkkkkk.",".PPPPPP.............",".PPPPPP.............",".PPPPPP.............","..PP.PP.............","..PP.PP.............",".KKK.KKK............"],"b":["........WWWWWWWWWWW.","........WBBW.WW.WWW.","..KKKK..WWWWBBBWWWW.",".KKKKKK.WBW.WWWWBBW.",".KKSSSK.WWWWWWWWWWW.",".KSSKSS.WWBBBWWBBBBW","..SSSS..WWWWWWWWWWW.","..PPPP...kkkkkkkkkk.",".PPPPPPSS...........",".PPPPPP.............",".PPPPPP.............","..PP.PP.............","..PP.PP.............",".KKK.KKK............"],"ia":["........WWWWWWWWWWW.","........WBBW.WW.WWW.","........WWWWBBBWWWW.","........WBW.WWWWBBW.","........WWWWWWWWWWW.","........WWBBBWW....W","........WWWWWWWWWWW.",".........Wkkkkkkkkk.","....................","....................","....................","....................","....................","...................."],"ib":["........WWWWWWWWWWW.","........WBBW.WW.WWW.","........WWWWBBBWWWW.","........WBW.WWWWBBW.","........WWWWWWWWWWW.","........WWBBBWWBBBBW","........WWWWWWWWWWW.",".........kkkkkkkkkk.","....................","....................","....................","....................","....................","...................."]},"coffee":{"a":["....................",".....z..............","......z.............","...KKKK.............","..KKKKKK............","..KKSSSMM...........","..KSSKSMM...........","...SSSSSS...........","..PPPPPP............",".PPPPPPP......dd....",".PPPPPPP.....dddd...","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"b":["....................","....................",".....z..............","...KKKK.............","..KKKKKK............","..KKSSS.............","..KSSKSS............","...SSSS.............","..PPPPPPSMM.........",".PPPPPPP.MM...dd....",".PPPPPPP.....dddd...","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"ia":["....................",".....z..............","......z.............","....................","....................","....................","....................","....................","....................","..............dd....",".............dddd...","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"ib":["....................","....................",".....z..............","....................","....................","....................","....................","....................","....................","..............dd....",".............dddd...","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"]},"nap":{"a":["...........zzz......",".............z......","............z.......","...........zzz......","....................",".......zz...........","........z...........",".......zz...........","..KKKK.......ggggg..",".KKKKKKSS....gkkkg..",".PPPPPPPPSS.gggggggm","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"b":["....................","....................","........zz..........",".........z..........","........zz..........","....................","...........zzz......",".............z......","..KKKK......zzzgg...",".KKKKKKSS....gkkkg..",".PPPPPPPPSS.gggggggm","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"ia":["...........zzz......",".............z......","............z.......","...........zzz......","....................",".......zz...........","........z...........",".......zz...........",".............ggggg..",".............gkkkg..","............gggggggm","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"],"ib":["....................","....................","........zz..........",".........z..........","........zz..........","....................","...........zzz......",".............z......","............zzzgg...",".............gkkkg..","............gggggggm","dddddddddddddddddddd","..k..k..........d..d","..k..k..........d..d"]},"flask":{"a":["............u.......","..........u...u.....","...KKKK......u......","..KKKKKK....GGG.....","..KKKSSS...GGGGG....","..KKSSKSS..GGGGG....","...KSSS.....GGG.....","....SS......w.w.....","...PPPP.SSSS.w......","..PPPPPP............","..PPPPPP.......qq...","dddddddddddddddqqddd","..k..k..........d..d","..k..k..........d..d"],"b":["...........u........",".............u......","...KKKK....u..u.....","..KKKKKK....GGG.....","..KKKSSS...GGGGG....","..KKSSKSS..GGGGG....","...KSSS.....GGG.....","....SS......w.w.....","...PPPP.SSSS.w......","..PPPPPP............","..PPPPPP.......qq...","dddddddddddddddqqddd","..k..k..........d..d","..k..k..........d..d"],"ia":["............u.......","..........u...u.....",".............u......","............GGG.....","...........GGGGG....","...........GGGGG....","............GGG.....","............w.w.....",".............w......","....................","...............qq...","dddddddddddddddqqddd","..k..k..........d..d","..k..k..........d..d"],"ib":["...........u........",".............u......","...........u..u.....","............GGG.....","...........GGGGG....","...........GGGGG....","............GGG.....","............w.w.....",".............w......","....................","...............qq...","dddddddddddddddqqddd","..k..k..........d..d","..k..k..........d..d"]},"ball":{"a":["....................","..............rww...",".............rrwwy..","..............ryy...","...............n....","..............eee...",".............eeeee..",".............enEee..",".S...........eeEee..",".S..O.......eeeeee..","KKKKO....EEeeeeeee..","KCCKK.....eeeeeeeee.","llllllllllllllllllll","alalalalalalalalalal"],"b":["..............rww...",".............rrwwy..","..............ryy...","....................","...............n....","..............eee...",".............eeeee..",".............enEee..","S............eeEee..",".S..O.......eeeeee..","KKKKO....EEeeeeeee..","KCCKK.....eeeeeeeee.","llllllllllllllllllll","lalalalalalalalalala"],"ia":["....................","..............rww...",".............rrwwy..","..............ryy...","....................","....................","....................","....................","....................","....................","....................","....................","llllllllllllllllllll","alalalalalalalalalal"],"ib":["..............rww...",".............rrwwy..","..............ryy...","....................","....................","....................","....................","....................","....................","....................","....................","....................","llllllllllllllllllll","lalalalalalalalalala"]},"swim":{"a":["llllllllllllllllllll","aaaaaaaaaaaaaaaaaaaa","aaaaauaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaeeeeaaaaaaaaaaaa","aaaeneeeeeaaaaaaaaaa","aaaaeeeeeeeEaaaaaaaa","aaaaaaaaaaEEaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaKKKaaa","aaaaaaaaaaaaaSCCKPPP","aaaaaaaaaaaaaaKKPPPF","aaaaaaaaaaaaaaaaaaFF","tttttttttttttttttttt"],"b":["llllllllllllllllllll","aaaaauaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaauaa","aaaaaeeeeaaaaaaaaaaa","aaaaeneeeeeaaaaaaaaa","aaaaaeeeeeeeEaaaaaaa","aaaaaaaaaaaEEaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaKKKaaaa","aaaaaaaaaaaaSCCKPPPF","aaaaaaaaaaaaaKKPPPFF","aaaaaaaaaaaaaaaaaaaa","tttttttttttttttttttt"],"ia":["llllllllllllllllllll","aaaaaaaaaaaaaaaaaaaa","aaaaauaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","tttttttttttttttttttt"],"ib":["llllllllllllllllllll","aaaaauaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaauaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","aaaaaaaaaaaaaaaaaaaa","tttttttttttttttttttt"]},"rock":{"a":["....................","....................","....................","....................","....................","....................","..........neee......",".........eeeeeeE.E..","........eeeEEeeeEE..",".......TttttttttT...",".KKK..TtttttttttttT.","KCCKK.TtttttttttttT.","llllllllllllllllllll","alalalalalalalalalal"],"b":["....................","....................","..w.................",".www................","..w.................","....................","..........neee......",".........eeeeeeEE...","........eeeEEeeee...",".......TttttttttT...",".KKK..TtttttttttttT.","KCCKK.TtttttttttttT.","llllllllllllllllllll","lalalalalalalalalala"],"ia":["....................","....................","....................","....................","....................","....................","....................","....................","....................",".......TttttttttT...","......TtttttttttttT.","......TtttttttttttT.","llllllllllllllllllll","alalalalalalalalalal"],"ib":["....................","....................","....................","....................","....................","....................","....................","....................","....................",".......TttttttttT...","......TtttttttttttT.","......TtttttttttttT.","llllllllllllllllllll","alalalalalalalalalal"]},"jump":{"a":["....................","....................",".........neee.......","........eeeeee......",".......eeeEEeee.....","......E.....eeee....","..............ee....","...............E....","....................","....................",".KKK................","KCCKK...............","llllllllllllllllllll","alalalalalalalalalal"],"b":["....................","....................","....................","....................","....................","....................","..........u.u.u.....","...........wuw......",".........uwwwwwu....","..........wwwww.....",".KKK.......www......","KCCKK.S.............","llllllllllwwwlllllll","lalalalalalalalalala"],"ia":["....................","....................","....................","....................","....................","....................","....................","....................","....................","....................","....................","....................","llllllllllllllllllll","alalalalalalalalalal"],"ib":["....................","....................","....................","....................","....................","....................","....................","....................","....................","....................","....................","....................","llllllllllllllllllll","alalalalalalalalalal"]},"roo":{"a":["....................","...............RR...","..............RRRR..","..............RkRR..","...............RRR..","..............RRR...",".............RRRR...","............RRRRR...","...........RRRRR....","..........RR..RR....",".........R.....RR...","....................","tttttttttttttttttttt","TTTTTTTTTTTTTTTTTTTT"],"b":["...............RR...","..............RRRR..","..............RkRR..","...............RRR..","..............RRR...",".............RRRR...","............RRRRR...","...........RRRRR....","..........RR..RR....",".........R.....RR...","....................","....................","tttttttttttttttttttt","TTTTTTTTTTTTTTTTTTTT"],"ia":["....................","...............RR...","..............RRRR..","..............RkRR..","...............RRR..","..............RRR...",".............RRRR...","............RRRRR...","...........RRRRR....","..........RR..RR....",".........R.....RR...","....................","tttttttttttttttttttt","TTTTTTTTTTTTTTTTTTTT"],"ib":["...............RR...","..............RRRR..","..............RkRR..","...............RRR..","..............RRR...",".............RRRR...","............RRRRR...","...........RRRRR....","..........RR..RR....",".........R.....RR...","....................","....................","tttttttttttttttttttt","TTTTTTTTTTTTTTTTTTTT"]}};
-const PX_LIST = {lab:['type','scope','board','coffee','nap','flask'], seal:['ball','swim','rock','jump','roo']};
-function pxFrame(rows, cls){
-  let g = `<g class="${cls}">`;
-  rows.forEach((row,y)=>{ for(let x=0;x<row.length;x++){ const c=PX_PAL[row[x]]; if(c) g+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${c}"/>`; } });
-  return g + '</g>';
-}
-const PX_SVG = {};
-function pxArt(scene){
-  if(!PX_SVG[scene]){ const sc = PX_SC[scene];
-    PX_SVG[scene] = `<svg class="px" viewBox="0 0 20 14" shape-rendering="crispEdges" aria-hidden="true">${pxFrame(sc.ia,'ia')}${pxFrame(sc.ib,'ib')}${pxFrame(sc.a,'fa')}${pxFrame(sc.b,'fb')}</svg>`; }
-  return PX_SVG[scene];
-}
-/* 출장 기간 안에서 며칠째인지 → 그날의 장면 */
-const awayScene = (aw, k) => { const L = PX_LIST[aw.kind]; const n = Math.round((parse(k) - parse(aw.from)) / 864e5); return L[((n % L.length) + L.length) % L.length]; };
-/* 주인공이 출장 칸들을 왔다갔다 — 2.4초마다 옆 칸으로 */
-let awayTimer = null;
-function wireAway(){
-  if(awayTimer){ clearInterval(awayTimer); awayTimer = null; }
-  const groups = {};
-  document.querySelectorAll('.cell.away[data-aw]').forEach(c => (groups[c.dataset.aw] = groups[c.dataset.aw] || []).push(c));
-  const runs = Object.values(groups).filter(g => g.length);
-  if(!runs.length) return;
-  const st = runs.map(g => { let i = Math.max(0, g.findIndex(c => c.dataset.day >= TODAY)); return {g, i, dir:1}; });
-  const show = () => st.forEach(s => s.g.forEach((c,j) => c.classList.toggle('on', j===s.i)));
-  show();
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  awayTimer = setInterval(() => {
-    if(!document.body.contains(st[0].g[0])){ clearInterval(awayTimer); awayTimer = null; return; }
-    st.forEach(s => { if(s.g.length<2) return; if(s.i+s.dir<0 || s.i+s.dir>=s.g.length) s.dir = -s.dir; s.i += s.dir; });
-    show();
-  }, 2400);
+/* ---------- 출장 칸 픽셀 애니메이션 ----------
+   2D 캐릭터 영상(3_홍보물/2D캐릭터_출장영상)을 48px·공통 팔레트·8fps 로 줄인 cal/NN.webp.
+   출장 n일째 칸에 목록 n번째 장면 */
+const AWAY_CLIPS = {
+  jp: [['07','비행기 창가'],['01','현미경 실험'],['02','컴퓨터 작업'],['11','학회 발표'],['09','회전초밥'],['03','꾸벅꾸벅'],['08','온천'],['04','라멘']],
+  au: [['07','비행기 창가'],['05','쿼카랑 셀카'],['06','물개랑 수영'],['12','코알라'],['13','캥거루랑 점프'],['14','오페라하우스'],['15','거북이 스노클'],['16','카페 미트파이']],
+};
+function awayClip(aw, k){
+  const L = AWAY_CLIPS[aw.kind] || []; if(!L.length) return '';
+  const n = Math.round((parse(k) - parse(aw.from)) / 864e5), days = Math.round((parse(aw.to) - parse(aw.from)) / 864e5) + 1;
+  /* 첫날은 비행기, 장면보다 날이 많으면 마지막 날도 비행기(귀국), 그 사이 반복할 땐 비행기는 건너뜀 */
+  const idx = n < L.length ? n : (days > L.length && n === days-1 ? 0 : 1 + (n-1) % (L.length-1));
+  const [f, alt] = L[Math.max(0, idx)];
+  return `<img class="pxv" src="cal/${f}.webp" width="48" height="48" alt="${esc(alt)}" loading="lazy" decoding="async">`;
 }
 const awayOn = k => (CONFIG.AWAY||[]).find(a => k>=a.from && k<=a.to);
 
@@ -959,7 +929,7 @@ function renderCal(){
     if(k < TODAY){ h += `<div class="cell past${cls}"><span class="n">${num}</span></div>`; continue; }
     const aw = awayOn(k);
     if(aw && !ss.length){
-      h += `<div class="cell away ${aw.kind}${cls}" data-aw="${(CONFIG.AWAY||[]).indexOf(aw)}" data-day="${k}" title="${esc(aw[state.lang]||aw.ko)}"><span class="n">${num}</span>${pxArt(awayScene(aw,k))}<span class="lbl">${esc(aw[state.lang]||aw.ko)}</span></div>`;
+      h += `<div class="cell away ${aw.kind}${cls}" title="${esc(aw[state.lang]||aw.ko)}"><span class="n">${num}</span>${awayClip(aw,k)}<span class="lbl">${esc(aw[state.lang]||aw.ko)}</span></div>`;
       continue;
     }
     if(ss.length){
@@ -987,7 +957,7 @@ function renderCal(){
     <span><i style="background:var(--faint)"></i>${t.otherLang}</span>
     <span><i style="background:var(--off-bg);border-color:var(--off-line)"></i>${t.legend.off}</span>
     <span><i style="background:var(--shut-bg);border-color:var(--shut-line)"></i>${t.legend.shut}</span>
-    ${(CONFIG.AWAY||[]).map(a=>`<span><i style="background:${a.kind==='lab'?'#fdf0f3':'#e6f6fb'};border-color:${a.kind==='lab'?'#f3c2d2':'#a9dcee'}"></i>${esc(a[state.lang]||a.ko)}</span>`).join('')}
+    ${(CONFIG.AWAY||[]).map(a=>`<span><i style="background:${a.kind==='jp'?'#fdf0f3':'#e6f6fb'};border-color:${a.kind==='jp'?'#f3c2d2':'#a9dcee'}"></i>${esc(a[state.lang]||a.ko)}</span>`).join('')}
     ${CONFIG.AVAIL?`<span><i style="background:var(--av-ink)"></i>${t.avLegend}</span>`:''}</div>`;
   h += `<div class="askline">${kakaoHTML(t.askSlot).split('INSTA_URL').join(INSTA)}</div>`;
   const sel = state.sel;
@@ -1587,7 +1557,6 @@ function render(){
   const [cstart,cend] = calRange(m).map(key);
   if(!state.sel || state.sel<cstart || state.sel>cend) state.sel = firstOpenDay();
   $('main').innerHTML = isMy ? renderMy() : renderCal();
-  if(!isMy) wireAway();
   if(isMy) showGoogleButton();
 }
 
