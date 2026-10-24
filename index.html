@@ -206,6 +206,25 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .cell.off{background:var(--off-bg)} .cell.off .n,.cell.off .lbl{color:var(--off-ink)}
 .cell.shut{background:var(--shut-bg)} .cell.shut .n,.cell.shut .lbl{color:var(--shut-ink)}
 .cell .lbl{font-size:10.5px; font-weight:700; margin-top:auto; line-height:1.2; letter-spacing:-.03em; overflow-wrap:anywhere}
+/* 출장 칸: 픽셀 애니메이션 */
+.cell.away{background:var(--aw-bg)}
+.cell.away .n{color:var(--aw-ink)}
+.cell.away .lbl{color:var(--aw-ink)}
+.cell.lab{--aw-bg:#fdf0f3; --aw-ink:#b0466a}
+.cell.seal{--aw-bg:#e6f6fb; --aw-ink:#1d7fa6}
+.px{display:block; width:100%; max-width:84px; margin:2px auto 0; image-rendering:pixelated}
+.px .f2{visibility:hidden}
+.px .f1{animation:pxa 1s steps(1) infinite}
+.px .f2{animation:pxb 1s steps(1) infinite}
+.cell.away:nth-child(2n) .px .f1, .cell.away:nth-child(2n) .px .f2{animation-delay:-.5s}
+@keyframes pxa{0%{visibility:visible}50%{visibility:hidden}}
+@keyframes pxb{0%{visibility:hidden}50%{visibility:visible}}
+@media (prefers-reduced-motion:reduce){ .px .f1,.px .f2{animation:none} .px .f2{visibility:hidden} }
+.cell .av{font-size:10px; font-weight:800; line-height:1.25; color:var(--av-ink); margin-top:auto; letter-spacing:-.03em}
+.cell .av b{display:block; font-size:9.5px; font-weight:700; color:var(--muted)}
+:root{--av-ink:#2c8a5a}
+@media (prefers-color-scheme:dark){ :root:not([data-theme=light]){--av-ink:#6fd3a0}
+  .cell.lab{--aw-bg:#3a2430; --aw-ink:#f3a6c0} .cell.seal{--aw-bg:#16323d; --aw-ink:#8fd6f0} }
 /* 달력 한 칸 안의 수업 한 줄: ● 시간 수업 잔여/정원 */
 .ev{display:flex; flex-wrap:wrap; align-items:center; gap:1px 4px; font-size:10px; font-weight:700;
   line-height:1.35; letter-spacing:-.03em; color:var(--ink); font-variant-numeric:tabular-nums}
@@ -227,6 +246,8 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
   .cell{min-height:112px; padding:9px 8px 8px; gap:4px}
   .cell .n{font-size:16px}
   .cell .lbl{font-size:12px}
+  .cell .av{font-size:12px}
+  .cell .av b{font-size:11px}
   .ev{font-size:12px; gap:2px 6px; letter-spacing:-.01em}
   .ev i{width:7px; height:7px}
   .ev .cn{display:inline}
@@ -522,6 +543,13 @@ const CONFIG = {
   IMAGES: { classes: ['class-exp.mp4', 'padi-freediver.webp'], about: ['instructor-1.mp4', 'instructor-2.mp4'] },   // .mp4 는 자동재생(무음·반복) 영상으로, 같은 이름 .jpg 가 있으면 로딩 전 표지로 씀
   // 일정에 보여줄 달 수. 0 = 이번 달만, 1 = 이번 달 + 다음 달
   MONTHS_AHEAD: 1,
+  // 출장 등으로 수업이 없는 기간 — 달력 칸에 픽셀 애니메이션으로 표시. kind: 'lab'(연구) | 'seal'(물개)
+  AWAY: [
+    {from:'2026-10-26', to:'2026-11-02', kind:'lab',  ko:'일본 출장', en:'Japan trip'},
+    {from:'2026-11-05', to:'2026-11-14', kind:'seal', ko:'호주 출장', en:'Australia trip'},
+  ],
+  // 수업이 안 잡힌 날에 '가능 시간' 표시 (평일 18시 이후, 주말 종일). false 면 빈칸
+  AVAIL: true,
   // 오픈 특가 이벤트. 10명 다 차면 false 로 바꾸면 배너와 안내가 모두 사라짐
   PROMO: true,
   // 카카오톡 채널. KAKAO_ID = 화면에 보일 채널 이름(검색용 아이디 @oasis1005 아님).
@@ -642,10 +670,11 @@ const T = {
     left:n=>`${n}자리 남음`,
     full:'마감', book:'신청',
     off:'외부일정', shut:'정기휴무',
+    avWeek:'<b>수업 가능</b>18시 이후', avEnd:'<b>수업 가능</b>종일', avLegend:'수업 가능 (평일 18시 이후 · 주말 종일) — 원하는 날짜는 문의 주세요',
     dow:['월','화','수','목','금','토','일'],
     date:(dt)=>`${dt.getMonth()+1}월 ${dt.getDate()}일 (${'일월화수목금토'[dt.getDay()]})`,
     mtab:(y,m)=>`${m}월`,
-    seats:n=> n ? `${n}자리 남음` : '마감',
+    seats:n=> n ? `${n}자리 남음` : (CONFIG.AVAIL ? '날짜 문의 가능' : '마감'),
     swipe:'← 달력을 옆으로 밀면 다른 달로 넘어가요 →',
     loading:'잠수해서 일정 가져오는 중…',
     error:'일정을 불러오지 못했어요. 잠시 후 다시 시도하거나 카카오톡 채널로 문의해 주세요.',
@@ -713,10 +742,11 @@ const T = {
     left:n=>`${n} spot${n>1?'s':''} left`,
     full:'Full', book:'Book',
     off:'Unavailable', shut:'Pool closed',
+    avWeek:'<b>Available</b>after 6 pm', avEnd:'<b>Available</b>all day', avLegend:'Available (weekdays after 6 pm · weekends all day) — message us for a date',
     dow:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
     date:(dt)=>dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),
     mtab:(y,m)=>['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1],
-    seats:n=> n ? `${n} spot${n>1?'s':''} left` : 'Full',
+    seats:n=> n ? `${n} spot${n>1?'s':''} left` : (CONFIG.AVAIL ? 'Ask for a date' : 'Full'),
     swipe:'← Swipe the calendar to change month →',
     loading:'Diving for the schedule…',
     error:'Could not load the schedule. Please try again, or message us on KakaoTalk.',
@@ -839,10 +869,11 @@ const inMonth = (d, m) => d.startsWith(`${m.getFullYear()}-${pad(m.getMonth()+1)
 function monthList(){
   const last = DATA.reduce((a,r)=> r.d>a ? r.d : a, TODAY);
   const cap = addMonths(firstMonth, Math.max(0, CONFIG.MONTHS_AHEAD|0));
-  let end = monthOf(parse(last)); if(end > cap) end = cap;
+  let end = monthOf(parse(last)); if(end > cap || CONFIG.AVAIL) end = cap;
   const out = [];
   for(let m=firstMonth; m<=end; m=addMonths(m,1)) out.push(m);
   /* 오늘 이후 수업이 하나도 없는 달은 빼기 — 월말에 지난 달 달력이 남지 않게 */
+  if(CONFIG.AVAIL) return out;
   const live = out.filter(m => DATA.some(r => r.s && r.d>=TODAY && inMonth(r.d,m)));
   return live.length ? live : out.slice(0,1);
 }
@@ -877,6 +908,34 @@ function calRange(m){
   return [new Date(y,mo,1-back), new Date(y,mo,last.getDate()+fwd)];
 }
 
+/* ---------- 출장 칸 픽셀 그림 (가로 20 × 세로 14 칸, 두 장면을 번갈아) ---------- */
+const PX_PAL = {n:'#1b1b1b', k:'#2b2d42', s:'#f4c6a0', b:'#4a7fd6', g:'#8d99ae', c:'#7fe0ff', w:'#ffffff', d:'#b07d56', m:'#e9e2d8',
+  h:'#cfd8e3', e:'#6d5d55', E:'#8a7a70', r:'#ef476f', y:'#ffd166', l:'#7ed3f2', a:'#2a8fc7', o:'#ff9f1c'};
+const PX_ART = {
+  lab: [[
+    '....................','...kkkk.............','..kkkkkk............','..kkksss............','..kksskss...........',
+    '...ksss.....h.......','....ss.......ggggg..','...bbbb......gcccg..','..bbbbbbss...gcwwg..','..bbbbb......gcccgm.',
+    '..bbbbb.....gggggggm','dddddddddddddddddddd','..k..k..........d..d','..k..k..........d..d'],[
+    '....................','...kkkk.............','..kkkkkk............','..kkksss............','..kksskss...........',
+    '...ksss......h......','....ss.......ggggg..','...bbbb.ss...gcccg..','..bbbbbb.....gwwcg..','..bbbbb......gcccgm.',
+    '..bbbbb.....gggggggm','dddddddddddddddddddd','..k..k..........d..d','..k..k..........d..d']],
+  seal: [[
+    '....................','..............rww...','.............rrwwy..','..............ryy...','...............n....','..............eee...','.............eeeee..','.............enEee..','.s...........eeEee..','.s..o.......eeeeee..','kkkko....EEeeeeeee..','kcckk.....eeeeeeeee.','llllllllllllllllllll','alalalalalalalalalal'],[
+    '..............rww...','.............rrwwy..','..............ryy...','....................','...............n....','..............eee...','.............eeeee..','.............enEee..','s............eeEee..','.s..o.......eeeeee..','kkkko....EEeeeeeee..','kcckk.....eeeeeeeee.','llllllllllllllllllll','lalalalalalalalalala']],
+};
+function pxFrame(rows, cls){
+  let g = `<g class="${cls}">`;
+  rows.forEach((row,y)=>{ for(let x=0;x<row.length;x++){ const c=PX_PAL[row[x]]; if(c) g+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${c}"/>`; } });
+  return g + '</g>';
+}
+const PX_SVG = {};
+function pxArt(kind){
+  if(!PX_SVG[kind]){ const [a,b] = PX_ART[kind];
+    PX_SVG[kind] = `<svg class="px" viewBox="0 0 20 14" shape-rendering="crispEdges" aria-hidden="true">${pxFrame(a,'f1')}${pxFrame(b,'f2')}</svg>`; }
+  return PX_SVG[kind];
+}
+const awayOn = k => (CONFIG.AWAY||[]).find(a => k>=a.from && k<=a.to);
+
 function renderCal(){
   const t = T[state.lang], m = state.month, [start,end] = calRange(m);
   let h = `<div class="cal">` + t.dow.map((d,i)=>`<div class="dow ${i===6?'sun':''}">${d}</div>`).join('');
@@ -885,6 +944,11 @@ function renderCal(){
     const num = adj && dt.getDate()===1 ? `${dt.getMonth()+1}/1` : dt.getDate();
     const cls = adj ? ' adj' : '';
     if(k < TODAY){ h += `<div class="cell past${cls}"><span class="n">${num}</span></div>`; continue; }
+    const aw = awayOn(k);
+    if(aw && !ss.length){
+      h += `<div class="cell away ${aw.kind}${cls}" title="${esc(aw[state.lang]||aw.ko)}"><span class="n">${num}</span>${pxArt(aw.kind)}<span class="lbl">${esc(aw[state.lang]||aw.ko)}</span></div>`;
+      continue;
+    }
     if(ss.length){
       const pills = ss.map(r=>{
         const left = r.cap-r.bk, bc = slotClass(r);
@@ -896,6 +960,9 @@ function renderCal(){
       h += `<div class="cell off${cls}"><span class="n">${num}</span><span class="lbl">${t.off}</span></div>`;
     } else if(aqClosed(dt) && (!state.cls || CLASSES[state.cls].p==='sn')){
       h += `<div class="cell shut${cls}"><span class="n">${num}</span><span class="lbl">${t.shut}</span></div>`;
+    } else if(CONFIG.AVAIL){
+      const we = dt.getDay()===0 || dt.getDay()===6;
+      h += `<div class="cell${cls}"><span class="n">${num}</span><span class="av">${we ? t.avEnd : t.avWeek}</span></div>`;
     } else {
       h += `<div class="cell${cls}"><span class="n">${num}</span></div>`;
     }
@@ -906,7 +973,9 @@ function renderCal(){
       `<span><i style="background:var(--k-${c.split('_')[0]})"></i>${t.cls[c]}</span>`).join('')}
     <span><i style="background:var(--faint)"></i>${t.otherLang}</span>
     <span><i style="background:var(--off-bg);border-color:var(--off-line)"></i>${t.legend.off}</span>
-    <span><i style="background:var(--shut-bg);border-color:var(--shut-line)"></i>${t.legend.shut}</span></div>`;
+    <span><i style="background:var(--shut-bg);border-color:var(--shut-line)"></i>${t.legend.shut}</span>
+    ${(CONFIG.AWAY||[]).map(a=>`<span><i style="background:${a.kind==='lab'?'#fdf0f3':'#e6f6fb'};border-color:${a.kind==='lab'?'#f3c2d2':'#a9dcee'}"></i>${esc(a[state.lang]||a.ko)}</span>`).join('')}
+    ${CONFIG.AVAIL?`<span><i style="background:var(--av-ink)"></i>${t.avLegend}</span>`:''}</div>`;
   h += `<div class="askline">${kakaoHTML(t.askSlot).split('INSTA_URL').join(INSTA)}</div>`;
   const sel = state.sel;
   h += `<div class="detail">` + (sel
