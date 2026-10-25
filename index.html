@@ -281,8 +281,6 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .clip video{display:block; width:100%; height:100%; object-fit:cover}
 .clip .ig{position:absolute; left:8px; top:8px; font-size:10.5px; font-weight:900; letter-spacing:.04em; color:#fff;
   background:linear-gradient(45deg,#f9a13b,#e1306c,#833ab4); padding:3px 8px; border-radius:999px}
-.clip figcaption{padding:8px 10px 10px; font-size:12.5px; line-height:1.5; color:var(--ink)}
-.clip figcaption .d{display:block; font-size:11px; color:var(--muted)}
 .rv p{margin:10px 0 0; font-size:14.5px; line-height:1.7; white-space:pre-line; overflow-wrap:anywhere}
 .attrib{font-size:11.5px; color:var(--muted); margin-top:10px}
 
@@ -1130,8 +1128,7 @@ function clipsHTML(t){
   return `<section class="sec"><h2>${t.rvInsta}</h2><p class="lede" style="margin:-4px 0 14px">${t.rvInstaSub}</p><div class="clips">` +
     L.map(x => `<figure class="clip"><div class="vw">
       <video data-src="reviews/${x.f}.mp4" poster="reviews/${x.f}.jpg" muted loop playsinline preload="none" aria-label="${esc(x.q||t.rvInsta)}"></video>
-      <span class="ig">Instagram</span></div>
-      <figcaption><span class="d">${esc(x.d)}</span>${x.q?esc(x.q):''}</figcaption></figure>`).join('') + `</div></section>`;
+      <span class="ig">Instagram</span></div></figure>`).join('') + `</div></section>`;
 }
 let clipObs = null;
 function wireClips(){
