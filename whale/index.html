@@ -555,7 +555,7 @@
   <div class="full" style="margin:0"><img src="img/drone_family.jpg" alt="어미와 새끼 혹등고래 (드론)"></div>
 
 </div>
-<script src="../whale-status.js"></script>
+<script>/* 신청 현황은 캐시 없이 매번 새로 (1분 단위 주소) */document.write('<script src="../whale-status.js?t='+Math.floor(Date.now()/60000)+'"><\/script>');</script>
 <script>
   try{ if(window.WHALE_STATUS){ document.getElementById('w-left').textContent = Math.max(0, WHALE_STATUS.cap - WHALE_STATUS.applied); document.getElementById('w-cap').textContent = WHALE_STATUS.cap; } }catch(e){}
 </script>

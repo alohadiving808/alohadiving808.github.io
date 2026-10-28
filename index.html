@@ -523,7 +523,7 @@ video.media{background:#0b3a4a}
 <div class="toast" id="toast" hidden></div>
 <div class="wpop" id="wpop" hidden role="dialog" aria-modal="true" aria-labelledby="wpop-title"></div>
 
-<script src="whale-status.js"></script>
+<script>/* 신청 현황은 캐시 없이 매번 새로 (1분 단위 주소) */document.write('<script src="whale-status.js?t='+Math.floor(Date.now()/60000)+'"><\/script>');</script>
 <script>
 /* ===== 설정 =====
    Apps Script 웹 앱 URL(…/exec)을 넣으면 구글 시트의 실제 일정을 읽어옴.
