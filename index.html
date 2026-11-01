@@ -1688,7 +1688,7 @@ document.addEventListener('click', e=>{
   else if(b.dataset.cls){ state.cls = state.cls===b.dataset.cls ? null : b.dataset.cls; state.sel=null; render(); }
   else if(b.dataset.month){ setMonth(parse(b.dataset.month)); }
   else if(b.dataset.day){ state.sel=b.dataset.day; render(); }
-  else if(b.dataset.id){ openSheet(DATA[+b.dataset.id]); }
+  else if(b.dataset.id && !b.dataset.adm){ openSheet(DATA[+b.dataset.id]); }   // 관리 화면 삭제 버튼도 data-id 를 가져서 제외
   else if(b.id==='retry'){ load(); }
   else if(b.dataset.adm){
     const t = T[state.lang], a = b.dataset.adm;
