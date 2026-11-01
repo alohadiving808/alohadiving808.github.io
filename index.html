@@ -1001,6 +1001,7 @@ async function adminDo(payload, okMsg){
     const j = await adminPost(payload);
     ADMMSG = j && j.ok ? {t: okMsg, cls:'good'} : {t: (j && (j.message || j.error)) || '실패', cls:'bad'};
   }catch(e){ ADMMSG = {t:String(e), cls:'bad'}; }
+  toast(ADMMSG.t);   // 화면 아래에서 눌러도 결과가 보이게
   await loadAdmin();
   load(true);
 }
@@ -1697,6 +1698,8 @@ document.addEventListener('click', e=>{
       const s = (parseInt(t0.slice(0,2),10) >= 12) ? 'pm' : 'am';
       adminDo({action:'admin_addslot', d, cls:c, s, t0, t1, cap}, `${d} ${t0} 추가했어요`);
     } else if(a==='del'){
+      if(!confirm(`이 일정을 지울까요? (${b.dataset.id})`)) return;
+      toast(t.admWorking);
       adminDo({action:'admin_delslot', id:b.dataset.id}, '일정을 지웠어요');
     } else {
       const r = ADMIN.rows[+b.dataset.i];
