@@ -231,6 +231,8 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .ev .cn{display:none; color:var(--muted); font-weight:700}
 .ev em{font-style:normal; font-weight:800; margin-left:auto}
 .ev.full em{text-decoration:line-through}
+.ev.ended{--c:var(--faint); color:var(--faint)}
+.ev.ended em{font-weight:700}
 .detail{margin-top:16px}
 .detail h2{font-size:16px; font-weight:800; letter-spacing:-.02em; margin:0 0 10px}
 .legend{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:var(--muted)}
@@ -536,6 +538,8 @@ const CONFIG = {
   IMAGES: { classes: ['class-exp.mp4', 'padi-freediver.webp'], about: ['instructor-1.mp4', 'instructor-2.mp4'] },   // .mp4 는 자동재생(무음·반복) 영상으로, 같은 이름 .jpg 가 있으면 로딩 전 표지로 씀
   // 일정에 보여줄 달 수. 0 = 이번 달만, 1 = 이번 달 + 다음 달
   MONTHS_AHEAD: 1,
+  // 지난 달 몇 개까지 넘겨 볼 수 있게 할지 (수업이 있었던 달만 보임). 0 = 지난 달 안 보임
+  MONTHS_BACK: 2,
   // 출장 등으로 수업이 없는 기간 — 달력 칸에 픽셀 애니메이션(cal/NN.webp)으로 표시. kind: 'jp'(일본) | 'au'(호주), 장면 순서는 AWAY_CLIPS
   AWAY: [
     {from:'2026-10-26', to:'2026-11-02', kind:'jp', ko:'일본 출장', en:'Japan trip'},
@@ -669,6 +673,7 @@ const T = {
     date:(dt)=>`${dt.getMonth()+1}월 ${dt.getDate()}일 (${'일월화수목금토'[dt.getDay()]})`,
     mtab:(y,m)=>`${m}월`,
     seats:n=> n ? `${n}자리 남음` : (CONFIG.AVAIL ? '날짜 문의 가능' : '마감'),
+    ended:'종료', endedN:n=>`종료 · ${n}명`, pastTab:n=>`지난 달 · ${n}회`,
     swipe:'← 달력을 옆으로 밀면 다른 달로 넘어가요 →',
     loading:'잠수해서 일정 가져오는 중…',
     error:'일정을 불러오지 못했어요. 잠시 후 다시 시도하거나 카카오톡 채널로 문의해 주세요.',
@@ -741,6 +746,7 @@ const T = {
     date:(dt)=>dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),
     mtab:(y,m)=>['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1],
     seats:n=> n ? `${n} spot${n>1?'s':''} left` : (CONFIG.AVAIL ? 'Ask for a date' : 'Full'),
+    ended:'Done', endedN:n=>`Done · ${n}`, pastTab:n=>`Past · ${n} class${n===1?'':'es'}`,
     swipe:'← Swipe the calendar to change month →',
     loading:'Diving for the schedule…',
     error:'Could not load the schedule. Please try again, or message us on KakaoTalk.',
@@ -866,15 +872,22 @@ function monthList(){
   let end = monthOf(parse(last)); if(end > cap || CONFIG.AVAIL) end = cap;
   const out = [];
   for(let m=firstMonth; m<=end; m=addMonths(m,1)) out.push(m);
-  /* 오늘 이후 수업이 하나도 없는 달은 빼기 — 월말에 지난 달 달력이 남지 않게 */
-  if(CONFIG.AVAIL) return out;
+  /* 지난 달: 수업이 있었던 달만 앞에 붙임 */
+  const back = [];
+  for(let i=Math.max(0, CONFIG.MONTHS_BACK|0); i>=1; i--){
+    const pm = addMonths(firstMonth, -i);
+    if(DATA.some(r => r.s && inMonth(r.d, pm))) back.push(pm);
+  }
+  if(CONFIG.AVAIL) return back.concat(out);
+  /* 오늘 이후 수업이 하나도 없는 달은 빼기 */
   const live = out.filter(m => DATA.some(r => r.s && r.d>=TODAY && inMonth(r.d,m)));
-  return live.length ? live : out.slice(0,1);
+  return back.concat(live.length ? live : out.slice(0,1));
 }
+const heldIn = m => DATA.filter(r => r.s && r.d < TODAY && inMonth(r.d, m)).length;
 /* 보고 있는 달이 목록에서 빠졌으면 첫 달로 옮김 */
 function fixMonth(){
   const ms = monthList();
-  if(!ms.some(mm => +mm===+state.month)){ state.month = ms[0]; state.sel = null; }
+  if(!ms.some(mm => +mm===+state.month)){ state.month = ms.find(mm => +mm===+firstMonth) || ms.find(mm => mm > firstMonth) || ms[ms.length-1]; state.sel = null; }
 }
 const seatsIn = m => DATA.filter(r=> r.s && inMonth(r.d,m) && r.d>=TODAY && shown(r))
                          .reduce((a,r)=> a + Math.max(0, r.cap-r.bk), 0);
@@ -926,7 +939,10 @@ function renderCal(){
     const k = key(dt), ss = slotsOn(k), adj = dt.getMonth()!==m.getMonth();
     const num = adj && dt.getDate()===1 ? `${dt.getMonth()+1}/1` : dt.getDate();
     const cls = adj ? ' adj' : '';
-    if(k < TODAY){ h += `<div class="cell past${cls}"><span class="n">${num}</span></div>`; continue; }
+    if(k < TODAY){   // 지난 날: 열렸던 수업을 회색 '종료'로 남겨 둠 (누를 수 없음)
+      const pills = ss.map(r=>{ const bc = slotClass(r);
+        return `<span class="ev ended"><i></i><b>${r.t[0]}</b>${bc?`<span class="cn">${t.clsShort[bc]}</span>`:''}<em>${r.bk ? t.endedN(r.bk) : t.ended}</em></span>`; }).join('');
+      h += `<div class="cell past${cls}"><span class="n">${num}</span>${pills}</div>`; continue; }
     const aw = awayOn(k);
     if(aw && !ss.length){
       h += `<div class="cell away ${aw.kind}${cls}" title="${esc(aw[state.lang]||aw.ko)}"><span class="n">${num}</span>${awayClip(aw,k)}<span class="lbl">${esc(aw[state.lang]||aw.ko)}</span></div>`;
@@ -1550,8 +1566,8 @@ function render(){
   const ms = monthList();
   $('months').hidden = ms.length < 2;
   $('months').innerHTML = ms.map(mm=>{
-    const n = seatsIn(mm), on = +mm===+m;
-    return `<button class="mtab" data-month="${key(mm)}" aria-pressed="${on}"><span class="m">${t.mtab(mm.getFullYear(), mm.getMonth()+1)}</span><span class="c${n?'':' zero'}">${t.seats(n)}</span></button>`;
+    const past = mm < firstMonth, n = past ? heldIn(mm) : seatsIn(mm), on = +mm===+m;
+    return `<button class="mtab" data-month="${key(mm)}" aria-pressed="${on}"><span class="m">${t.mtab(mm.getFullYear(), mm.getMonth()+1)}</span><span class="c${n&&!past?'':' zero'}">${past ? t.pastTab(n) : t.seats(n)}</span></button>`;
   }).join('');
   if(pg==='reviews'){ $('main').innerHTML = renderReviews(); wireClips(); return; }
   const [cstart,cend] = calRange(m).map(key);
