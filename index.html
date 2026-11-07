@@ -211,6 +211,7 @@ a.book{text-decoration:none; text-align:center; display:inline-block}
 .cell.away{background:var(--aw-bg)}
 .cell.away .n{color:var(--aw-ink)}
 .cell.away .lbl{color:var(--aw-ink)}
+.cell.away.was{opacity:.6}
 .cell.jp{--aw-bg:#fdf0f3; --aw-ink:#b0466a}
 .cell.au{--aw-bg:#e6f6fb; --aw-ink:#1d7fa6}
 .pxv{display:block; width:100%; max-width:76px; aspect-ratio:1; height:auto; margin:2px auto 0;
@@ -538,6 +539,10 @@ const CONFIG = {
   IMAGES: { classes: ['class-exp.mp4', 'padi-freediver.webp'], about: ['instructor-1.mp4', 'instructor-2.mp4'] },   // .mp4 는 자동재생(무음·반복) 영상으로, 같은 이름 .jpg 가 있으면 로딩 전 표지로 씀
   // 일정에 보여줄 달 수. 0 = 이번 달만, 1 = 이번 달 + 다음 달
   MONTHS_AHEAD: 1,
+  // 시트에 없는 지난 수업 기록(1:1 트레이닝 등) — 달력 지난 칸에 회색 '종료'로 표시. n = 인원
+  PAST_LOG: [
+    {d:'2026-11-03', ko:'1:1 트레이닝', en:'1:1 training', n:1},
+  ],
   // 지난 달 몇 개까지 넘겨 볼 수 있게 할지 (수업이 있었던 달만 보임). 0 = 지난 달 안 보임
   MONTHS_BACK: 2,
   // 출장 등으로 수업이 없는 기간 — 달력 칸에 픽셀 애니메이션(cal/NN.webp)으로 표시. kind: 'jp'(일본) | 'au'(호주), 장면 순서는 AWAY_CLIPS
@@ -883,7 +888,7 @@ function monthList(){
   const live = out.filter(m => DATA.some(r => r.s && r.d>=TODAY && inMonth(r.d,m)));
   return back.concat(live.length ? live : out.slice(0,1));
 }
-const heldIn = m => DATA.filter(r => r.s && r.d < TODAY && inMonth(r.d, m)).length;
+const heldIn = m => DATA.filter(r => r.s && r.d < TODAY && inMonth(r.d, m)).length + (CONFIG.PAST_LOG||[]).filter(x => x.d < TODAY && inMonth(x.d, m)).length;
 /* 보고 있는 달이 목록에서 빠졌으면 첫 달로 옮김 */
 function fixMonth(){
   const ms = monthList();
@@ -939,11 +944,16 @@ function renderCal(){
     const k = key(dt), ss = slotsOn(k), adj = dt.getMonth()!==m.getMonth();
     const num = adj && dt.getDate()===1 ? `${dt.getMonth()+1}/1` : dt.getDate();
     const cls = adj ? ' adj' : '';
-    if(k < TODAY){   // 지난 날: 열렸던 수업을 회색 '종료'로 남겨 둠 (누를 수 없음)
-      const pills = ss.map(r=>{ const bc = slotClass(r);
-        return `<span class="ev ended"><i></i><b>${r.t[0]}</b>${bc?`<span class="cn">${t.clsShort[bc]}</span>`:''}<em>${r.bk ? t.endedN(r.bk) : t.ended}</em></span>`; }).join('');
-      h += `<div class="cell past${cls}"><span class="n">${num}</span>${pills}</div>`; continue; }
     const aw = awayOn(k);
+    if(k < TODAY){   // 지난 날: 열렸던 수업을 회색 '종료'로 남겨 둠 (누를 수 없음)
+      const logs = (CONFIG.PAST_LOG||[]).filter(x => x.d===k);
+      if(aw && !ss.length && !logs.length){   // 지난 출장 칸도 그대로(살짝 흐리게)
+        h += `<div class="cell away ${aw.kind} was${cls}" title="${esc(aw[state.lang]||aw.ko)}"><span class="n">${num}</span>${awayClip(aw,k)}<span class="lbl">${esc(aw[state.lang]||aw.ko)}</span></div>`; continue;
+      }
+      const pills = ss.map(r=>{ const bc = slotClass(r);
+        return `<span class="ev ended"><i></i><b>${r.t[0]}</b>${bc?`<span class="cn">${t.clsShort[bc]}</span>`:''}<em>${r.bk ? t.endedN(r.bk) : t.ended}</em></span>`; }).join('')
+        + logs.map(x => `<span class="ev ended"><i></i><b>${esc(x[state.lang]||x.ko)}</b><em>${x.n ? t.endedN(x.n) : t.ended}</em></span>`).join('');
+      h += `<div class="cell past${cls}"><span class="n">${num}</span>${pills}</div>`; continue; }
     if(aw && !ss.length){
       h += `<div class="cell away ${aw.kind}${cls}" title="${esc(aw[state.lang]||aw.ko)}"><span class="n">${num}</span>${awayClip(aw,k)}<span class="lbl">${esc(aw[state.lang]||aw.ko)}</span></div>`;
       continue;
